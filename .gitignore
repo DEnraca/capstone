@@ -8,6 +8,7 @@
 /storage/framework/testing
 /storage/framework/views
 /storage/logs
+/public/hot
 composer.lock
 package-lock.json
 .env
