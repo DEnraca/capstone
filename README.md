@@ -15,6 +15,7 @@ Node
 6. Run Filament Shield $ php artisan shield:install --fresh
 7. Create a symlink to the storage $ php artisan storage:link
 8. Install Node modules $ npm install
+9. Run Seeders $ php artisan db:seed
 
 
 You're ready to go! Goto to browser URL and login Enjoy! 😃
