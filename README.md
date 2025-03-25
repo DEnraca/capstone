@@ -7,7 +7,7 @@ Laragon WAMP/ Herd for MAC with DBngin
 Node
 
 **Installation Guide**
-1. Run Composer Install
+1. Run composer install
 2. $ cp .env.example .env
 3. go to .env and change APP_URL, DB_USERNAME, DB_PASSWORD and DB_DATABASE
 4. Generate App key  $ php artisan key:generate
