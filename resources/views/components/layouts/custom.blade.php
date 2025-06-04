@@ -16,6 +16,7 @@
         <meta charset="utf-8" />
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
 
         @if ($favicon = filament()->getFavicon())
             <link rel="icon" href="{{ $favicon }}" />
@@ -26,9 +27,7 @@
             $brandName = strip_tags(filament()->getBrandName());
         @endphp
 
-        <title>
-            {{ filled($title) ? "{$title} - " : null }} {{ $brandName }}
-        </title>
+        <title>{{ config('app.name') }}</title>
 
 
         <style>
@@ -118,7 +117,8 @@
             </script>
         @endif
 
-        @stack('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 
+        @stack('scripts')
     </body>
 </html>

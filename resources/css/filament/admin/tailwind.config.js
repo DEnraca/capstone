@@ -6,9 +6,16 @@ export default {
         "./app/Filament/**/*.php",
         "./resources/views/filament/**/*.blade.php",
         "./vendor/filament/**/*.blade.php",
+        './resources/views/livewire/*.blade.php',
+        './resources/views/public/*.blade.php',
     ],
     theme: {
         extend: {
+
+            backgroundImage: {
+                'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+            },
+
             colors: {
                 secondary: {
                     50: "rgba(var(--secondary-50), <alpha-value>)",

@@ -15,7 +15,7 @@ use App\Livewire\Queues;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('public.welcome');
 });
 
 
