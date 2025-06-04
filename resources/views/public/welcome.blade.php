@@ -11,8 +11,6 @@
         html {
             scroll-behavior: smooth;
             /* color: #557ca8 */
-
-
         }
         .herosection {
             background-image: url('{{asset('images/frontend_asset/hospitalfront.jpg')}}');
@@ -45,8 +43,6 @@
             position: absolute;
         }
 
-
-
     </style>
     <div style="background-color: #FBFEE1;" class="max-w-screen" class="roboto">
         <!-- Hero Section -->
@@ -64,7 +60,6 @@
                             <a href="#mission" class="hover:text-primary-400 pt-1 pr-3" >Patient Care</a>
                             <a href="{{route('filament.admin.auth.login')}}" class="bg-primary-400 font-bold  px-5 pt-1 border border-secondary rounded-lg hover:text-primary-600">Login</a>
                         </nav>
-
                         <button class="md:hidden focus:outline-none" onclick="toggleMenu()">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -115,18 +110,18 @@
                     <!-- Item 1 -->
                     <div class="hidden duration-700 bg-transparent ease-out-in grid grid-cols-3 md:grid-cols-3 sm:grid-cols-2 gap-3" data-carousel-item="active">
                         <div class="p-2 rounded max-h-full col-span-1">
-                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-contain w-full h-auto max-h-40  rounded-xl">
+                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-contain w-full h-auto max-h-46  rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">CARDIAC</h3>
                             <p class="text-sm mt-2">Refers to anything related to the heart. A cardiac laboratory usually performs tests and procedures to evaluate heart function, such as ECG, stress tests, and cardiac imaging.</p>
                         </div>
                         <div class="p-2 rounded max-h-full col-span-1">
-                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-contain w-full h-auto max-h-40  rounded-xl">
+                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-contain w-full h-auto max-h-46  rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">LABORATORY</h3>
                             <p class="text-sm mt-2">A medical laboratory is a facility where tests are carried out on clinical specimens (like blood, urine, or tissue) to gather information about a patient's health for diagnosis, treatment, and prevention of diseases.</p>
                         </div>
 
                         <div class="p-2 rounded max-h-full col-span-1">
-                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-contain w-full h-auto max-h-40 rounded-xl">
+                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-contain w-full h-auto max-h-46 rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">ULTRA-SOUND</h3>
                             <p class="text-sm mt-2">Also known as sonography, it is an imaging method that uses high-frequency sound waves to create images of the inside of the body. It’s commonly used in pregnancy, but also for organs like the liver, kidneys, and heart.</p>
                         </div>
@@ -134,13 +129,13 @@
                     <!-- Item 1 -->
                     <div class="hidden duration-700 bg-transparent ease-out-in grid grid-cols-3 md:grid-cols-3 sm:grid-cols-2 gap-2 p-3" data-carousel-item>
                         <div class="p-2 rounded max-h-full col-span-1">
-                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-contain w-full h-auto max-h-40  rounded-xl">
+                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-contain w-full h-auto max-h-46  rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">X-RAY</h3>
                             <p class="text-sm mt-2">Refers to anything related to the heart. A cardiac laboratory usually performs tests and procedures to evaluate heart function, such as ECG, stress tests, and cardiac imaging.</p>
                         </div>
 
                         <div class="p-2 rounded max-h-full col-span-1">
-                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-contain w-full h-auto max-h-40  rounded-xl">
+                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-contain w-full h-auto max-h-46  rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">LABORATORY</h3>
                             <p class="text-sm mt-2">A medical laboratory is a facility where tests are carried out on clinical specimens (like blood, urine, or tissue) to gather information about a patient's health for diagnosis, treatment, and prevention of diseases.</p>
                         </div>
@@ -229,15 +224,7 @@
 
         <!-- HMO Partners -->
         <section class="py-10">
-          <div class="max-w-4xl mx-auto px-4 text-center">
-            <h2 class="text-2xl font-bold text-primary-400 mb-4">Our Health Medical Orgranization (HMO) Partners</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <img src="https://picsum.photos/100?random=1" alt="Partner 1" class="mx-auto h-16" />
-              <img src="https://picsum.photos/100?random=2" alt="Partner 2" class="mx-auto h-16" />
-              <img src="https://picsum.photos/100?random=3" alt="Partner 3" class="mx-auto h-16" />
-              <img src="https://picsum.photos/100?random=4" alt="Partner 4" class="mx-auto h-16" />
-            </div>
-          </div>
+            @include('public.hmos')
         </section>
 
         <!-- Patient Care Section 2 -->
