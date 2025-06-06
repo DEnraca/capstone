@@ -56,8 +56,8 @@
                     <div class="col-span-2 justify-items-end">
                         <nav class="hidden md:flex space-x-6 pt-2">
                             <a href="#hero" class="hover:text-primary-400 pt-1 pr-3">Home</a>
-                            <a href="#services" class="hover:text-primary-400 pt-1 pr-3">About Us</a>
-                            <a href="#mission" class="hover:text-primary-400 pt-1 pr-3" >Patient Care</a>
+                            <a href="#about-us" class="hover:text-primary-400 pt-1 pr-3">About Us</a>
+                            <a href="#patient-care" class="hover:text-primary-400 pt-1 pr-3" >Patient Care</a>
                             <a href="{{route('filament.admin.auth.login')}}" class="bg-primary-400 font-bold  px-5 pt-1 border border-secondary rounded-lg hover:text-primary-600">Login</a>
                         </nav>
                         <button class="md:hidden focus:outline-none" onclick="toggleMenu()">
@@ -69,8 +69,8 @@
                 </div>
                 <div id="mobile-menu" class="md:hidden hidden px-4 pb-4">
                     <a href="#hero" class="block py-2 hover:text-primary-400">Home</a>
-                    <a href="#services" class="block py-2 hover:text-primary-400">About Us</a>
-                    <a href="#mission" class="block py-2 hover:text-primary-400">Patient Care</a>
+                    <a href="#about-us" class="block py-2 hover:text-primary-400">About Us</a>
+                    <a href="#patient-care" class="block py-2 hover:text-primary-400">Patient Care</a>
                     <a href="#footer" class="block py-2 hover:text-primary-400">Login</a>
                 </div>
             </header>
@@ -103,42 +103,45 @@
         </div>
 
 
-        <section id="services" class="my-6">
-            <div id="controls-carousel" class="relative overflow-hidden w-full h-auto bg-transparent px-12" data-carousel="slide">
+        <section id="about-us" class="my-6">
+            <div id="controls-carousel" class="xs:hidden relative overflow-hidden w-full h-auto bg-transparent px-12" data-carousel="slide">
                 <!-- Carousel wrapper -->
                 <div class="relative rounded-lg h-96">
                     <!-- Item 1 -->
                     <div class="hidden duration-700 bg-transparent ease-out-in grid grid-cols-3 md:grid-cols-3 sm:grid-cols-2 gap-3" data-carousel-item="active">
                         <div class="p-2 rounded max-h-full col-span-1">
-                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-contain w-full h-auto max-h-46  rounded-xl">
+
+                            <img src="{{asset('images/frontend_asset/cardiac.jpg')}}" class="object-fill w-full h-auto max-h-44  rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">CARDIAC</h3>
                             <p class="text-sm mt-2">Refers to anything related to the heart. A cardiac laboratory usually performs tests and procedures to evaluate heart function, such as ECG, stress tests, and cardiac imaging.</p>
                         </div>
                         <div class="p-2 rounded max-h-full col-span-1">
-                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-contain w-full h-auto max-h-46  rounded-xl">
+                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-fill w-full h-auto max-h-44  rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">LABORATORY</h3>
                             <p class="text-sm mt-2">A medical laboratory is a facility where tests are carried out on clinical specimens (like blood, urine, or tissue) to gather information about a patient's health for diagnosis, treatment, and prevention of diseases.</p>
                         </div>
 
                         <div class="p-2 rounded max-h-full col-span-1">
-                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-contain w-full h-auto max-h-46 rounded-xl">
+                            <img src="{{asset('images/frontend_asset/ultrasound.jpg')}}" class="object-fill w-full h-auto max-h-44 rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">ULTRA-SOUND</h3>
                             <p class="text-sm mt-2">Also known as sonography, it is an imaging method that uses high-frequency sound waves to create images of the inside of the body. It’s commonly used in pregnancy, but also for organs like the liver, kidneys, and heart.</p>
                         </div>
                     </div>
                     <!-- Item 1 -->
-                    <div class="hidden duration-700 bg-transparent ease-out-in grid grid-cols-3 md:grid-cols-3 sm:grid-cols-2 gap-2 p-3" data-carousel-item>
+                    <div class="hidden duration-700 bg-transparent ease-out-in grid grid-cols-3 md:grid-cols-3 sm:grid-cols-2 gap-3 " data-carousel-item>
+
+
                         <div class="p-2 rounded max-h-full col-span-1">
-                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-contain w-full h-auto max-h-46  rounded-xl">
+                            <img src="{{asset('images/frontend_asset/xray.jpg')}}" class="object-fill w-full h-auto max-h-44  rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">X-RAY</h3>
                             <p class="text-sm mt-2">Refers to anything related to the heart. A cardiac laboratory usually performs tests and procedures to evaluate heart function, such as ECG, stress tests, and cardiac imaging.</p>
                         </div>
-
                         <div class="p-2 rounded max-h-full col-span-1">
-                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-contain w-full h-auto max-h-46  rounded-xl">
+                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-fill w-full h-auto max-h-44  rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">LABORATORY</h3>
                             <p class="text-sm mt-2">A medical laboratory is a facility where tests are carried out on clinical specimens (like blood, urine, or tissue) to gather information about a patient's health for diagnosis, treatment, and prevention of diseases.</p>
                         </div>
+
                     </div>
                 </div>
                 <!-- Slider indicators -->
@@ -217,7 +220,7 @@
             <div class="m-0 bg-primary-400 text-lg text-white font-bold text-center uppercase py-4  grid grid-cols-4">
                 <span class="col-span-3 text-xl [text-shadow:_1px_3px_rgb(0_0_1_/_0.2)]">Do you want to make an appointment ? check our certified doctors! </span>
                 <span class="col-span-1">
-                    <a href="{{route('filament.admin.auth.login')}}" class="bg-primary-100 font-bold  px-5 py-3 rounded-lg text-primary-400 hover:bg-primary-500 hover:text-primary-400 uppercase">create an appointment</a>
+                    <a href="{{route('filament.admin.auth.login')}}" class="bg-primary-100 font-bold  px-5 py-3 sm:px-2 sm:py-1 rounded-lg text-primary-400 hover:bg-primary-500 hover:text-primary-400 uppercase">create an appointment</a>
                 </span>
             </div>
         </section>
@@ -228,7 +231,7 @@
         </section>
 
         <!-- Patient Care Section 2 -->
-        <section class="py-12">
+        <section id="patient-care" class="py-12">
           <div class="max-w-6xl mx-auto px-4 text-center">
             <h2 class="text-2xl font-bold text-primary-400 mb-2">DISCOVER THE SERVICES WE OFFER FOR YOUR HEALTH.</h2>
             <div class="grid grid-cols-1 text-center sm:grid-cols-2 md:grid-cols-3 gap-6 text-left">
@@ -269,7 +272,7 @@
 
 
         <!-- Mission and Vision -->
-        <section id="mission" class="py-6">
+        <section  class="py-6">
             <div class="mx-auto text-center grid grid-cols-2 px-10 gap-6">
                 <div class="col-span-1 ">
                     <h2 class="text-xl font-bold text-primary-400 mb-3 ">Mission</h2>
@@ -305,7 +308,7 @@
                 <div class="mt-3 pt-2">
                     <h5 class="uppercase text-lg text-center" style="font-weight: 900">stay connected</h5>
                     <div class="flex justify-center gap-4">
-                        <a href="">
+                        <a href="https://www.facebook.com/abrlaboratory2010/" target="_blank">
                             <x-fab-facebook class="h-12 w-10 text-gray-400">
 
                             </x-fab-facebook>
