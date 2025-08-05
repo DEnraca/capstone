@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Service extends Model
+{
+    use HasFactory;
+
+    protected $table = 'services';
+
+    protected $fillable = [
+        'station_id',
+        'department_id',
+        'code',
+        'name',
+        'active',
+        'description',
+        'price',
+    ];
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class,);
+    }
+
+    public function station(): BelongsTo
+    {
+        return $this->belongsTo(Station::class,);
+    }
+}
