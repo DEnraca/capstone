@@ -353,10 +353,19 @@
     </div>
     <script>
         function toggleMenu() {
-        const menu = document.getElementById('mobile-menu');
-        menu.classList.toggle('hidden');
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
         }
+
+        window.addEventListener('close-appointment-modal', function () {
+        const modal = document.getElementById('appointment-modal');
+        if (modal) {
+            modal.classList.add('hidden'); // Hide the modal
+        }
+    });
+
     </script>
+
 
 </x-layouts.custom>
 
