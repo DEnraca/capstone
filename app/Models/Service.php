@@ -38,5 +38,10 @@ class Service extends Model
     {
         return $this->belongsToMany(Appointment::class, 'booked_services');
     }
+    
+    public function medTechs(): BelongsToMany
+    {
+        return $this->belongsToMany(Employee::class, 'med_tech_has_services', 'service_id', 'med_tech_id');
+    }
 
 }

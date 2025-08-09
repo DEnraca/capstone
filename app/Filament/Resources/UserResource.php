@@ -19,6 +19,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -71,11 +72,16 @@ class UserResource extends Resource
                             ->schema([
                                 Select::make('roles')->label('Role')
                                     ->hiddenLabel()
-                                    ->relationship('roles', 'name')
+                                    ->relationship('roles', 'name',  modifyQueryUsing: function (Builder $query){
+                                        if(!auth()->user()->hasRole(config('filament-shield.super_admin.name'))) {
+                                            return $query->where('name', '!=', config('filament-shield.super_admin.name'));
+                                        }
+                                        return $query;
+                                    })
                                     ->getOptionLabelFromRecordUsing(fn (Model $record) => Str::headline($record->name))
+
                                     ->multiple()
                                     ->preload()
-                                    ->maxItems(1)
                                     ->native(false),
                             ])
                             ->compact(),
