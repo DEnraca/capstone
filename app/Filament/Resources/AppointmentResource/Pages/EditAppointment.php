@@ -18,7 +18,7 @@ class EditAppointment extends EditRecord
         return [
             Action::make('approve')
                 ->label('Approve')
-                // ->hidden(fn ($record) => ($record->status == 1) ? false : true)
+                ->hidden(fn ($record) => ($record->status == 1) ? false : true)
                 ->requiresConfirmation()
                 ->action(function (Appointment $record) {
                     if($record->services()->count() == 0 || $record->services()->where('status',2)->count() < 1) {
@@ -47,4 +47,5 @@ class EditAppointment extends EditRecord
             Actions\ViewAction::make(),
         ];
     }
+
 }

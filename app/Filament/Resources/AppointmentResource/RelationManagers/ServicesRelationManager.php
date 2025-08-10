@@ -44,6 +44,12 @@ class ServicesRelationManager extends RelationManager
             ]);
     }
 
+    public function isReadOnly(): bool
+    {
+        return  $this->getOwnerRecord()->status != 1;
+    }
+
+
     public function table(Table $table): Table
     {
         return $table
@@ -99,6 +105,7 @@ class ServicesRelationManager extends RelationManager
                 Action::make('approve')
                     ->label('Approve')
                     ->hidden(fn ($record) => ($record->status == 2 || $record->status == 4) ? true : false)
+                    ->visible(fn () => $this->getOwnerRecord()->status == 1)
                     ->requiresConfirmation()
                     ->icon('fas-check')
                     ->action(function ($record) {
