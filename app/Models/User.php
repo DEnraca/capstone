@@ -95,4 +95,9 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
             ->fit(Fit::Contain, 300, 300)
             ->nonQueued();
     }
+
+    public function employee()
+    {
+        return $this->hasOne(Employee::class);
+    }
 }

@@ -60,7 +60,6 @@ class CreateApointment extends Component implements HasForms
                                     DatePicker::make('appointment_date')
                                         ->required()
                                         ->native(false)
-                                        ->default(now()->format('Y-m-d'))
                                         ->prefixIcon('heroicon-o-calendar-days')
                                         ->prefixIconColor('primary')
                                         ->closeOnDateSelection()
@@ -85,14 +84,12 @@ class CreateApointment extends Component implements HasForms
                                         TextInput::make('last_name')
                                             ->prefixIcon('heroicon-o-user')
                                             ->prefixIconColor('primary')
-                                            ->default('Enraca')
                                             ->helperText('Kindly include suffix after last name, e.g. II, III')
                                             ->label('Last Name')
                                             ->required(),
 
                                         TextInput::make('first_name')
                                             ->prefixIcon('heroicon-o-user')
-                                            ->default('Dennis')
                                             ->prefixIconColor('primary')
                                             ->label('First Name')
                                             ->required(),
@@ -100,7 +97,6 @@ class CreateApointment extends Component implements HasForms
                                         TextInput::make('middle_name')
                                             ->prefixIcon('heroicon-o-user')
                                             ->prefixIconColor('primary')
-                                            ->default('Abellera')
                                             ->label('Middle Name'),
                                     ]),
 
@@ -110,7 +106,6 @@ class CreateApointment extends Component implements HasForms
                                 ->prefixIcon('heroicon-o-at-symbol')
                                 ->prefixIconColor('primary')
                                 ->label('Email')
-                                ->default('dennisenraca25@gmail.com')
                                 ->required(),
 
                             TextInput::make('mobile')
@@ -121,14 +116,12 @@ class CreateApointment extends Component implements HasForms
                                 ->maxLength(10)
                                 ->prefix('+63')
                                 ->label('Phone')
-                                ->default('9050449294')
                                 ->helperText('Mobile number must start with +63')
                                 ->required(),
 
                             Textarea::make('message')
                                 ->placeholder('I want to book an appointment')
                                 ->rows(3)
-                                ->default('Test')
                                 ->columnSpan(2)
                                 ->autosize(),
 

@@ -51,21 +51,18 @@ class EmployeeResource extends Resource
 
                             Forms\Components\TextInput::make('last_name')
                                 ->required()
-                                ->default('Enraca')
                                 ->columnSpanFull()
                                 ->helperText('Kindly include suffix after last name, e.g. II, III')
                                 ->label('Last Name')
                                 ->required()
                                 ->maxLength(25),
                             Forms\Components\TextInput::make('first_name')
-                                ->default('Dennis')
                                 ->columnSpanFull()
                                 ->prefixIconColor('primary')
                                 ->label('First Name')
                                 ->maxLength(20)
                                 ->required(),
                             Forms\Components\TextInput::make('middle_name')
-                                ->default('Abellera')
                                 ->columnSpanFull()
                                 ->label('Middle Name')
                                 ->maxLength(20),
@@ -113,7 +110,6 @@ class EmployeeResource extends Resource
                                 ->prefix('+63')
                                 ->columnSpanFull()
                                 ->label('Phone / Mobile')
-                                ->default('9050449294')
                                 ->helperText('Mobile number must start with +63')
                                 ->maxLength(12),
 
@@ -170,19 +166,16 @@ class EmployeeResource extends Resource
                                             Forms\Components\TextInput::make('email')
                                                 ->unique(ignoreRecord: true)
                                                 ->required()
-                                                ->default('dennisenraca25@gmail.com')
                                                 ->maxLength(255),
 
                                             Forms\Components\TextInput::make('password')
                                                 ->password()
-                                                ->default('superadmin')
                                                 ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
                                                 ->dehydrated(fn (?string $state): bool => filled($state))
                                                 ->revealable()
                                                 ->required(),
                                             Forms\Components\TextInput::make('passwordConfirmation')
                                                 ->password()
-                                                ->default('superadmin')
                                                 ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
                                                 ->dehydrated(fn (?string $state): bool => filled($state))
                                                 ->revealable()

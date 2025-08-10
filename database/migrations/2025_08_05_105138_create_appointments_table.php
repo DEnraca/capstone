@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('middle_name',50)->nullable();
             $table->string('mobile',12)->nullable();
             $table->longText('message',300)->nullable();
+            $table->string('confimed_by',36)->nullable()->comment('Employee who approved the appointment');
             $table->unsignedBigInteger('patient_id')->nullable();
             $table->timestamps();
         });

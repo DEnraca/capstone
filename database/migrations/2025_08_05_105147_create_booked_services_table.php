@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('appointment_id');
             $table->unsignedBigInteger('service_id');
-            $table->unsignedBigInteger('approved_by')->nullable()->comment('Employee who approved the service');
+            $table->string('approved_by',36)->nullable()->comment('Employee who approved the service');
             $table->integer('status')->comment('1: Pending, 2: Approved, 3: Not Available, 4: Decline')->default(1);
-            $table->timestamps();
         });
 
     }

@@ -87,6 +87,27 @@ if (! function_exists('generateUniqueUsername')) {
     }
 }
 
+if (! function_exists('getAppointmentStatus')) {
+
+    function getAppointmentStatus($id)
+    {
+        switch ($id) {
+            case 1:
+                return 'Pending';
+            case 2:
+                return 'Confirmed';
+            case 3:
+                return 'Cancelled';
+            case 4:
+                return 'Completed';
+            default:
+                return 'Unknown';
+        }
+    }
+}
+
+
+
 
 
 

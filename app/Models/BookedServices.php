@@ -13,6 +13,8 @@ class BookedServices extends Model
     use HasFactory;
     protected $table = 'booked_services';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'appointment_id',
         'service_id',
@@ -29,5 +31,17 @@ class BookedServices extends Model
     {
         return $this->belongsTo(Service::class, 'service_id');
     }
+
+
+    public function approvedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function scopeApproved($query)
+    {
+        return $query->where('status', 2);
+    }
+
 
 }

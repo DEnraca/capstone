@@ -25,18 +25,27 @@ class Appointment extends Model
         'middle_name',
         'mobile',
         'message',
+        'confimed_by'
     ];
 
 
     public function services()
     {
-        return $this->belongsToMany(Service::class, 'booked_services');
+        return $this->belongsToMany(Service::class, 'booked_services')
+            ->withPivot('status', 'approved_by');
     }
 
     public function reminders(): HasMany
     {
         return $this->hasMany(AppointmentReminder::class,);
     }
+
+
+    public function confirmedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class,'confimed_by');
+    }
+
 
     // public function department(): BelongsTo
     // {
