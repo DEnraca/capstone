@@ -110,21 +110,20 @@
                     <!-- Item 1 -->
                     <div class="hidden duration-700 bg-transparent ease-out-in grid grid-cols-3 md:grid-cols-3 sm:grid-cols-2 gap-3" data-carousel-item="active">
                         <div class="p-2 rounded max-h-full col-span-1">
-
                             <img src="{{asset('images/frontend_asset/cardiac.jpg')}}" class="object-fill w-full h-auto max-h-44  rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">CARDIAC</h3>
-                            <p class="text-sm mt-2">Refers to anything related to the heart. A cardiac laboratory usually performs tests and procedures to evaluate heart function, such as ECG, stress tests, and cardiac imaging.</p>
+                            <p class="text-sm mt-2 text-gray-800">Refers to anything related to the heart. A cardiac laboratory usually performs tests and procedures to evaluate heart function, such as ECG, stress tests, and cardiac imaging.</p>
                         </div>
                         <div class="p-2 rounded max-h-full col-span-1">
                             <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-fill w-full h-auto max-h-44  rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">LABORATORY</h3>
-                            <p class="text-sm mt-2">A medical laboratory is a facility where tests are carried out on clinical specimens (like blood, urine, or tissue) to gather information about a patient's health for diagnosis, treatment, and prevention of diseases.</p>
+                            <p class="text-sm mt-2 text-gray-800">A medical laboratory is a facility where tests are carried out on clinical specimens (like blood, urine, or tissue) to gather information about a patient's health for diagnosis, treatment, and prevention of diseases.</p>
                         </div>
 
                         <div class="p-2 rounded max-h-full col-span-1">
                             <img src="{{asset('images/frontend_asset/ultrasound.jpg')}}" class="object-fill w-full h-auto max-h-44 rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">ULTRA-SOUND</h3>
-                            <p class="text-sm mt-2">Also known as sonography, it is an imaging method that uses high-frequency sound waves to create images of the inside of the body. It’s commonly used in pregnancy, but also for organs like the liver, kidneys, and heart.</p>
+                            <p class="text-sm mt-2 text-gray-800">Also known as sonography, it is an imaging method that uses high-frequency sound waves to create images of the inside of the body. It’s commonly used in pregnancy, but also for organs like the liver, kidneys, and heart.</p>
                         </div>
                     </div>
                     <!-- Item 1 -->
@@ -134,12 +133,12 @@
                         <div class="p-2 rounded max-h-full col-span-1">
                             <img src="{{asset('images/frontend_asset/xray.jpg')}}" class="object-fill w-full h-auto max-h-44  rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">X-RAY</h3>
-                            <p class="text-sm mt-2">Refers to anything related to the heart. A cardiac laboratory usually performs tests and procedures to evaluate heart function, such as ECG, stress tests, and cardiac imaging.</p>
+                            <p class="text-sm mt-2 text-gray-800">Refers to anything related to the heart. A cardiac laboratory usually performs tests and procedures to evaluate heart function, such as ECG, stress tests, and cardiac imaging.</p>
                         </div>
                         <div class="p-2 rounded max-h-full col-span-1">
                             <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-fill w-full h-auto max-h-44  rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">LABORATORY</h3>
-                            <p class="text-sm mt-2">A medical laboratory is a facility where tests are carried out on clinical specimens (like blood, urine, or tissue) to gather information about a patient's health for diagnosis, treatment, and prevention of diseases.</p>
+                            <p class="text-sm mt-2 text-gray-800">A medical laboratory is a facility where tests are carried out on clinical specimens (like blood, urine, or tissue) to gather information about a patient's health for diagnosis, treatment, and prevention of diseases.</p>
                         </div>
 
                     </div>
@@ -177,7 +176,7 @@
         <!-- Patient Care Section 1 -->
         <div class="py-10 mx-auto px-4 text-center">
             <h2 class="text-4xl font-bold text-primary-400 mb-2 uppercase">ABR Diagnostic center opc.</h2>
-            <p class="text-md mb-8">Trust the experts in advanced outpatient medical imaging.</p>
+            <p class="text-md mb-8 text-gray-800">Trust the experts in advanced outpatient medical imaging.</p>
         </div>
 
         <section class="py-8">
@@ -185,32 +184,32 @@
             <div class="grid md:grid-cols-4 gap-8 text-center">
               <div>
                 <div class="justify-items-center mb-2">
-                    <x-fas-stethoscope class="w-10 h-10"> </x-fas-stethoscope>
+                    <x-fas-stethoscope class="w-10 h-10 text-gray-800"> </x-fas-stethoscope>
                 </div>
                 <h4 class="font-bold text-lg text-primary-400">Experienced Medical Professionals</h4>
-                <p class="text-sm pt-1">A diagnostic center relies on skilled professionals for accurate tests, ensuring early detection and quality care.</p>
+                <p class="text-sm pt-1 text-gray-800">A diagnostic center relies on skilled professionals for accurate tests, ensuring early detection and quality care.</p>
               </div>
               <div>
                 <div class="justify-items-center mb-2">
-                    <x-fas-heartbeat class="w-10 h-10"> </x-fas-heartbeat>
+                    <x-fas-heartbeat class="w-10 h-10 text-gray-800"> </x-fas-heartbeat>
                 </div>
                 <h4 class="font-bold text-lg text-primary-400">Innovative Medical Technologies</h4>
-                <p class="text-sm pt-1">Precise diagnostics are vital for effective treatment, and we use cutting-edge technology to enhance patient outcomes.</p>
+                <p class="text-sm pt-1 text-gray-800 text-gray-800">Precise diagnostics are vital for effective treatment, and we use cutting-edge technology to enhance patient outcomes.</p>
               </div>
               <div>
                 <div class="justify-items-center mb-2">
-                    <x-fas-thumbs-up class="w-10 h-10"> </x-fas-thumbs-up>
+                    <x-fas-thumbs-up class="w-10 h-10 text-gray-800"> </x-fas-thumbs-up>
                 </div>
                 <h4 class="font-bold text-lg text-primary-400">Innovative Medical Technologies
                 </h4>
-                <p class="text-sm pt-1">Equipped with advanced technology and efficient workflows, diagnostic centers deliver fast, reliable results for early detection and timely treatment.</p>
+                <p class="text-sm pt-1 text-gray-800">Equipped with advanced technology and efficient workflows, diagnostic centers deliver fast, reliable results for early detection and timely treatment.</p>
               </div>
               <div>
                 <div class="justify-items-center mb-3">
-                    <x-fas-file-zipper class="w-10 h-10"> </x-fas-file-zipper>
+                    <x-fas-file-zipper class="w-10 h-10 text-gray-800"> </x-fas-file-zipper>
                 </div>
                 <h4 class="font-bold text-lg text-primary-400">Fast and Accurate Results</h4>
-                <p class="text-sm pt-1">Equipped with advanced technology and efficient workflows, diagnostic centers deliver fast, reliable results for early detection and timely treatment.</p>
+                <p class="text-sm pt-1 text-gray-800">Equipped with advanced technology and efficient workflows, diagnostic centers deliver fast, reliable results for early detection and timely treatment.</p>
               </div>
 
             </div>
@@ -220,7 +219,7 @@
             <div class="m-0 bg-primary-400 text-lg text-white font-bold text-center uppercase py-4  grid grid-cols-4">
                 <span class="col-span-3 text-xl [text-shadow:_1px_3px_rgb(0_0_1_/_0.2)]">Do you want to make an appointment ? check our certified doctors! </span>
                 <span class="col-span-1">
-                    <a href="{{route('filament.admin.auth.login')}}" class="bg-primary-100 font-bold  px-5 py-3 sm:px-2 sm:py-1 rounded-lg text-primary-400 hover:bg-primary-500 hover:text-primary-400 uppercase">create an appointment</a>
+                    <button class="bg-primary-100 font-bold  px-5 py-3 sm:px-2 sm:py-1 rounded-lg text-primary-400 hover:bg-primary-500 hover:text-primary-400 uppercase" data-modal-target="appointment-modal" data-modal-toggle="appointment-modal">create an appointment</button>
                 </span>
             </div>
         </section>
@@ -237,28 +236,28 @@
             <div class="grid grid-cols-1 text-center sm:grid-cols-2 md:grid-cols-3 gap-6 text-left">
               <div class="p-4">
                 <h4 class="font-bold text-primary-400">Accurate Diagnostics</h4>
-                <p class="text-sm mt-2">Our advanced diagnostic technologies ensure precise and reliable results, enabling early detection and effective treatment planning.</p>
+                <p class="text-sm mt-2 text-gray-800">Our advanced diagnostic technologies ensure precise and reliable results, enabling early detection and effective treatment planning.</p>
               </div>
               <div class="p-4">
                 <h4 class="font-bold text-primary-400">Experienced Specialists</h4>
-                <p class="text-sm mt-2">Our team of highly skilled radiologists and laboratory experts provide accurate assessments and expert consultations to guide your healthcare journey.</p>
+                <p class="text-sm mt-2 text-gray-800">Our team of highly skilled radiologists and laboratory experts provide accurate assessments and expert consultations to guide your healthcare journey.</p>
               </div>
               <div class="p-4">
                 <h4 class="font-bold text-primary-400">Comprehensive Testing Services</h4>
-                <p class="text-sm mt-2">We offer a wide range of medical tests, including blood work, imaging, and specialized screenings, ensuring a one-stop solution for your diagnostic needs.</p>
+                <p class="text-sm mt-2 text-gray-800">We offer a wide range of medical tests, including blood work, imaging, and specialized screenings, ensuring a one-stop solution for your diagnostic needs.</p>
               </div>
               <!-- Repeat cards to fill 3x3 grid -->
               <div class="p-4">
                 <h4 class="font-bold text-primary-400">State-of-the-Art Equipment</h4>
-                <p class="text-sm mt-2">We invest in the latest medical technology to deliver high-quality diagnostic services with speed and accuracy.</p>
+                <p class="text-sm mt-2 text-gray-800">We invest in the latest medical technology to deliver high-quality diagnostic services with speed and accuracy.</p>
               </div>
               <div class="p-4">
                 <h4 class="font-bold text-primary-400">Affordable and Accessible Healthcare</h4>
-                <p class="text-sm mt-2">We believe quality diagnostics should be within everyone’s reach. Our services are offered at competitive prices with various payment options available.</p>
+                <p class="text-sm mt-2 text-gray-800">We believe quality diagnostics should be within everyone’s reach. Our services are offered at competitive prices with various payment options available.</p>
               </div>
               <div class="p-4">
                 <h4 class="font-bold text-primary-400">Convenient and Fast Results</h4>
-                <p class="text-sm mt-2">Our efficient processes ensure quick turnaround times, so you can receive your results faster and proceed with the necessary medical care without delay.</p>
+                <p class="text-sm mt-2 text-gray-800">Our efficient processes ensure quick turnaround times, so you can receive your results faster and proceed with the necessary medical care without delay.</p>
               </div>
             </div>
           </div>
@@ -266,7 +265,7 @@
 
          <!-- Divider -->
          <div class="m-0 bg-primary-400 text-md text-white font-bold text-center uppercase py-1 [text-shadow:_1px_3px_rgb(0_0_1_/_0.2)]">
-            <span >Do you want to make an appointment? Check our certified doctors!  Need help? ABR HOTLINE NUMBERS  0935-575-1649 Clinic Hours: 6:00am to 6:00pm daily.</span>
+            <span >Do you want to make an appointment? Check our certified doctors!  Need help? ABR HOTLINE NUMBERS  0935-575-1649 Clinic Hours: 6:00am to 8:00pm daily.</span>
         </div>
 
 
@@ -276,11 +275,11 @@
             <div class="mx-auto text-center grid grid-cols-2 px-10 gap-6">
                 <div class="col-span-1 ">
                     <h2 class="text-xl font-bold text-primary-400 mb-3 ">Mission</h2>
-                    <p class="text-sm mt-2 mb-8">Our mission is to provide accessible and affordable laboratory test to promote better health and well-being in the community.</p>
+                    <p class="text-sm mt-2 mb-8 text-gray-800">Our mission is to provide accessible and affordable laboratory test to promote better health and well-being in the community.</p>
                 </div>
                 <div class="col-span-1">
                     <h2 class="text-xl font-bold text-primary-400 mb-3">Vision</h2>
-                    <p class="text-sm mt-2">We envision a healthier community where everyone has easy access to essential diagnostic services, contributing to preventive healthcare and early detection of diseases.</p>
+                    <p class="text-sm mt-2 text-gray-800">We envision a healthier community where everyone has easy access to essential diagnostic services, contributing to preventive healthcare and early detection of diseases.</p>
                 </div>
             </div> <br>
 
@@ -288,6 +287,7 @@
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3864.7164340754807!2d121.47534797515954!3d14.385811486075482!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397f13560091c33%3A0x203b989f7d4bc699!2sABR%20DIAGNOSTIC%20CENTER%20OPC!5e0!3m2!1sen!2sph!4v1749023854904!5m2!1sen!2sph" width="100%" height="100" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </section>
+
 
         <!-- Footer -->
         <footer id="footer" class="text-sm">
@@ -327,13 +327,45 @@
             <div class="text-center py-2 bg-primary-400 text-white text-md">&copy; 2025 ABR Diagnostics Center. All rights reserved.</div>
         </footer>
 
+
+        <!-- Main modal -->
+        <div id="appointment-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                    <h3 class="text-xl font-semibold ">
+                        Start an Appointment
+                    </h3>
+                    <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="appointment-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-4 md:p-5">
+                    @livewire('create-apointment')
+                </div>
+            </div>
+        </div>
+
     </div>
     <script>
         function toggleMenu() {
-        const menu = document.getElementById('mobile-menu');
-        menu.classList.toggle('hidden');
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
         }
+
+        window.addEventListener('close-appointment-modal', function () {
+        const modal = document.getElementById('appointment-modal');
+        if (modal) {
+            modal.classList.add('hidden'); // Hide the modal
+        }
+    });
+
     </script>
+
 
 </x-layouts.custom>
 
