@@ -55,10 +55,11 @@
                     </div>
                     <div class="col-span-2 justify-items-end">
                         <nav class="hidden md:flex space-x-6 pt-2">
-                            <a href="#hero" class="hover:text-primary-400 pt-1 pr-3">Home</a>
-                            <a href="#about-us" class="hover:text-primary-400 pt-1 pr-3">About Us</a>
-                            <a href="#patient-care" class="hover:text-primary-400 pt-1 pr-3" >Patient Care</a>
-                            <a href="{{route('filament.admin.auth.login')}}" class="bg-primary-400 font-bold  px-5 pt-1 border border-secondary rounded-lg hover:text-primary-600">Login</a>
+                            <a href="#hero" class="hover:text-primary-400 pt-1 pr-1">Home</a>
+                            <a href="#about-us" class="hover:text-primary-400 pt-1 pr-1">About Us</a>
+                            <a href="#patient-care" class="hover:text-primary-400 pt-1 pr-1" >Patient Care</a>
+                            <a href="{{route('filament.admin.auth.login')}}" class="hover:text-primary-400 pt-1 pr-1" >Login</a>
+                            <button href="{{route('filament.admin.auth.login')}}"  data-modal-target="appointment-modal" data-modal-toggle="appointment-modal" class="bg-primary-400 font-bold  px-5 pt-1 border border-secondary rounded-lg hover:text-primary-900">Create Appointment</button>
                         </nav>
                         <button class="md:hidden focus:outline-none" onclick="toggleMenu()">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -67,6 +68,7 @@
                         </button>
                     </div>
                 </div>
+                <!-- Mobile -->
                 <div id="mobile-menu" class="md:hidden hidden px-4 pb-4">
                     <a href="#hero" class="block py-2 hover:text-primary-400">Home</a>
                     <a href="#about-us" class="block py-2 hover:text-primary-400">About Us</a>
@@ -219,7 +221,7 @@
             <div class="m-0 bg-primary-400 text-lg text-white font-bold text-center uppercase py-4  grid grid-cols-4">
                 <span class="col-span-3 text-xl [text-shadow:_1px_3px_rgb(0_0_1_/_0.2)]">Do you want to make an appointment ? check our certified doctors! </span>
                 <span class="col-span-1">
-                    <button class="bg-primary-100 font-bold  px-5 py-3 sm:px-2 sm:py-1 rounded-lg text-primary-400 hover:bg-primary-500 hover:text-primary-400 uppercase" data-modal-target="appointment-modal" data-modal-toggle="appointment-modal">create an appointment</button>
+                    <button class="bg-primary-100 font-bold  px-5 py-3 sm:px-2 sm:py-1 rounded-lg text-primary-400 hover:text-primary-900 uppercase" data-modal-target="appointment-modal" data-modal-toggle="appointment-modal">create an appointment</button>
                 </span>
             </div>
         </section>
@@ -330,13 +332,13 @@
 
         <!-- Main modal -->
         <div id="appointment-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+            <div class="relative bg-white rounded-lg shadow-sm text-primary-500">
                 <!-- Modal header -->
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                    <h3 class="text-xl font-semibold ">
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t  border-gray-200">
+                    <h3 class="text-xl font-semibold">
                         Start an Appointment
                     </h3>
-                    <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="appointment-modal">
+                    <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="appointment-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                         </svg>
@@ -344,7 +346,7 @@
                     </button>
                 </div>
                 <!-- Modal body -->
-                <div class="p-4 md:p-5">
+                <div>
                     @livewire('create-apointment')
                 </div>
             </div>
