@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ShowQueues;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Queues;
 
@@ -16,8 +17,10 @@ use App\Livewire\Queues;
 
 Route::get('/', function () {
     return view('public.welcome');
-});
+})->name('home');
 
+
+Route::get('/admin/queue-board', [ShowQueues::class,'index']);
 
 Route::get('/search-results', function () {
     return view('search');

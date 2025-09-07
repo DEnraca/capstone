@@ -26,13 +26,34 @@ use Illuminate\Support\HtmlString;
 class CreateApointment extends Component implements HasForms
 {
     use InteractsWithForms;
-
     public $data;
+
+    public $selectedService;
+    public $page;
+
+    protected $listeners = [
+        'changePage' => 'handlechangePage',
+    ];
+
+
+
 
     public function mount(): void
     {
-        $this->form->fill();
+        session(['selected_service' => []]);
+        $this->getPage('');
     }
+
+    public function gotoNext()
+    {
+        $this->getPage($this->page['shownext']);
+    }
+
+    public function gotoPrev()
+    {
+        $this->getPage($this->page['showprev']);
+    }
+
 
     public function form(Form $form): Form
     {
@@ -157,6 +178,57 @@ class CreateApointment extends Component implements HasForms
     {
         return view('livewire.create-apointment');
     }
+
+    public function getPage($page){
+        switch ($page) {
+            case 2:
+                $details = [
+                    'current_page' => 2,
+                    'page1' => true,
+                    'page2' => true,
+                    'page3' => false,
+                    'page4' => false,
+                    'showprev' => 1,
+                    'shownext' => 3,
+                ];
+                break;
+            case 3:
+                $details = [
+                    'current_page' => 3,
+                    'page1' => true,
+                    'page2' => true,
+                    'page3' => true,
+                    'page4' => false,
+                    'showprev' => 2,
+                    'shownext' => 4,
+                ];
+                break;
+            case 4:
+                $details = [
+                    'current_page' => 4,
+                    'page1' => true,
+                    'page2' => true,
+                    'page3' => true,
+                    'page4' => true,
+                    'showprev' => 3,
+                    'shownext' => null,
+                ];
+                break;
+            default:
+                $details = [
+                    'current_page' => 1,
+                    'page1' => true,
+                    'page2' => false,
+                    'page3' => false,
+                    'page4' => false,
+                    'showprev' => null,
+                    'shownext' => 2,
+                ];
+                break;
+        }
+        $this->page = $details;
+    }
+
 
 
 }

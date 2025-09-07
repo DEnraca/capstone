@@ -331,11 +331,11 @@
 
 
         <!-- Main modal -->
-        <div id="appointment-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div id="appointment-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)]">
             <div class="relative bg-white rounded-lg shadow-sm text-primary-500">
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t  border-gray-200">
-                    <h3 class="text-xl font-semibold">
+                    <h3 class="text-2xl font-semibold">
                         Start an Appointment
                     </h3>
                     <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="appointment-modal">
@@ -346,7 +346,7 @@
                     </button>
                 </div>
                 <!-- Modal body -->
-                <div>
+                <div class="max-w-full">
                     @livewire('create-apointment')
                 </div>
             </div>
@@ -354,6 +354,14 @@
 
     </div>
     <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+        // Your JavaScript code that interacts with the DOM goes here
+            let test = document.getElementById('appointment-modal');
+            test.classList.remove('hidden')
+        });
+
+        document.r
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
