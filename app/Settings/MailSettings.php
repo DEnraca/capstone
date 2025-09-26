@@ -6,6 +6,7 @@ use Spatie\LaravelSettings\Settings;
 
 class MailSettings extends Settings
 {
+
     public string $from_address;
     public string $from_name;
     public ?string $driver;
@@ -16,6 +17,14 @@ class MailSettings extends Settings
     public ?string $password;
     public ?int $timeout;
     public ?string $local_domain;
+
+
+    // 👇 Hide from navigation
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
 
     public static function group(): string
     {

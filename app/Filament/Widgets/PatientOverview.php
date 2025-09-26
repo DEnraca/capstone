@@ -31,12 +31,12 @@ class PatientOverview extends BaseWidget
                 ->description("Today's Patient")
                 ->icon('heroicon-s-user-group'),
 
-            Stat::make("", '37')
+            Stat::make("", '23')
                 ->color('warning')
                 ->description("On Queue")
                 ->icon('heroicon-s-clock'),
 
-            Stat::make("", '37')
+            Stat::make("", '14')
                 ->color('success')
                 ->description("Completed")
                 ->icon('heroicon-s-check-circle'),

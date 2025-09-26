@@ -1,16 +1,16 @@
 <div>
+    <div class="grid grid-cols-5 gap-2">
 
-    <div class="grid grid-cols-[1fr_25%] gap-2">
-        <div>
+        <div class="col-span-4">
             @livewire('services-table')
         </div>
-        <div class="min-h-full">
-            <ul class="max-w-md divide-y divide-gray-200 grid grid-rows-[8%_1fr] gap-2 h-full">
-                <div class="flex items-center justify-center">
-                    <h4 class="text-bold text-lg text-center ">Selected Service: {{count($this->selectedService)}}</h4>
+        <div class="col-span-1">
+            <ul class="divide-y divide-gray-200 grid grid-rows-[8%_1fr] gap-2">
+                <div class="flex items-center justify-center m0">
+                    <h4 class="text-bold text-lg text-center ">Selected Service: <span class="text-primary-500 font-black">{{count($this->selectedService)}}</span></h4>
                 </div>
                 <div>
-                    <li class="pb-3 sm:pb-4">
+                    <li class="pb-3 sm:pb-4 overflow-auto h-[30rem] bg-gray-100">
                         @if (!empty($this->selectedService))
                             @foreach ($this->selectedService as $service)
                                 @php
@@ -35,8 +35,16 @@
                             @endforeach
                         @endif
                     </li>
+                    <div class="flex justify-end m-2 <?php if(count($this->selectedService) <= 0) {
+                        echo 'hidden opacity-50 pointer-events-none';
+                    }?>">
+                        <x-filament::button color="primary">Proceed</x-filament:button>
+                    </div>
+
                 </div>
             </ul>
         </div>
+
     </div>
+
 </div>

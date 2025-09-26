@@ -59,7 +59,7 @@
                             <a href="#about-us" class="hover:text-primary-400 pt-1 pr-1">About Us</a>
                             <a href="#patient-care" class="hover:text-primary-400 pt-1 pr-1" >Patient Care</a>
                             <a href="{{route('filament.admin.auth.login')}}" class="hover:text-primary-400 pt-1 pr-1" >Login</a>
-                            <button href="{{route('filament.admin.auth.login')}}"  data-modal-target="appointment-modal" data-modal-toggle="appointment-modal" class="bg-primary-400 font-bold  px-5 pt-1 border border-secondary rounded-lg hover:text-primary-900">Create Appointment</button>
+                            <a href="{{route('livewire-appointment')}}"  class="bg-primary-400 font-bold  px-5 pt-1 border border-secondary rounded-lg hover:text-primary-900" target="_blank">Create Appointment</a>
                         </nav>
                         <button class="md:hidden focus:outline-none" onclick="toggleMenu()">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -112,18 +112,18 @@
                     <!-- Item 1 -->
                     <div class="hidden duration-700 bg-transparent ease-out-in grid grid-cols-3 md:grid-cols-3 sm:grid-cols-2 gap-3" data-carousel-item="active">
                         <div class="p-2 rounded max-h-full col-span-1">
-                            <img src="{{asset('images/frontend_asset/cardiac.jpg')}}" class="object-fill w-full h-auto max-h-44  rounded-xl">
+                            <img src="{{asset('images/frontend_asset/cardiac.jpg')}}" class="object-fill w-full h-auto max-h-64  rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">CARDIAC</h3>
                             <p class="text-sm mt-2 text-gray-800">Refers to anything related to the heart. A cardiac laboratory usually performs tests and procedures to evaluate heart function, such as ECG, stress tests, and cardiac imaging.</p>
                         </div>
                         <div class="p-2 rounded max-h-full col-span-1">
-                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-fill w-full h-auto max-h-44  rounded-xl">
+                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-fill w-full h-auto max-h-64  rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">LABORATORY</h3>
                             <p class="text-sm mt-2 text-gray-800">A medical laboratory is a facility where tests are carried out on clinical specimens (like blood, urine, or tissue) to gather information about a patient's health for diagnosis, treatment, and prevention of diseases.</p>
                         </div>
 
                         <div class="p-2 rounded max-h-full col-span-1">
-                            <img src="{{asset('images/frontend_asset/ultrasound.jpg')}}" class="object-fill w-full h-auto max-h-44 rounded-xl">
+                            <img src="{{asset('images/frontend_asset/ultrasound.jpg')}}" class="object-fill w-full h-auto max-h-64 rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">ULTRA-SOUND</h3>
                             <p class="text-sm mt-2 text-gray-800">Also known as sonography, it is an imaging method that uses high-frequency sound waves to create images of the inside of the body. It’s commonly used in pregnancy, but also for organs like the liver, kidneys, and heart.</p>
                         </div>
@@ -133,12 +133,12 @@
 
 
                         <div class="p-2 rounded max-h-full col-span-1">
-                            <img src="{{asset('images/frontend_asset/xray.jpg')}}" class="object-fill w-full h-auto max-h-44  rounded-xl">
+                            <img src="{{asset('images/frontend_asset/xray.jpg')}}" class="object-fill w-full h-auto max-h-64  rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">X-RAY</h3>
                             <p class="text-sm mt-2 text-gray-800">Refers to anything related to the heart. A cardiac laboratory usually performs tests and procedures to evaluate heart function, such as ECG, stress tests, and cardiac imaging.</p>
                         </div>
                         <div class="p-2 rounded max-h-full col-span-1">
-                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-fill w-full h-auto max-h-44  rounded-xl">
+                            <img src="{{asset('images/frontend_asset/laboratory.jpg')}}" class="object-fill w-full h-auto max-h-64  rounded-xl">
                             <h3 class="mt-4 text-2xl font-bold text-primary-400 border-b-2 border-[#000000] py-3">LABORATORY</h3>
                             <p class="text-sm mt-2 text-gray-800">A medical laboratory is a facility where tests are carried out on clinical specimens (like blood, urine, or tissue) to gather information about a patient's health for diagnosis, treatment, and prevention of diseases.</p>
                         </div>
@@ -221,7 +221,7 @@
             <div class="m-0 bg-primary-400 text-lg text-white font-bold text-center uppercase py-4  grid grid-cols-4">
                 <span class="col-span-3 text-xl [text-shadow:_1px_3px_rgb(0_0_1_/_0.2)]">Do you want to make an appointment ? check our certified doctors! </span>
                 <span class="col-span-1">
-                    <button class="bg-primary-100 font-bold  px-5 py-3 sm:px-2 sm:py-1 rounded-lg text-primary-400 hover:text-primary-900 uppercase" data-modal-target="appointment-modal" data-modal-toggle="appointment-modal">create an appointment</button>
+                    <a class="bg-primary-100 font-bold  px-5 py-3 sm:px-2 sm:py-1 rounded-lg text-primary-400 hover:text-primary-900 uppercase" href="{{route('livewire-appointment')}}" target="_blank" >create an appointment</a>
                 </span>
             </div>
         </section>
@@ -330,36 +330,15 @@
         </footer>
 
 
-        <!-- Main modal -->
-        <div id="appointment-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)]">
-            <div class="relative bg-white rounded-lg shadow-sm text-primary-500">
-                <!-- Modal header -->
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t  border-gray-200">
-                    <h3 class="text-2xl font-semibold">
-                        Start an Appointment
-                    </h3>
-                    <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="appointment-modal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                </div>
-                <!-- Modal body -->
-                <div class="max-w-full">
-                    @livewire('create-apointment')
-                </div>
-            </div>
-        </div>
 
     </div>
     <script>
 
-        document.addEventListener("DOMContentLoaded", function() {
-        // Your JavaScript code that interacts with the DOM goes here
-            let test = document.getElementById('appointment-modal');
-            test.classList.remove('hidden')
-        });
+        // document.addEventListener("DOMContentLoaded", function() {
+        // // Your JavaScript code that interacts with the DOM goes here
+        //     let test = document.getElementById('appointment-modal');
+        //     test.classList.remove('hidden')
+        // });
 
         document.r
         function toggleMenu() {

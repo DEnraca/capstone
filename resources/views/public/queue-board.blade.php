@@ -19,7 +19,7 @@
         </div>
 
         <div class="min-h-full min-w-full col-span-1 max-h-full bg-gray-200 rounded-lg grid-rows-[auto_1fr]" >
-
+            
                 <div class="bg-white text-center py-2">
                     <p class="font-black text-black text-2xl">Now Serving</p>
                 </div>
