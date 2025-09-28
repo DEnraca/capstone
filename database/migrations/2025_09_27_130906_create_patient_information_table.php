@@ -17,6 +17,20 @@ return new class extends Migration
         });
     }
 
+    //     <!--
+//     first_name
+//     last_name
+//     middle_name
+//     address
+//     gender
+//     civil_status
+//     email
+//     dob
+//     contact_number
+//     pass
+
+// -->
+
     /**
      * Reverse the migrations.
      */

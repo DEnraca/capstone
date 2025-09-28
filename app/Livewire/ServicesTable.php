@@ -117,11 +117,6 @@ class ServicesTable extends BaseWidget
         session(['selected_service' => $this->selectedService]);
         $this->dispatch('refreshChecklist');
 
-        Notification::make()
-            ->title('Added')
-            ->success()
-            ->send();
-
         return;
     }
 

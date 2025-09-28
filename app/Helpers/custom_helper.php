@@ -140,6 +140,23 @@ if (! function_exists('getBarangayCustom')) {
 }
 
 
+if (! function_exists('getAddressDetails')) {
+
+    function getAddressDetails($regionID, $provinceID, $cityID, $barangayID)
+    {
+        $region = getRegionsCustom()[$regionID] ?? null;
+        $province = getProvincesCustom($regionID)[$provinceID] ?? null;
+        $city = getCitiesCustom($provinceID)[$cityID] ?? null;
+        $barangay = getBarangayCustom($cityID)[$barangayID] ?? null;
+
+        return [
+            'region' => $region,
+            'province' => $province,
+            'city' => $city,
+            'barangay' => $barangay,
+        ];
+    }
+}
 
 
 

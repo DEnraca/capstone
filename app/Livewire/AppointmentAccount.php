@@ -254,20 +254,6 @@ class AppointmentAccount extends Component implements HasForms
 
     }
 
-//     <!--
-//     first_name
-//     last_name
-//     middle_name
-//     address
-//     gender
-//     civil_status
-//     email
-//     dob
-//     contact_number
-//     pass
-
-// -->
-
     public function submit()
     {
         // This will trigger validation based on your form schema
@@ -275,12 +261,9 @@ class AppointmentAccount extends Component implements HasForms
         // Instead of saving to the database, put it in the session
         Session::put('appointment_form', $data);
 
-        $account = session('appointment_form', []);
-        dd($account);
-
+        $this->dispatch('changePage','appointment-details');
 
     }
-
 
 
     public function render()

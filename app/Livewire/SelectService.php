@@ -38,10 +38,20 @@ class SelectService extends Component
                 ->send();
 
         }
-
-
     }
 
+    public function submitServiceSelection(){
+        if(count(session('selected_service', [])) == 0){
+            Notification::make()
+                ->title('No Service Selected')
+                ->body('Please select at least one service to proceed.')
+                ->danger()
+                ->send();
+            return;
+
+        }
+        $this->dispatch('changePage','service-selection');
+    }
     public function handleRefreshChecklist()
     {
         $this->selectedService = Service::whereIn('id',session('selected_service', []))->get();

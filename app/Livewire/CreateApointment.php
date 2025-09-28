@@ -10,7 +10,7 @@ class CreateApointment extends Component
 {
     public $data;
 
-    public $selectedService;
+
     public $page;
 
     protected $listeners = [
@@ -20,20 +20,9 @@ class CreateApointment extends Component
 
     public function mount(): void
     {
-        session(['selected_service' => []]);
         $this->getPage('');
-    }
 
-    public function gotoNext()
-    {
-        $this->getPage($this->page['shownext']);
     }
-
-    public function gotoPrev()
-    {
-        $this->getPage($this->page['showprev']);
-    }
-
 
     public function create(): void
     {
@@ -48,6 +37,18 @@ class CreateApointment extends Component
 
             redirect()->to('/');
 
+    }
+
+    public function handlechangePage($fromPage){
+        if($fromPage == 'service-selection'){
+            return $this->getPage(2);
+        }
+
+        if($fromPage == 'appointment-details'){
+            return $this->getPage(3);
+        }
+
+        return $this->getPage(1);
     }
 
     public function render()
@@ -79,7 +80,7 @@ class CreateApointment extends Component
                 break;
             default:
                 $details = [
-                    'current_page' => 2,
+                    'current_page' => 1,
                     'page1' => true,
                     'page2' => false,
                     'page3' => false,
@@ -90,7 +91,5 @@ class CreateApointment extends Component
         }
         $this->page = $details;
     }
-
-
 
 }

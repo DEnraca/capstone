@@ -38,7 +38,9 @@
                     <div class="flex justify-end m-2 <?php if(count($this->selectedService) <= 0) {
                         echo 'hidden opacity-50 pointer-events-none';
                     }?>">
-                        <x-filament::button color="primary">Proceed</x-filament:button>
+                        <x-filament::button color="primary"
+                            wire:click="submitServiceSelection"
+                            >Proceed</x-filament:button>
                     </div>
 
                 </div>
