@@ -15,6 +15,8 @@ class CreateApointment extends Component
 
     protected $listeners = [
         'changePage' => 'handlechangePage',
+        'backPage' => 'getPage',
+
     ];
 
 
@@ -49,6 +51,10 @@ class CreateApointment extends Component
         }
 
         return $this->getPage(1);
+    }
+
+    public function saveAppointment(){
+        dd(session()->all());
     }
 
     public function render()

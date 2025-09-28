@@ -147,10 +147,14 @@
                     </x-filament::card>
                 @endforeach
             </div>
-            <div class="flex justify-end">
+            <div class="flex justify-end gap-1">
+                <x-filament::button x-on:click="$dispatch('backPage', { page: 2})" color="gray">
+                    Back
+                </x-filament::button>
                 <x-filament::button
                     type="button"
                     color="primary"
+                    wire:click="saveAppointment"
                 >
                     Confirm Appointment
                 </x-filament::button>

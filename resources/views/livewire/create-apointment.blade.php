@@ -1,7 +1,7 @@
 <div>
     <div class="flex items-center justify-around  border border-gray-200 rounded-lg shadow-xs items-center gap-3 min-w-full py-1">
         <ol class="h-[10%] flex items-center justify-center w-full p-3 space-x-1 text-sm font-medium text-center text-primary-400 rtl:space-x-reverse">
-            <li class="hover:underline  flex items-center cursor-pointer" wire:click="getPage(1)">
+            <li class=" flex items-center cursor-pointer">
                 <span class="flex items-center justify-center w-5 h-5 me-2 text-xs border border-gray-600 rounded-full shrink-0">
                     @if ($page['page1']) <x-fas-check-circle></x-fas-check-circle>
                     @else 1 @endif
@@ -11,7 +11,7 @@
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 9 4-4-4-4M1 9l4-4-4-4"/>
                 </svg>
             </li>
-            <li class="hover:underline  flex items-center cursor-pointer" wire:click="getPage(2)">
+            <li class="flex items-center">
                 <span class="flex items-center justify-center w-5 h-5 me-2 text-xs border border-gray-600 rounded-full shrink-0">
                     @if ($page['page2']) <x-fas-check-circle></x-fas-check-circle>
                     @else 2 @endif
@@ -22,7 +22,7 @@
                 </svg>
             </li>
 
-            <li class="hover:underline  flex items-center cursor-pointer" wire:click="getPage(3)">
+            <li class="flex items-center">
                 <span class="flex items-center justify-center w-5 h-5 me-2 text-xs border border-gray-600 rounded-full shrink-0">
                     @if ($page['page3']) <x-fas-check-circle></x-fas-check-circle>
                     @else 3 @endif

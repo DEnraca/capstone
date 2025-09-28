@@ -3,9 +3,13 @@
     {{-- In work, do what you enjoy. --}}
 
 
-    <div class="flex justify-end m-2">
+    <div class="flex justify-end m-2 gap-1">
+        <x-filament::button x-on:click="$dispatch('backPage', { page: 1})" color="gray">
+            Back
+        </x-filament::button>
+
         <x-filament::button wire:click="submit" color="primary">
-            Create Account
+            Proceed booking confirmation
         </x-filament::button>
     </div>
 
