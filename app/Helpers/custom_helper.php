@@ -106,6 +106,38 @@ if (! function_exists('getAppointmentStatus')) {
     }
 }
 
+if (! function_exists('getRegionsCustom')) {
+
+    function getRegionsCustom()
+    {
+        return DB::table('regions')->orderBy('name')->pluck('name', 'region_id')->toArray();
+    }
+}
+
+if (! function_exists('getProvincesCustom')) {
+
+    function getProvincesCustom($regionID)
+    {
+        return DB::table('provinces')->where('region_id',$regionID)->orderBy('name')->pluck('name', 'province_id')->toArray();
+    }
+}
+
+if (! function_exists('getCitiesCustom')) {
+
+    function getCitiesCustom($provinceID)
+    {
+        return DB::table('cities')->where('province_id',$provinceID)->orderBy('name')->pluck('name', 'city_id')->toArray();
+    }
+}
+
+
+if (! function_exists('getBarangayCustom')) {
+
+    function getBarangayCustom($cityID)
+    {
+        return DB::table('barangays')->where('city_id',$cityID)->orderBy('name')->pluck('name', 'id')->toArray();
+    }
+}
 
 
 

@@ -18,8 +18,6 @@ class CreateApointment extends Component
     ];
 
 
-
-
     public function mount(): void
     {
         session(['selected_service' => []]);

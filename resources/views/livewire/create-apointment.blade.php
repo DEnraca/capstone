@@ -31,7 +31,7 @@
             </li>
         </ol>
     </div>
-    <div>
+    <div class="p-2">
         @if ($page['current_page'] == 1)
             @livewire('select-service')
         @endif

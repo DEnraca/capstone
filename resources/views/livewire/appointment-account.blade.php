@@ -4,7 +4,7 @@
 
 
     <div class="flex justify-end m-2">
-        <x-filament::button wire:click="gotoNext" color="primary">
+        <x-filament::button wire:click="submit" color="primary">
             Create Account
         </x-filament::button>
     </div>
