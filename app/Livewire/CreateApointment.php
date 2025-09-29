@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Livewire;
-
-use App\Forms\Components\ServicesSelect;
 use App\Models\Appointment;
+use App\Models\Address;
+use App\Models\User;
+use App\Models\PatientInformation;
 use Livewire\Component;
 use Filament\Notifications\Notification;
 class CreateApointment extends Component
@@ -54,7 +55,45 @@ class CreateApointment extends Component
     }
 
     public function saveAppointment(){
-        dd(session()->all());
+        $selectedService = session('selected_service',[]);
+        $appointment_form = session('appointment_form',[]);
+
+        $pat_id = (auth()->check()?->patient ?? null) ? auth()->user()->patient->id : null;
+        if(!$pat_id){
+            $address = Address::create($appointment_form['address']);
+            $info = $appointment_form['info'];
+            $info['address_id'] = $address->id;
+
+            $user_id = User::create([
+                'username' => generateUniqueUsername($info['first_name'],$info['middle_name'] ?? null,$info['last_name']),
+                'firstname' => $info['first_name'],
+                'lastname' => $info['last_name'],
+                'email' => $appointment_form['account']['email'],
+                'password' => $appointment_form['account']['password'],
+                'email_verified_at' => now(),
+            ]);
+
+            $info['user_id'] = $user_id->id;
+
+            $pat_id = PatientInformation::create($info);
+            $pat_id = $pat_id->id;
+        }
+
+        $book = $appointment_form['book'];
+        $book['patient_id'] = $pat_id;
+        $appointment = Appointment::create($book);
+        foreach($selectedService as $service){
+            $appointment->services()->attach($service,['status' => 1]);
+        }
+
+        session()->flush();
+
+        Notification::make()
+            ->title('Appointment Created')
+            ->success()
+            ->send();
+
+        return redirect()->route('home');
     }
 
     public function render()

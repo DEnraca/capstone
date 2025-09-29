@@ -17,7 +17,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
-
+use App\Models\PatientInformation;
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail, HasAvatar, HasName, HasMedia
 {
     use InteractsWithMedia;
@@ -100,4 +100,10 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
     {
         return $this->hasOne(Employee::class);
     }
+
+    public function patient()
+    {
+        return $this->hasOne(PatientInformation::class,'user_id');
+    }
+
 }

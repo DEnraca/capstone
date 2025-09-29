@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\HtmlString;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
+
 
 class AppointmentAccount extends Component implements HasForms
 {
@@ -70,20 +72,17 @@ class AppointmentAccount extends Component implements HasForms
                                         ->prefixIconColor('primary')
                                         ->helperText('Kindly include suffix after last name, e.g. II, III')
                                         ->label('Last Name')
-                                        ->default('Enraca')
                                         ->required(),
 
                                     TextInput::make('first_name')
                                         ->prefixIcon('heroicon-o-user')
                                         ->prefixIconColor('primary')
                                         ->label('First Name')
-                                        ->default('Dennis')
                                         ->required(),
 
                                     TextInput::make('middle_name')
                                         ->prefixIcon('heroicon-o-user')
                                         ->prefixIconColor('primary')
-                                        ->default('Abellera')
                                         ->label('Middle Name'),
 
                                     TextInput::make('mobile')
@@ -96,7 +95,6 @@ class AppointmentAccount extends Component implements HasForms
                                         ->prefix('+63')
                                         ->label('Phone')
                                         ->helperText('Mobile number must start with +63')
-                                        ->default('9171234567')
                                         ->required(),
 
                                     DatePicker::make('dob')
@@ -105,19 +103,16 @@ class AppointmentAccount extends Component implements HasForms
                                         ->prefixIconColor('primary')
                                         ->maxDate(now()->subYear())
                                         ->closeOnDateSelection()
-                                        ->default('1999-25-01')
                                         ->label('Birthdate'),
 
                                     Select::make('gender')
                                         ->label('Gender')
                                         ->options( fn () => Gender::all()->pluck('name','id')->toArray() )
-                                        ->default(1)
                                         ->required(),
 
                                     Select::make('civil_status')
                                         ->label('Civil Status')
                                         ->options( fn () => CivilStatus::all()->pluck('name','id')->toArray() )
-                                        ->default(1)
                                         ->required(),
 
                                 ]),
@@ -136,7 +131,6 @@ class AppointmentAccount extends Component implements HasForms
                                                 $set('city_id', null);
                                                 $set('barangay_id', null);
                                             })
-                                            ->default('03')
                                             ->required(),
 
                                         Select::make('province_id')
@@ -150,7 +144,6 @@ class AppointmentAccount extends Component implements HasForms
                                             ->searchable()
                                             ->live()
                                             ->optionsLimit(75)
-                                            ->default('03014')
                                             ->required(),
 
                                         Select::make('city_id')
@@ -163,7 +156,6 @@ class AppointmentAccount extends Component implements HasForms
                                             })
                                             ->live()
                                             ->optionsLimit(75)
-                                            ->default('0301404')
                                             ->required(),
 
                                         Select::make('barangay_id')
@@ -172,13 +164,11 @@ class AppointmentAccount extends Component implements HasForms
                                             ->disabled(fn (callable $get) => !$get('city_id'))
                                             ->searchable()
                                             ->live()
-                                            ->default('8773')
                                             ->optionsLimit(75)
                                             ->required(),
 
                                         TextInput::make('house_address')
                                             ->columnSpanFull()
-                                            ->default('1547 Banlok St. Farmers Subd.')
                                             ->helperText('House no., Street, Subdivision, Village')
                                             ->label('House Address')
                                             ->required(),
@@ -195,13 +185,11 @@ class AppointmentAccount extends Component implements HasForms
                                         ->native(false)
                                         ->prefixIcon('heroicon-o-calendar-days')
                                         ->prefixIconColor('primary')
-                                        ->default('2025-09-27')
                                         ->closeOnDateSelection()
                                         ->label('Date'),
 
                                     Select::make('appointment_time')
                                         ->label('Time')
-                                        ->default('9:30')
                                         ->placeholder('Select Time')
                                         ->prefixIcon('heroicon-o-clock')
                                         ->prefixIconColor('primary')
@@ -227,8 +215,7 @@ class AppointmentAccount extends Component implements HasForms
                                         ->prefixIcon('heroicon-o-at-symbol')
                                         ->prefixIconColor('primary')
                                         ->label('Email')
-                                        // ->unique(table: User::class, column: 'email')
-                                        ->default('dennisenraca25@gmail.com')
+                                        ->unique(table: User::class, column: 'email', ignorable: fn () => Auth::user() )
                                         ->required(),
 
                                     TextInput::make('password')
@@ -236,7 +223,6 @@ class AppointmentAccount extends Component implements HasForms
                                         ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
                                         ->dehydrated(fn (?string $state): bool => filled($state))
                                         ->revealable()
-                                        ->default('admin123')
                                         ->required(),
 
                                     TextInput::make('passwordConfirmation')
@@ -245,7 +231,6 @@ class AppointmentAccount extends Component implements HasForms
                                         ->dehydrated(fn (?string $state): bool => filled($state))
                                         ->revealable()
                                         ->same('password')
-                                        ->default('admin123')
                                         ->required(),
                                 ]),
                             ]),
