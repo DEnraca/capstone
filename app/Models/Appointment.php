@@ -19,11 +19,7 @@ class Appointment extends Model
         'appointment_date',
         'appointment_time',
         'status',
-        'email',
-        'last_name',
-        'first_name',
-        'middle_name',
-        'mobile',
+        'patient_id',
         'message',
         'confimed_by'
     ];

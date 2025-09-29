@@ -1,13 +1,47 @@
 <div>
+    <div class="flex items-center justify-around  border border-gray-200 rounded-lg shadow-xs items-center gap-3 min-w-full py-1">
+        <ol class="h-[10%] flex items-center justify-center w-full p-3 space-x-1 text-sm font-medium text-center text-primary-400 rtl:space-x-reverse">
+            <li class=" flex items-center cursor-pointer">
+                <span class="flex items-center justify-center w-5 h-5 me-2 text-xs border border-gray-600 rounded-full shrink-0">
+                    @if ($page['page1']) <x-fas-check-circle></x-fas-check-circle>
+                    @else 1 @endif
+                </span>
+                Select Service
+                <svg class="w-3 h-3 ms-3 sm:ms-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 12 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 9 4-4-4-4M1 9l4-4-4-4"/>
+                </svg>
+            </li>
+            <li class="flex items-center">
+                <span class="flex items-center justify-center w-5 h-5 me-2 text-xs border border-gray-600 rounded-full shrink-0">
+                    @if ($page['page2']) <x-fas-check-circle></x-fas-check-circle>
+                    @else 2 @endif
+                </span>
+                Appointment Details
+                <svg class="w-3 h-3 ms-2 sm:ms-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 12 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 9 4-4-4-4M1 9l4-4-4-4"/>
+                </svg>
+            </li>
 
-      <form wire:submit="create">
-        {{ $this->form }}
-
-        {{-- <div class="flex justify-end p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-            <button type="submit" class="text-white bg-primary-500 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Submit</button>
-            <button data-modal-hide="appointment-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-primary-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-700 dark:bg-primary-800 dark:text-primary-400 dark:border-primary-600 dark:hover:text-white dark:hover:bg-primary-700">Decline</button>
-        </div> --}}
-
-    </form>
-
+            <li class="flex items-center">
+                <span class="flex items-center justify-center w-5 h-5 me-2 text-xs border border-gray-600 rounded-full shrink-0">
+                    @if ($page['page3']) <x-fas-check-circle></x-fas-check-circle>
+                    @else 3 @endif
+                </span>
+                    Confirm
+            </li>
+        </ol>
+    </div>
+    <div class="p-2">
+        @if ($page['current_page'] == 1)
+            @livewire('select-service')
+        @endif
+        @if ($page['current_page'] == 2)
+            @livewire('appointment-account')
+        @endif
+        @if ($page['current_page'] == 3)
+            @include('livewire.confirm-appointment')
+        @endif
+    </div>
 </div>
+
+

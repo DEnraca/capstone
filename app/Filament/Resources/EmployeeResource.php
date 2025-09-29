@@ -29,7 +29,7 @@ class EmployeeResource extends Resource
 {
     protected static ?string $model = Employee::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'fas-user-doctor';
 
     public static function form(Form $form): Form
     {
@@ -244,6 +244,7 @@ class EmployeeResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('emp_id')
+                    ->label('Employee ID')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('last_name')
                     ->searchable(),
@@ -251,13 +252,14 @@ class EmployeeResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('middle_name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('gender.id')
+                Tables\Columns\TextColumn::make('gender.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('birthdate')
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('mobile')
+                    ->prefix('+63')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('department.name')
                     ->numeric()
@@ -265,7 +267,7 @@ class EmployeeResource extends Resource
                 Tables\Columns\TextColumn::make('position.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('employment_type')
+                Tables\Columns\TextColumn::make('employmentType.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('date_hired')
@@ -273,8 +275,7 @@ class EmployeeResource extends Resource
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('user.id')
-                    ->searchable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

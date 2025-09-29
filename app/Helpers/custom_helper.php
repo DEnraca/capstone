@@ -106,7 +106,90 @@ if (! function_exists('getAppointmentStatus')) {
     }
 }
 
+if (! function_exists('getRegionsCustom')) {
 
+    function getRegionsCustom()
+    {
+        return DB::table('regions')->orderBy('name')->pluck('name', 'region_id')->toArray();
+    }
+}
+
+if (! function_exists('getProvincesCustom')) {
+
+    function getProvincesCustom($regionID)
+    {
+        return DB::table('provinces')->where('region_id',$regionID)->orderBy('name')->pluck('name', 'province_id')->toArray();
+    }
+}
+
+if (! function_exists('getCitiesCustom')) {
+
+    function getCitiesCustom($provinceID)
+    {
+        return DB::table('cities')->where('province_id',$provinceID)->orderBy('name')->pluck('name', 'city_id')->toArray();
+    }
+}
+
+
+if (! function_exists('getBarangayCustom')) {
+
+    function getBarangayCustom($cityID)
+    {
+        return DB::table('barangays')->where('city_id',$cityID)->orderBy('name')->pluck('name', 'id')->toArray();
+    }
+}
+
+
+if (! function_exists('getAddressDetails')) {
+
+    function getAddressDetails($regionID, $provinceID, $cityID, $barangayID)
+    {
+        $region = getRegionsCustom()[$regionID] ?? null;
+        $province = getProvincesCustom($regionID)[$provinceID] ?? null;
+        $city = getCitiesCustom($provinceID)[$cityID] ?? null;
+        $barangay = getBarangayCustom($cityID)[$barangayID] ?? null;
+
+        return [
+            'region' => $region,
+            'province' => $province,
+            'city' => $city,
+            'barangay' => $barangay,
+        ];
+    }
+}
+
+if (! function_exists('generatePatID')) {
+    function generatePatID()
+    {
+        $year = Carbon::now()->format('Y');
+
+        // Get the latest emp_id for the current year
+        $latest = DB::table('patient_information')
+            ->where('pat_id', 'like', "$year%")
+            ->orderByDesc('pat_id')
+            ->first();
+
+        if (!$latest) {
+            return sprintf("%s-%04d-%02d", $year, 0, 0);
+        }
+
+        // Parse the latest emp_id
+        [$latestYear, $latestBackup, $latestCounter] = explode('-', $latest->emp_id);
+
+        $backup = (int) $latestBackup;
+        $counter = (int) $latestCounter;
+
+        // Increment counter, and overflow to backup if needed
+        if ($counter < 99) {
+            $counter++;
+        } else {
+            $counter = 0;
+            $backup++;
+        }
+
+        return sprintf("%s-%04d-%02d", $year, $backup, $counter);
+    }
+}
 
 
 

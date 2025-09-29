@@ -18,7 +18,7 @@ class ServiceResource extends Resource
 {
     protected static ?string $model = Service::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'fas-notes-medical';
 
     public static function form(Form $form): Form
     {
@@ -67,11 +67,12 @@ class ServiceResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('department.name')
-                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('code')
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('price')
                     ->money('php')

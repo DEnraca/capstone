@@ -7,9 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Service extends Model
+class Service extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     use HasFactory;
 
     protected $table = 'services';
@@ -38,7 +42,7 @@ class Service extends Model
     {
         return $this->belongsToMany(Appointment::class, 'booked_services');
     }
-    
+
     public function medTechs(): BelongsToMany
     {
         return $this->belongsToMany(Employee::class, 'med_tech_has_services', 'service_id', 'med_tech_id');
