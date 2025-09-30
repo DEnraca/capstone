@@ -20,54 +20,31 @@
         >
             <x-slot name="heading">Account Sign In</x-slot>
 
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">
-                    Email
-                </label>
-                <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    autofocus
-                    autocomplete="email"
-                    tabindex="1"
-                    class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                >
-            </div>
+                <div class="space-y-4">
+                    <x-filament::input.wrapper>
+                        <x-filament::input type="email" wire:model.defer="email" placeholder="Email"/>
+                    </x-filament::input.wrapper>
+                    @error('email')
+                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                    @enderror
 
-            <!-- Password -->
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">
-                    Password
-                </label>
-                <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    autocomplete="current-password"
-                    tabindex="2"
-                    class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                >
-
-                <!-- Forgot password link -->
-                <div class="mt-2 text-sm">
-                    <a href="/admin/password-reset/request" tabindex="3" class="text-primary-600 hover:underline">
-                        Forgot your password?
-                    </a>
+                    <x-filament::input.wrapper>
+                        <x-filament::input type="password" wire:model.defer="password" placeholder="Password" />
+                    </x-filament::input.wrapper>
+                    @error('password')
+                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
-            </div>
 
 
-            <x-slot name="footer">
-                <x-filament::button wire:click="gotoNext" color="primary">
-                    Sign In
-                </x-filament::button>
-                <x-filament::button x-on:click="$dispatch('close-modal', { id: 'appoinment-login-modal'})" color="gray">
-                    Cancel
-                </x-filament::button>
-            </x-slot>
+                <x-slot name="footer">
+                    <x-filament::button wire:click="login" color="primary">
+                        Sign In
+                    </x-filament::button>
+                    <x-filament::button x-on:click="$dispatch('close-modal', { id: 'appoinment-login-modal'})" color="gray">
+                        Cancel
+                    </x-filament::button>
+                </x-slot>
         </x-filament::modal>
     </div>
 
