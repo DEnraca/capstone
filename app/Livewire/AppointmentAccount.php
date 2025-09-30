@@ -21,11 +21,15 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\HtmlString;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Validation\ValidationException;
+use Filament\Notifications\Notification;
 
 class AppointmentAccount extends Component implements HasForms
 {
     use InteractsWithForms;
+
+    public string $email = '';
+    public string $password = '';
 
     public $data;
 
@@ -34,10 +38,60 @@ class AppointmentAccount extends Component implements HasForms
     public function mount(): void
     {
         $app_form = session('appointment_form', []);
-        // $this->form->fill([$app_form]);
-        $this->form->fill();
+        if(auth()->check()){
+            $this->form->fill($this->automateForm(Auth::user()));
+        }else{
+            $this->form->fill([]);
+        }
 
     }
+
+    public function login()
+    {
+        $this->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        if (! Auth::attempt([
+            'email' => $this->email,
+            'password' => $this->password,
+        ], true)) {
+            throw ValidationException::withMessages([
+                'email' => __('filament-panels::pages/auth/login.messages.failed'),
+            ]);
+        }
+
+        // session()->regenerate();
+
+        // optional: close modal after login
+        $this->dispatch('close-modal', id: 'appoinment-login-modal');
+
+        Notification::make()
+            ->success()
+            ->title('Authenticated')
+            ->send();
+
+        return $this->form->fill($this->automateForm(Auth::user()));
+        // // redirect to panel's home/dashboard
+        // return redirect()->intended(filament()->getUrl());
+    }
+
+
+    public function automateForm($user){
+    // dd($user);
+        $info = $user->patient;
+        $address = $info->address;
+        $preFilled = [
+            'info' => $info->toArray(),
+            'address' => $address->toArray(),
+            'account' => [
+                'email' => $user->email,
+            ]
+        ];
+        return $preFilled;
+    }
+
 
     public function form(Form $form): Form
     {
@@ -65,6 +119,7 @@ class AppointmentAccount extends Component implements HasForms
 
                             Fieldset::make('Personal Information')
                                 ->columns(3)
+                                ->disabled(fn () => auth()->check())
                                 ->statePath('info')
                                 ->schema([
                                     TextInput::make('last_name')
@@ -120,6 +175,7 @@ class AppointmentAccount extends Component implements HasForms
                                 Fieldset::make('Address')
                                     ->columns(2)
                                     ->statePath('address')
+                                    ->disabled(fn () => auth()->check())
                                     ->schema([
                                         Select::make('region_id')
                                             ->label('Region')
@@ -208,6 +264,7 @@ class AppointmentAccount extends Component implements HasForms
                             Fieldset::make('Account Information')
                                 ->columnSpan(1)
                                 ->statePath('account')
+                                ->disabled(fn () => auth()->check())
                                 ->columns(1)
                                 ->schema([
                                     TextInput::make('email')
@@ -220,6 +277,7 @@ class AppointmentAccount extends Component implements HasForms
 
                                     TextInput::make('password')
                                         ->password()
+                                        ->hidden(fn () => auth()->check())
                                         ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
                                         ->dehydrated(fn (?string $state): bool => filled($state))
                                         ->revealable()
@@ -227,6 +285,7 @@ class AppointmentAccount extends Component implements HasForms
 
                                     TextInput::make('passwordConfirmation')
                                         ->password()
+                                        ->hidden(fn () => auth()->check())
                                         ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
                                         ->dehydrated(fn (?string $state): bool => filled($state))
                                         ->revealable()
@@ -244,6 +303,11 @@ class AppointmentAccount extends Component implements HasForms
         // This will trigger validation based on your form schema
         $data = $this->form->getState();
         // Instead of saving to the database, put it in the session
+        if(auth()->check()){
+            $preFilled = $this->automateForm(auth()->user());
+            $preFilled['book'] = $data['book'];
+            $data= $preFilled;
+        }
         Session::put('appointment_form', $data);
 
         $this->dispatch('changePage','appointment-details');

@@ -7,10 +7,11 @@ use App\Models\User;
 use App\Models\PatientInformation;
 use Livewire\Component;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\DB;
+
 class CreateApointment extends Component
 {
     public $data;
-
 
     public $page;
 
@@ -58,7 +59,12 @@ class CreateApointment extends Component
         $selectedService = session('selected_service',[]);
         $appointment_form = session('appointment_form',[]);
 
-        $pat_id = (auth()->check()?->patient ?? null) ? auth()->user()->patient->id : null;
+        $pat_id = null;
+        if(auth()->check()){
+            if(auth()->user()->patient){
+                $pat_id = auth()->user()->patient->id;
+            }
+        }
         if(!$pat_id){
             $address = Address::create($appointment_form['address']);
             $info = $appointment_form['info'];
@@ -71,6 +77,12 @@ class CreateApointment extends Component
                 'email' => $appointment_form['account']['email'],
                 'password' => $appointment_form['account']['password'],
                 'email_verified_at' => now(),
+            ]);
+
+            DB::table('model_has_roles')->insert([
+                'role_id' => 3,
+                'model_type' => 'App\Models\User',
+                'model_id' => $user_id->id,
             ]);
 
             $info['user_id'] = $user_id->id;

@@ -11,8 +11,6 @@ class Login extends BasePage
     public function mount(): void
     {
         parent::mount();
-
-
     }
 
     public function form(Form $form): Form
