@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources;
 
+use App\Actions\Form\AppointmentFields\DateTimeMessage;
+use App\Actions\Form\PatientInformation\Address;
+use App\Actions\Form\PatientInformation\PersonalInfo;
 use App\Filament\Resources\AppointmentResource\Pages;
 use App\Filament\Resources\AppointmentResource\RelationManagers;
 use App\Models\Appointment;
@@ -9,6 +12,8 @@ use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -20,6 +25,7 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\HtmlString;
 
 class AppointmentResource extends Resource
 {
@@ -29,110 +35,61 @@ class AppointmentResource extends Resource
 
     public static function form(Form $form): Form
     {
+
+        $patientInfoField = PersonalInfo::run();
+        $patientAddressField = Address::run();
+        $appointmentField = DateTimeMessage::run();
+
         return $form
             ->schema([
+                Section::make('Appointment Details')
+                    ->description(function (Appointment $record) {
+                        if($record->services()->count() == 0 || $record->services()->where('status',2)->count() > 1){
+                            // $badge = $record->status_name;
 
-                Fieldset::make('')
-                    ->hiddenLabel()
+                            return new HtmlString('
+                                    <div class="flex justify-between">
+                                        <span class="text-red-500">You must approve at least 1 booked services before appointment confirmation</span>
+                                    </div>
+                                ');
+                        }
+                        return null;
+                    })
                     ->schema([
-                        DatePicker::make('appointment_date')
-                            ->required()
-                            ->native(false)
-                            ->default(now()->format('Y-m-d'))
-                            ->formatStateUsing(fn ($state) => $state ? date('F j, Y', strtotime($state)) : '')
-                            ->prefixIcon('heroicon-o-calendar-days')
-                            ->prefixIconColor('primary')
-                            ->closeOnDateSelection()
-                            ->label('Date'),
+                        Fieldset::make('Patient Information')
+                            ->relationship('patient')
+                            ->disabled()
+                            ->schema(array_merge(
+                                $patientInfoField,
+                                [
+                                    Fieldset::make('Address')
+                                        ->relationship('address')
+                                        ->schema($patientAddressField)
+                                        ->columnSpanFull()
+                                        ->columns(2),
+                                ]
+                            ))->columns(3)->columnSpan(2),
 
-                        Select::make('appointment_time')
-                            ->label('Time')
-                            ->default('8:30')
-                            ->formatStateUsing(fn ($state) => $state ? date('h:i A', strtotime($state)) : '')
-                            ->placeholder('Select Time')
-                            ->prefixIcon('heroicon-o-clock')
-                            ->prefixIconColor('primary')
-                            ->required()
-                            ->disableOptionWhen(fn (string $value): bool => ($value) === '08:30')
-                            ->options(fn () => get_appointment_timeslots())
-                            ->searchable(),
-
-
-                    Fieldset::make('Full Name')
-                        ->columns(3)
-                        ->schema([
-                            TextInput::make('last_name')
-                                ->prefixIcon('heroicon-o-user')
-                                ->prefixIconColor('primary')
-                                ->helperText('Kindly include suffix after last name, e.g. II, III')
-                                ->label('Last Name')
-                                ->required(),
-                            TextInput::make('first_name')
-                                ->prefixIcon('heroicon-o-user')
-                                ->default('Dennis')
-                                ->prefixIconColor('primary')
-                                ->label('First Name')
-                                ->required(),
-                            TextInput::make('middle_name')
-                                ->prefixIcon('heroicon-o-user')
-                                ->prefixIconColor('primary')
-                                ->default('Abellera')
-                                ->label('Middle Name'),
-                        ]),
-
-                        TextInput::make('email')
-                            ->email() // or
-                            ->prefixIcon('heroicon-o-at-symbol')
-                            ->prefixIconColor('primary')
-                            ->label('Email')
-                            ->default('dennisenraca25@gmail.com')
-                            ->required(),
-
-                        TextInput::make('mobile')
-                            ->tel() // or
-                            ->prefixIcon('heroicon-o-phone')
-                            ->prefixIconColor('primary')
-                            ->minLength(10)
-                            ->maxLength(10)
-                            ->prefix('+63')
-                            ->label('Phone')
-                            ->default('9050449294')
-                            ->helperText('Mobile number must start with +63')
-                            ->required(),
-
-                        Textarea::make('message')
-                            ->placeholder('I want to book an appointment')
-                            ->rows(3)
-                            ->default('Test')
-                            ->columnSpan(2)
-                            ->autosize(),
-
-                ])->columnSpan(2),
+                        Fieldset::make('Appointment Date')
+                            ->schema($appointmentField)
+                            ->columns(1)
+                            ->disabled(fn (Appointment $record) => ($record->status == 1) ? false : true)
+                            ->columnSpan(1),
+                    ])->columns(3),
 
 
-            ]);
+
+            ])->columns(1);
     }
-
-    //admission staff
-    //patient
-    //cashier
-    //med tech
-    //administrator
-
-    //positions
-     /*
-      Pathologist
-
-     */
 
     public static function table(Table $table): Table
     {
         return $table
             ->defaultSort('created_at','desc')
             ->columns([
-                Tables\Columns\TextColumn::make('last_name')
+                Tables\Columns\TextColumn::make('patient')
                     ->label('Full Name')
-                    ->formatStateUsing(fn ($record) => $record->first_name . ' ' .$record->last_name )
+                    ->formatStateUsing(fn ($state) => $state->first_name . ' ' .$state->last_name )
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('appointment_date')
@@ -152,7 +109,7 @@ class AppointmentResource extends Resource
                     })
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('mobile')
+                Tables\Columns\TextColumn::make('patient.mobile')
                     ->prefix('+63')
                     ->searchable(),
 
@@ -181,7 +138,7 @@ class AppointmentResource extends Resource
             ])
             ->actions([
                 Action::make('approve')
-                    ->label('Approve')
+                    ->label('Confirm Appointment')
                     ->hidden(fn ($record) => ($record->status == 1) ? false : true)
                     ->requiresConfirmation()
                     ->action(function (Appointment $record) {

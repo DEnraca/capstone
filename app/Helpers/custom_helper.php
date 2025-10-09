@@ -191,6 +191,51 @@ if (! function_exists('generatePatID')) {
     }
 }
 
+if (! function_exists('generateQueueNumber')) {
+    /**
+     * Generate a unique queue number with type prefix and sequence per day.
+     *
+     * Example output: W-20251004-001
+     */
+    function generateQueueNumber(int $type = 1): string
+    {
+        $prefix = match ($type) {
+            2  => 'W',
+            4  => 'P',
+            1  => 'A',
+            default          => 'U', // unknown
+        };
+
+        $date = Carbon::now()->format('Ymd');
+
+        // Wrap in transaction to avoid race condition when many users queue at once
+        return DB::transaction(function () use ($type, $prefix, $date) {
+            $latest = DB::table('queues')
+                ->where('queue_type_id', $type)
+                ->whereDate('created_at', Carbon::today())
+                ->lockForUpdate()
+                ->orderByDesc('sequence')
+                ->first();
+
+            $nextSequence = $latest ? $latest->sequence + 1 : 1;
+            $formattedSeq = str_pad($nextSequence, 3, '0', STR_PAD_LEFT);
+            $queueNo = "{$prefix}-{$date}-{$formattedSeq}";
+
+            // Double-check uniqueness in case of DB lag
+            while (
+                DB::table('queues')->where('queue_number', $queueNo)->exists()
+            ) {
+                $nextSequence++;
+                $formattedSeq = str_pad($nextSequence, 3, '0', STR_PAD_LEFT);
+                $queueNo = "{$prefix}-{$date}-{$formattedSeq}";
+            }
+
+            return $queueNo;
+        });
+    }
+}
+
+
 
 
 

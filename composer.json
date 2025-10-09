@@ -34,6 +34,7 @@
         "laravel/tinker": "^2.8",
         "league/commonmark": "^2.4",
         "leandrocfe/filament-apex-charts": "^3.1",
+        "lorisleiva/laravel-actions": "^2.9",
         "maatwebsite/excel": "^3.1",
         "owenvoke/blade-fontawesome": "^2.9",
         "riodwanto/filament-ace-editor": "^1.0",
