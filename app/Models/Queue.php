@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Queue extends Model
@@ -25,15 +27,6 @@ class Queue extends Model
         'queue_end',
         'created_by',
     ];
-
-    protected static function booted()
-    {
-        static::creating(function (PatientInformation $model) {
-            // Your logic to be executed before a new model is created
-            // For example, setting a default value or performing validation
-            $model->pat_id = generatePatID();
-        });
-    }
 
     public function priorityType(): BelongsTo
     {
@@ -64,4 +57,25 @@ class Queue extends Model
     {
         return $this->belongsTo(Employee::class,'confimed_by');
     }
+
+    public function checklists(): HasMany
+    {
+        return $this->hasMany(QueueChecklist::class,'queue_id');
+    }
+
+    public function currentStatus(): Attribute
+    {
+        return Attribute::get(function () {
+            $latestStatuses = $this->checklists()
+                ->with('latestTimestamp')
+                ->get()
+                ->pluck('latestTimestamp.status')
+                ->filter();
+
+            return $latestStatuses;
+        });
+
+
+    }
+
 }

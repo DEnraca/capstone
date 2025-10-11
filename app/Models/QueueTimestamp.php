@@ -12,7 +12,7 @@ class QueueTimestamp extends Model
 
     public $timestamps = false;
 
-    protected $table = 'queue_checklists';
+    protected $table = 'queue_timestamps';
 
     protected $fillable = [
         'queue_checklists',
@@ -31,6 +31,18 @@ class QueueTimestamp extends Model
     {
         return $this->belongsTo(Station::class,'station_id');
     }
+
+    public function status(): BelongsTo
+    {
+        return $this->belongsTo(QueueStatus::class,'queue_statuses');
+    }
+
+
+    public function latest()
+    {
+        return $this->orderBy('id','desc')->first();
+    }
+
 
     //
 }

@@ -44,7 +44,7 @@ class AppointmentResource extends Resource
             ->schema([
                 Section::make('Appointment Details')
                     ->description(function (Appointment $record) {
-                        if($record->services()->count() == 0 || $record->services()->where('status',2)->count() > 1){
+                        if($record->services()->count() == 0 || $record->services()->where('status',2)->count() <= 0){
                             // $badge = $record->status_name;
 
                             return new HtmlString('

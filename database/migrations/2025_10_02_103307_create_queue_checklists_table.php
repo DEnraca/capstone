@@ -15,11 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('queue_id');
             $table->unsignedBigInteger('station_id');
-            $table->unsignedBigInteger('service_id');
-            $table->unsignedBigInteger('queue_statuses');
-            $table->unsignedBigInteger('updated_by');
-            $table->boolean('is_default_step');
-            $table->string('step_name')->comment('patient_info, transaction, releasing', 'billing');
+            $table->unsignedBigInteger('service_id')->nullable();
+            $table->boolean('is_default_step')->default(false);
+            $table->unsignedBigInteger('queue_statuses')->default(1);
+            $table->string('step_name')->nullable()->comment('patient_info, transaction, releasing','billing');
             $table->integer('sort_order')->default(0);
         });
     }

@@ -31,8 +31,6 @@ class Appointment extends Model
             ->withPivot('status', 'approved_by');
     }
 
-
-
     public function reminders(): HasMany
     {
         return $this->hasMany(AppointmentReminder::class,);

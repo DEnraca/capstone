@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class QueueChecklist extends Model
 {
@@ -16,11 +17,9 @@ class QueueChecklist extends Model
     protected $table = 'queue_checklists';
 
     protected $fillable = [
-        'queue_id',
+        ' ',
         'station_id',
         'service_id',
-        'queue_statuses',
-        'appointment_id',
         'updated_by',
         'sort_order',
         'is_default_step',
@@ -42,14 +41,24 @@ class QueueChecklist extends Model
         return $this->belongsTo(Service::class,'service_id');
     }
 
-    public function status(): BelongsTo
+    public function timestamps(): HasMany
     {
-        return $this->belongsTo(QueueStatus::class,'queue_statuses');
+        return $this->hasMany(QueueTimestamp::class,'queue_checklists');
+    }
+
+    public function currentTS()
+    {
+        return $this->timestamps()->latest();
     }
 
     public function updatedBy(): BelongsTo
     {
         return $this->belongsTo(Employee::class,'updated_by');
+    }
+
+    public function latestTimestamp()
+    {
+        return $this->hasOne(QueueTimestamp::class, 'queue_checklists')->latestOfMany();
     }
 
 }

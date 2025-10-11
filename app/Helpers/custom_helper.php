@@ -203,28 +203,32 @@ if (! function_exists('generateQueueNumber')) {
             2  => 'W',
             4  => 'P',
             1  => 'A',
-            default          => 'U', // unknown
+            default => 'U', // unknown
         };
 
         $date = Carbon::now()->format('Ymd');
 
-        // Wrap in transaction to avoid race condition when many users queue at once
-        return DB::transaction(function () use ($type, $prefix, $date) {
+        return DB::transaction(function () use ($prefix, $type, $date) {
+            // Find latest queue number for today & same type
             $latest = DB::table('queues')
-                ->where('queue_type_id', $type)
                 ->whereDate('created_at', Carbon::today())
+                ->where('queue_number', 'like', "{$prefix}-{$date}-%")
                 ->lockForUpdate()
-                ->orderByDesc('sequence')
+                ->orderByDesc('queue_number')
                 ->first();
 
-            $nextSequence = $latest ? $latest->sequence + 1 : 1;
+            // Extract the numeric part from the last queue_number (if exists)
+            $nextSequence = 1;
+            if ($latest && preg_match('/-(\d{3})$/', $latest->queue_number, $matches)) {
+                $nextSequence = (int) $matches[1] + 1;
+            }
+
+            // Format next queue number
             $formattedSeq = str_pad($nextSequence, 3, '0', STR_PAD_LEFT);
             $queueNo = "{$prefix}-{$date}-{$formattedSeq}";
 
-            // Double-check uniqueness in case of DB lag
-            while (
-                DB::table('queues')->where('queue_number', $queueNo)->exists()
-            ) {
+            // Final check for duplicates
+            while (DB::table('queues')->where('queue_number', $queueNo)->exists()) {
                 $nextSequence++;
                 $formattedSeq = str_pad($nextSequence, 3, '0', STR_PAD_LEFT);
                 $queueNo = "{$prefix}-{$date}-{$formattedSeq}";
