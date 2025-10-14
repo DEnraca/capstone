@@ -4,7 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\QueueResource\Pages;
 use App\Filament\Resources\QueueResource\RelationManagers;
+use App\Models\Employee;
+use App\Models\PatientInformation;
 use App\Models\Queue;
+use Carbon\Carbon;
 use Closure;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
@@ -14,6 +17,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class QueueResource extends Resource
@@ -26,11 +30,6 @@ class QueueResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('queue_number')
-                    ->required()
-                    ->disabled()
-                    ->visibleOn('view'),
-
                 Forms\Components\Select::make('queue_type_id')
                     ->columnSpanFull()
                     ->live()
@@ -57,7 +56,6 @@ class QueueResource extends Resource
                                 if (! $record) return null;
 
                                 $patientName = $record->patient ?  $record->patient->first_name. ' '. $record->patient->last_name:  'Unknown';
-                                // dd($record->appointment_date.' '. $record->appointment_time);
                                 $date = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $record->appointment_date.' '. $record->appointment_time ?? null)
                                     ->format('F d Y g:i A');
 
@@ -67,23 +65,24 @@ class QueueResource extends Resource
                                 // Build a label like: "John Doe - June 24, 2007 (Services: Service 1, Service 2)"
                                 return "{$patientName} - {$date} • Services: {$services}";
                             }),
-
                     ]),
 
-
-                Forms\Components\Select::make('status_id')
+                Forms\Components\TextInput::make('queue_start')
+                    ->disabled()
                     ->hiddenOn('create')
-                    ->relationship('status', 'name'),
-                Forms\Components\DateTimePicker::make('queue_start')
-                    ->disabledOn('edit')
-                    ->visibleOn('view')
+                    ->formatStateUsing( fn ($state) => Carbon::parse($state)->isoFormat('MMMM DD YYYY, h:mm A'))
                     ->required(),
-                Forms\Components\DateTimePicker::make('queue_end')
-                    ->disabledOn('edit')
-                    ->visibleOn('view'),
-                Forms\Components\TextInput::make('created_by')
+
+                Forms\Components\TextInput::make('queue_end')
+                    ->disabled()
                     ->hiddenOn('create')
-                    ->numeric(),
+                    ->formatStateUsing( fn ($state) => (!$state) ? null : Carbon::parse($state)->isoFormat('MMMM DD YYYY, h:mm A')),
+                Forms\Components\Select::make('created_by')
+                    ->relationship('createdBy', 'id')
+                    ->getOptionLabelFromRecordUsing(fn (Model $record) => $record->getFullname())
+                    ->searchable(['first_name' , 'last_name', 'emp_id'])
+                    ->preload()
+                    ->hiddenOn('create'),
             ])->columns(1);
     }
 
@@ -93,29 +92,32 @@ class QueueResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('queue_number')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('priorityType.name')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('queueType.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('patient.id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('appointment.id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('status.name')
-                    ->numeric()
+                    ->formatStateUsing(function ($state){
+                        if(!$state){
+                            return 'N/A';
+                        }
+                        return PatientInformation::find($state)->getFullname();
+                    })
+                    ->searchable(['first_name', 'last_name', 'pat_id'])
                     ->sortable(),
                 Tables\Columns\TextColumn::make('queue_start')
-                    ->dateTime()
+                    ->dateTime('M d Y h:m A')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('queue_end')
-                    ->dateTime()
+                    ->dateTime('M d Y h:m A')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_by')
-                    ->numeric()
+                    ->formatStateUsing(function ($state){
+                        if(!$state){
+                            return 'N/A';
+                        }
+                        return Employee::find($state)?->getFullname() ?? 'N/A';
+                    })
+                    ->searchable(['first_name', 'last_name', 'pat_id'])
                     ->sortable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
@@ -136,6 +138,7 @@ class QueueResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

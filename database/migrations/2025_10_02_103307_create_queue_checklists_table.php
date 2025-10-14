@@ -17,7 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger('station_id');
             $table->unsignedBigInteger('service_id')->nullable();
             $table->boolean('is_default_step')->default(false);
-            $table->unsignedBigInteger('queue_statuses')->default(1);
+            $table->boolean('is_current')->default(false);
+            $table->unsignedBigInteger('latest_status')->default(1);
             $table->string('step_name')->nullable()->comment('patient_info, transaction, releasing','billing');
             $table->integer('sort_order')->default(0);
         });

@@ -56,5 +56,10 @@ class PatientInformation extends Model
     {
         return $this->hasMany(Gender::class,'gender');
     }
+    
+    public function getFullname()
+    {
+        return "{$this->first_name} {$this->middle_name} {$this->last_name}";
+    }
 
 }

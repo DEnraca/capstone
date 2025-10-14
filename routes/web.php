@@ -22,6 +22,11 @@ Route::get('/', function () {
 
 
 Route::get('/admin/queue-board', [ShowQueues::class,'index']);
+Route::get('/admin/queue-get', [ShowQueues::class,'showqueues'])->name('queues-next');
+Route::get('/admin/queue-next', [ShowQueues::class,'shownext'])->name('queues-call-next');
+
+
+
 Route::get('/my-component', function () {
     return view('public.create-appointment');
 })->name('livewire-appointment');
@@ -31,6 +36,7 @@ Route::get('/search-results', function () {
 });
 
 Route::get('/queues', Queues::class);
+
 
 
 

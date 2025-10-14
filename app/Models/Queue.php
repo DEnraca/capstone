@@ -55,7 +55,7 @@ class Queue extends Model
 
     public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(Employee::class,'confimed_by');
+        return $this->belongsTo(Employee::class,'created_by');
     }
 
     public function checklists(): HasMany
@@ -63,19 +63,10 @@ class Queue extends Model
         return $this->hasMany(QueueChecklist::class,'queue_id');
     }
 
-    public function currentStatus(): Attribute
+
+    public function currentStation()
     {
-        return Attribute::get(function () {
-            $latestStatuses = $this->checklists()
-                ->with('latestTimestamp')
-                ->get()
-                ->pluck('latestTimestamp.status')
-                ->filter();
-
-            return $latestStatuses;
-        });
-
-
+        return $this->checklists()->where('is_current',true)->first();
     }
 
 }

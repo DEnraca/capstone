@@ -40,6 +40,7 @@ class CreateQueue extends CreateRecord
                 'is_default_step' => true,
                 'step_name' => 'patient_info',
                 'sort_order' => 0,
+                'is_current' => true
             ],
             [
                 'queue_id' =>  $record->id,
@@ -47,6 +48,7 @@ class CreateQueue extends CreateRecord
                 'is_default_step' => true,
                 'step_name' => 'transaction',
                 'sort_order' => 1,
+                'is_current' => false
             ],
 
             [
@@ -55,6 +57,7 @@ class CreateQueue extends CreateRecord
                 'is_default_step' => true,
                 'step_name' => 'billing',
                 'sort_order' => 2,
+                'is_current' => false
             ],
 
         ]);

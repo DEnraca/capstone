@@ -63,5 +63,9 @@ class Employee extends Model
         return $this->belongsToMany(Service::class, 'med_tech_has_services', 'med_tech_id', 'service_id');
     }
 
+    public function getFullname()
+    {
+        return "{$this->first_name} {$this->middle_name} {$this->last_name}";
+    }
     //
 }
