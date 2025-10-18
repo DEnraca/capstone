@@ -37,20 +37,28 @@ class Appointment extends Model
     }
 
 
+     public function patient(): BelongsTo
+    {
+        return $this->belongsTo(PatientInformation::class,'patient_id');
+    }
+
+
     public function confirmedBy(): BelongsTo
     {
         return $this->belongsTo(User::class,'confimed_by');
     }
 
 
-    // public function department(): BelongsTo
-    // {
-    //     return $this->belongsTo(Department::class,);
-    // }
+    public function status_name()
+    {
+        return match ($this->status) {
+            1 => 'Pending',
+            2 => 'Confirmed',
+            3 => 'Completed',
+            4 => 'Cancelled',
+            default => 'Unknown',
+        };
+    }
 
-    // public function station(): BelongsTo
-    // {
-    //     return $this->belongsTo(Station::class,);
-    // }
 
 }

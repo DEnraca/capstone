@@ -13,3 +13,4 @@ composer.lock
 package-lock.json
 .env
 .phpunit.result.cache
+public/images/frontend_asset/abr_vid.mp4

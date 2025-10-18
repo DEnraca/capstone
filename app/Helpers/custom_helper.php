@@ -174,7 +174,7 @@ if (! function_exists('generatePatID')) {
         }
 
         // Parse the latest emp_id
-        [$latestYear, $latestBackup, $latestCounter] = explode('-', $latest->emp_id);
+        [$latestYear, $latestBackup, $latestCounter] = explode('-', $latest->pat_id);
 
         $backup = (int) $latestBackup;
         $counter = (int) $latestCounter;
@@ -190,6 +190,55 @@ if (! function_exists('generatePatID')) {
         return sprintf("%s-%04d-%02d", $year, $backup, $counter);
     }
 }
+
+if (! function_exists('generateQueueNumber')) {
+    /**
+     * Generate a unique queue number with type prefix and sequence per day.
+     *
+     * Example output: W-20251004-001
+     */
+    function generateQueueNumber(int $type = 1): string
+    {
+        $prefix = match ($type) {
+            2  => 'W',
+            4  => 'P',
+            1  => 'A',
+            default => 'U', // unknown
+        };
+
+        $date = Carbon::now()->format('Ymd');
+
+        return DB::transaction(function () use ($prefix, $type, $date) {
+            // Find latest queue number for today & same type
+            $latest = DB::table('queues')
+                ->whereDate('created_at', Carbon::today())
+                ->where('queue_number', 'like', "{$prefix}-{$date}-%")
+                ->lockForUpdate()
+                ->orderByDesc('queue_number')
+                ->first();
+
+            // Extract the numeric part from the last queue_number (if exists)
+            $nextSequence = 1;
+            if ($latest && preg_match('/-(\d{3})$/', $latest->queue_number, $matches)) {
+                $nextSequence = (int) $matches[1] + 1;
+            }
+
+            // Format next queue number
+            $formattedSeq = str_pad($nextSequence, 3, '0', STR_PAD_LEFT);
+            $queueNo = "{$prefix}-{$date}-{$formattedSeq}";
+
+            // Final check for duplicates
+            while (DB::table('queues')->where('queue_number', $queueNo)->exists()) {
+                $nextSequence++;
+                $formattedSeq = str_pad($nextSequence, 3, '0', STR_PAD_LEFT);
+                $queueNo = "{$prefix}-{$date}-{$formattedSeq}";
+            }
+
+            return $queueNo;
+        });
+    }
+}
+
 
 
 

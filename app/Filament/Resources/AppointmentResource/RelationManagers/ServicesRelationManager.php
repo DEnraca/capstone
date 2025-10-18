@@ -72,8 +72,8 @@ class ServicesRelationManager extends RelationManager
                     ->formatStateUsing(function ($state){
                         if($state){
                             $user = User::find($state);
-                            $user = $user?->employee;
-                            return ($user) ? $user->first_name . ' ' . $user->last_name : null;
+                            $employee = $user?->employee;
+                            return ($employee) ? $employee->first_name . ' ' . $employee->last_name : $user->firstname . ' ' . $user->lastname;
                         }
                         return null;
                     }),
@@ -109,7 +109,6 @@ class ServicesRelationManager extends RelationManager
                     ->requiresConfirmation()
                     ->icon('fas-check')
                     ->action(function ($record) {
-                        dd($record);
                         $record->pivot->status = 2;
                         $record->pivot->approved_by = auth()->user()->id;
                         $record->pivot->save();
