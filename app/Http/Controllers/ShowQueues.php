@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\QueueCall;
 use App\Models\QueueChecklist;
 use Illuminate\Http\Request;
 
@@ -67,40 +68,20 @@ class ShowQueues extends Controller
     public function shownext(){
         try {
 
-            // $stations = Station::orderBy('status','desc')->get();
-            // $queues = [];
+            $queue = QueueCall::orderBy('id','desc')->where('is_called',false)->first();
+            $data = [];
+            if($queue){
+                $queue->is_called = true;
+                $queue->update();
 
-            // foreach ($stations as $station){
-            //     $processing = $station->processingQueues->first();
-            //     $activeQueues = $station->pendingQueues->take(5);
-            //     $q = [];
-            //     $q = $activeQueues->map(function ($map){
-            //         return [
-            //             'name' => $map->name,
-            //             'transaction_name' => $map->transaction->name,
-            //             'queue_number' => $map->getQueueNumber(),
-            //         ];
-            //     });
-            //     $queues[] = [
-            //         'id' => $station->id,
-            //         'status' => $station->status,
-
-            //         'processing' => $processing ? [
-            //             'name' => $processing->name,
-            //             'transaction_name' => $processing->transaction->name,
-            //             'queue_number' => $processing->getQueueNumber(),
-            //         ] : null,
-            //         'station' => $station->name ?? $station->code,
-            //         'queues' => array_chunk($q->toArray(),3),
-            //     ];
-            // }
-            // dd($queues);
+                $data = [
+                    'queue_number' => $queue->checklist->queue->queue_number,
+                    'transaction' => $queue->checklist->station->name,
+                ];
+            }
             return response()->json([
                 'status' => 'success',
-                'data' => [
-                    'queue_number' => 'A-20251012-001',
-                    'transaction' => 'Admission',
-                ]
+                'data' => $data
             ], 200);
 
         } catch (\Exception $e) {

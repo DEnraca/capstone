@@ -174,7 +174,7 @@ if (! function_exists('generatePatID')) {
         }
 
         // Parse the latest emp_id
-        [$latestYear, $latestBackup, $latestCounter] = explode('-', $latest->emp_id);
+        [$latestYear, $latestBackup, $latestCounter] = explode('-', $latest->pat_id);
 
         $backup = (int) $latestBackup;
         $counter = (int) $latestCounter;
