@@ -42,60 +42,144 @@
             top: 0;
             position: absolute;
         }
+        </style>
+                    <!-- Centered Overlay -->
+                    <div class="absolute inset-0">
+                        <div
+                            class="w-full h-full flex justify-center md:justify-end items-center
+                                    bg-slate-900/80 sm:[background:linear-gradient(to_right,rgba(15,23,42,0.35)_15%,transparent_45%,rgba(15,23,42,0.9)_100%)]">
+                            <!-- Headings -->
+                            <div
+                                class="text-white max-w-full sm:max-w-xl md:max-w-3xl flex flex-col justify-center space-y-2">
+                                <div class="sm:space-y-2 px-4 sm:px-6 py-2 sm:py-4 text-center md:text-start">
+                                    <h5 class="text-sm sm:text-sm md:text-lg font-semibold">
+                                        Your path to
+                                    </h5>
+                                    <h1 class="text-3xl sm:text-2xl md:text-3xl font-bold uppercase text-amber-400">
+                                        BETTER HEALTH
+                                    </h1>
+                                    <h5 class="text-xs sm:text-sm md:text-lg font-semibold">
+                                        Start here, with
+                                    </h5>
+                                    <h1 class="text-lg sm:text-2xl md:text-3xl font-bold uppercase text-amber-400">
+                                        INNOVATIVE DIAGNOSTIC
+                                    </h1>
+                                    <h5 class="text-xs sm:text-sm md:text-lg font-semibold">
+                                        and Exceptional care
+                                    </h5>
+                                </div>
+                                <!-- Check Items -->
+                                <div class="flex flex-col gap-2 px-4 sm:px-6 text-center md:text-start">
+                                    <!-- Item 1 -->
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="hidden sm:block w-3 sm:w-6 h-3 sm:h-6 text-amber-400" fill="none"
+                                            stroke="currentColor" stroke-width="4" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <path d="m9 12 2 2 4-4" />
+                                        </svg>
+                                        <p class="font-semibold text-sm sm:text-base">
+                                            HMO Available
+                                        </p>
+                                    </div>
+                                    <div
+                                        class="flex flex-col gap-1 px-4 sm:px-7 text-amber-400 font-semibold text-xs sm:text-sm md:text-base">
+                                        <p>Medicard, Cocolife, Philcare</p>
+                                        <p>Intellicare & Avega</p>
+                                    </div>
 
-    </style>
-    <div style="background-color: #FBFEE1;" class="max-w-screen" class="roboto">
-        <!-- Hero Section -->
-        <section id="hero" class="bg-cover bg-center herosection h-[70vh] xs:h-[45vh] text-info-100 " >
-            <!-- Navbar -->
-            <header class="relative sticky top-0 left-0 w-full backdrop-blur-md bg-[#557ca8]/30 shadow md:h-[18%]">
-                <div class="px-10 py-0 flex items-center justify-between md:grid md:grid-cols-3 text-xl h-full">
-                    <div class="col-span-1">
-                        <img src="{{asset('images/logo-light-text.png')}}" height="auto" class="max-h-full" >
+                                    <!-- Item 2 -->
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="hidden sm:block sm:w-6 h-5 sm:h-6 text-amber-400" fill="none"
+                                            stroke="currentColor" stroke-width="4" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <path d="m9 12 2 2 4-4" />
+                                        </svg>
+                                        <p class="font-semibold text-sm sm:text-base">
+                                            64 Slice CT Scan
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-span-2 justify-items-end">
-                        <nav class="hidden md:flex space-x-6 pt-2">
-                            <a href="#hero" class="hover:text-primary-400 pt-1 pr-1">Home</a>
-                            <a href="#about-us" class="hover:text-primary-400 pt-1 pr-1">About Us</a>
-                            <a href="#patient-care" class="hover:text-primary-400 pt-1 pr-1" >Patient Care</a>
-                            <a href="{{route('filament.admin.auth.login')}}" class="hover:text-primary-400 pt-1 pr-1" >Login</a>
-                            <a href="{{route('livewire-appointment')}}"  class="bg-primary-400 font-bold  px-5 pt-1 border border-secondary rounded-lg hover:text-primary-900" target="_blank">Create Appointment</a>
-                        </nav>
-                        <button class="md:hidden focus:outline-none" onclick="toggleMenu()">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                            </svg>
-                        </button>
+                </div>
+                <!-- Navbar -->
+                <header
+                    class="fixed top-0 w-full flex items-center justify-between px-6 py-2 text-white z-50 bg-white/10 backdrop-blur-md border-b border-white/20">
+                    <!-- Logo -->
+                    <div class="flex items-center">
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8 sm:h-12 w-auto" />
                     </div>
-                </div>
-                <!-- Mobile -->
-                <div id="mobile-menu" class="md:hidden hidden px-4 pb-4">
-                    <a href="#hero" class="block py-2 hover:text-primary-400">Home</a>
-                    <a href="#about-us" class="block py-2 hover:text-primary-400">About Us</a>
-                    <a href="#patient-care" class="block py-2 hover:text-primary-400">Patient Care</a>
-                    <a href="#footer" class="block py-2 hover:text-primary-400">Login</a>
-                </div>
-            </header>
 
-            <div class="grid md:grid-cols-5 gap-4 mx-auto h-[82%] pl-4">
-                <div class="md:col-span-3">
-                </div>
+                    <!-- Desktop Menu -->
+                    <nav class="hidden md:flex space-x-8 text-sm flex items-center">
+                        <a href="#hero" class="hover:text-amber-400 transition">Home</a>
+                        <a href="#about-us" class="hover:text-amber-400 transition">About Us</a>
+                        <a href="#patient-care" class="hover:text-amber-400 transition">Patient Care</a>
+                    </nav>
 
-                <div class="md:col-span-2 sm:col-span-5 flex flex-col justify-center bg-[#000000]  bg-opacity-50 p-4 rounded-lg px-auto">
-                    <p class="text-md ">Your Path to</p>
-                    <h1 class="text-4xl font-bold text-primary-400">BETTER HEALTH</h1>
-
-                    <p class="text-md ">Start here, with</p>
-                    <h1 class="text-4xl font-bold text-primary-400">INNOVATIVE DIAGNOSTIC</h1>
-                    <p class="text-md ">and Exceptional care</p>
-
-                    <div class="text-sm pt-4">
-                        <p class="flex"><x-fas-check-circle class="w-5 h-5 text-primary-500 mr-2"/>HMO Available</p>
-                        <p class="text-primary-400"> <span class="pr-7 "></span> Medicard, Cocolife, Philcare</p>
-                        <p class="text-primary-400"> <span class="pr-7"></span> Intellicare & Avega</p>
-                        <p class="flex"><x-fas-check-circle class="w-5 h-5 text-primary-500 mr-2"/>64 Slice CT Scan</p>
+                    <!-- Desktop Buttons -->
+                    <div class="hidden md:flex space-x-2">
+                        <a href="{{ route('livewire-appointment') }}" target="_blank"
+                            class="text-sm text-amber-400 border border-slate-300 py-1 px-4 rounded hover:bg-amber-400 hover:text-white transition">
+                            Create an appointment
+                        </a>
+                        <a href="{{ route('filament.admin.auth.login') }}"
+                            class="text-sm bg-amber-400 px-4 py-1 rounded text-white hover:bg-amber-500 transition">
+                            Log in
+                        </a>
                     </div>
-                </div>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="menu-btn" class="md:hidden focus:outline-none p-2 rounded hover:bg-white/20">
+                        <!-- Open Icon -->
+                        <svg id="icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <!-- Close Icon -->
+                        <svg id="icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </header>
+
+                <!-- Mobile Menu -->
+                <nav id="mobile-menu"
+                    class="fixed top-[62px] left-0 w-full bg-primary-200 backdrop-blur-xl border-b border-white/20 text-white hidden flex-col px-6 py-8 z-40 md:hidden shadow-lg space-y-4 text-center text-sm uppercase">
+                    <a href="#hero"
+                        class="block py-2 font-medium tracking-wide hover:text-amber-300 transition">Home</a>
+                    <a href="#about-us"
+                        class="block py-2 font-medium tracking-wide hover:text-amber-300 transition">About Us</a>
+                    <a href="#patient-care"
+                        class="block py-2 font-medium tracking-wide hover:text-amber-300 transition">Patient Care</a>
+                    <div class="flex flex-col pt-4 border-t border-white/20 space-y-2">
+                        <a href="{{ route('livewire-appointment') }}" target="_blank"
+                            class="w-full bg-amber-600 py-2.5 rounded-lg text-white font-semibold shadow-md">
+                            Create Appointment
+                        </a>
+                        <a href="{{ route('filament.admin.auth.login') }}"
+                            class="w-full bg-amber-400 py-2.5 rounded-lg text-white font-semibold shadow-md">
+                            Log In
+                        </a>
+                    </div>
+                </nav>
+            </section>
+
+            <!-- Divider -->
+            <div
+                class="bg-amber-400 uppercase text-[10px] sm:text-xs md:text-sm text-center px-2 py-1 text-white leading-snug whitespace-normal">
+                <p>
+                    Need help?
+                    <span class="font-semibold">ABR Hotline: 0935-575-1649</span>
+                    (Tavera St. Pakil, Laguna) | Clinic Hours: 6:00pm daily.
+                </p>
             </div>
         </section>
 
