@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\QueueCall;
+use App\Models\QueueChecklist;
 use Illuminate\Http\Request;
 
 class ShowQueues extends Controller
@@ -11,8 +13,7 @@ class ShowQueues extends Controller
      */
     public function index()
     {
-        $dummy =$this->dummy();
-        return view('public.queue-board', compact('dummy'));
+        return view('public.queue-board');
         //
     }
 
@@ -64,95 +65,85 @@ class ShowQueues extends Controller
         //
     }
 
+    public function shownext(){
+        try {
 
-     public function dummy(){
-            $transactions = collect([
-                [
-                    'station' => 'Cashier',
-                    'now_serving' => [
-                        'number' => 'PWD-0002',
-                        'name' => 'Marcus',
-                    ],
-                    'next_in_line' => [
-                        ['number' => 'PP-0003', 'name' => 'Alice'],
-                        ['number' => 'PP-0004', 'name' => 'Bob'],
-                        ['number' => 'PP-0005', 'name' => 'Charlie'],
-                        ['number' => 'PP-0006', 'name' => 'Diana'],
-                        ['number' => 'PP-0007', 'name' => 'Ethan'],
-                        ['number' => 'PP-0008', 'name' => 'Fiona'],
-                        ['number' => 'PP-0009', 'name' => 'George'],
-                    ],
-                ],
-                [
-                    'station' => 'Chemistry',
-                    'now_serving' => [
-                        'number' => 'SC-0010',
-                        'name' => 'Hannah',
-                    ],
-                    'next_in_line' => [
-                        ['number' => 'SC-0011', 'name' => 'Ian'],
-                        ['number' => 'SC-0012', 'name' => 'Jack'],
-                        ['number' => 'SC-0013', 'name' => 'Karen'],
-                        ['number' => 'SC-0014', 'name' => 'Leo'],
-                        ['number' => 'SC-0015', 'name' => 'Mona'],
-                        ['number' => 'SC-0016', 'name' => 'Nina'],
-                        ['number' => 'SC-0017', 'name' => 'Oscar'],
-                    ],
-                ],
-                [
-                    'station' => 'Microscopy',
-                    'now_serving' => [
-                        'number' => 'MI-0020',
-                        'name' => 'Paul',
-                    ],
-                    'next_in_line' => [
-                        ['number' => 'MI-0021', 'name' => 'Quincy'],
-                        ['number' => 'MI-0022', 'name' => 'Rachel'],
-                        ['number' => 'MI-0023', 'name' => 'Steve'],
-                        ['number' => 'MI-0024', 'name' => 'Tina'],
-                        ['number' => 'MI-0025', 'name' => 'Uma'],
-                        ['number' => 'MI-0026', 'name' => 'Victor'],
-                        ['number' => 'MI-0027', 'name' => 'Wendy'],
-                    ],
-                ],
-                [
-                    'station' => 'Hematology',
-                    'now_serving' => [
-                        'number' => 'HE-0030',
-                        'name' => 'Xander',
-                    ],
-                    'next_in_line' => [
-                        ['number' => 'HE-0031', 'name' => 'Yara'],
-                        ['number' => 'HE-0032', 'name' => 'Zane'],
-                    ],
-                ],
-                [
-                    'station' => 'Bacteriology',
-                    'now_serving' => [
-                        'number' => 'BA-0040',
-                        'name' => 'Olivia',
-                    ],
-                    'next_in_line' => [], // station with no next in line
-                ],
-                [
-                    'station' => 'Serology',
-                    'now_serving' => [
-                        'number' => 'SE-0050',
-                        'name' => 'Peter',
-                    ],
-                    'next_in_line' => [
-                        ['number' => 'SE-0051', 'name' => 'Quinn'],
-                        ['number' => 'SE-0052', 'name' => 'Rita'],
-                        ['number' => 'SE-0053', 'name' => 'Sam'],
-                        ['number' => 'SE-0054', 'name' => 'Tracy'],
-                        ['number' => 'SE-0055', 'name' => 'Uma'],
-                        ['number' => 'SE-0056', 'name' => 'Victor'],
-                        ['number' => 'SE-0057', 'name' => 'Wendy'],
-                    ],
-                ],
-            ]);
+            $queue = QueueCall::orderBy('id','desc')->where('is_called',false)->first();
+            $data = [];
+            if($queue){
+                $queue->is_called = true;
+                $queue->update();
 
-        return $transactions;
+                $data = [
+                    'queue_number' => $queue->checklist->queue->queue_number,
+                    'transaction' => $queue->checklist->station->name,
+                ];
+            }
+            return response()->json([
+                'status' => 'success',
+                'data' => $data
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to fetch queues',
+                'error' => $e->getMessage()
+            ], 500);
+        }
 
     }
+    public function showqueues(){
+
+        try {
+            $stations = QueueChecklist::current()
+                ->select('station_id')
+                ->with('station')
+                ->distinct()
+                ->get();
+            $queues = [];
+            foreach($stations as $station){
+                $checklists = QueueChecklist::where('station_id', $station->station->id)
+                    ->applySorting()
+                    ->today()
+                    ->current();
+                $now_serving = (clone $checklists)->processing()->first();
+                if(!$now_serving){
+                    $now_serving = [];
+                }else{
+                    $now_serving = [
+                        'number' => $now_serving->queue->queue_number,
+                        'name' => $now_serving->queue->patient?->first_name ?? 'Guest',
+                    ];
+                }
+                $next_in_line = (clone $checklists)
+                    ->pending()
+                    ->limit(12)
+                    ->get()->map(function($map){
+                        return [
+                            'number' => $map->queue->queue_number,
+                            'name' => $map->queue->patient?->first_name ?? 'Guest',
+                        ];
+                    });
+                $queues[] = collect([
+                    'station' => $station->station->name,
+                    'now_serving' => $now_serving,
+                    'next_in_line' => $next_in_line,
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $queues
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to fetch queues',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

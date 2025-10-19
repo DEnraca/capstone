@@ -2,6 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Actions\Form\AppointmentFields\DateTimeMessage;
+use App\Actions\Form\PatientInformation\Address;
+use App\Actions\Form\PatientInformation\PersonalInfo;
+use App\Actions\Form\PatientPersonalInformationFields;
 use App\Models\CivilStatus;
 use App\Models\Gender;
 use App\Models\User;
@@ -95,6 +99,12 @@ class AppointmentAccount extends Component implements HasForms
 
     public function form(Form $form): Form
     {
+
+        $patientInfoField = PersonalInfo::run();
+        $patientAddressField = Address::run();
+        $appointmentField = DateTimeMessage::run();
+
+
         return $form
             ->statePath('data')
             ->schema([
@@ -121,146 +131,20 @@ class AppointmentAccount extends Component implements HasForms
                                 ->columns(3)
                                 ->disabled(fn () => auth()->check())
                                 ->statePath('info')
-                                ->schema([
-                                    TextInput::make('last_name')
-                                        ->prefixIcon('heroicon-o-user')
-                                        ->prefixIconColor('primary')
-                                        ->helperText('Kindly include suffix after last name, e.g. II, III')
-                                        ->label('Last Name')
-                                        ->required(),
-
-                                    TextInput::make('first_name')
-                                        ->prefixIcon('heroicon-o-user')
-                                        ->prefixIconColor('primary')
-                                        ->label('First Name')
-                                        ->required(),
-
-                                    TextInput::make('middle_name')
-                                        ->prefixIcon('heroicon-o-user')
-                                        ->prefixIconColor('primary')
-                                        ->label('Middle Name'),
-
-                                    TextInput::make('mobile')
-                                        ->tel() // or
-                                        ->prefixIcon('heroicon-o-phone')
-                                        ->prefixIconColor('primary')
-                                        ->minLength(10)
-                                        ->maxLength(10)
-                                        ->columnSpan(2)
-                                        ->prefix('+63')
-                                        ->label('Phone')
-                                        ->helperText('Mobile number must start with +63')
-                                        ->required(),
-
-                                    DatePicker::make('dob')
-                                        ->required()
-                                        ->prefixIcon('heroicon-o-calendar-days')
-                                        ->prefixIconColor('primary')
-                                        ->maxDate(now()->subYear())
-                                        ->closeOnDateSelection()
-                                        ->label('Birthdate'),
-
-                                    Select::make('gender')
-                                        ->label('Gender')
-                                        ->options( fn () => Gender::all()->pluck('name','id')->toArray() )
-                                        ->required(),
-
-                                    Select::make('civil_status')
-                                        ->label('Civil Status')
-                                        ->options( fn () => CivilStatus::all()->pluck('name','id')->toArray() )
-                                        ->required(),
-
-                                ]),
+                                ->schema($patientInfoField),
 
                                 Fieldset::make('Address')
                                     ->columns(2)
                                     ->statePath('address')
                                     ->disabled(fn () => auth()->check())
-                                    ->schema([
-                                        Select::make('region_id')
-                                            ->label('Region')
-                                            ->options( fn (): array => getRegionsCustom())
-                                            ->live()
-                                            ->optionsLimit(75)
-                                            ->afterStateUpdated(function (callable $set) {
-                                                $set('province_id', null);
-                                                $set('city_id', null);
-                                                $set('barangay_id', null);
-                                            })
-                                            ->required(),
-
-                                        Select::make('province_id')
-                                            ->label('Province')
-                                            ->options( fn (callable $get): array => getProvincesCustom($get('region_id')) )
-                                            ->disabled(fn (callable $get) => !$get('region_id'))
-                                            ->afterStateUpdated(function (callable $set) {
-                                                $set('city_id', null);
-                                                $set('barangay_id', null);
-                                            })
-                                            ->searchable()
-                                            ->live()
-                                            ->optionsLimit(75)
-                                            ->required(),
-
-                                        Select::make('city_id')
-                                            ->label('Municipality/City')
-                                            ->options( fn (callable $get): array => getCitiesCustom($get('province_id')) )
-                                            ->disabled(fn (callable $get) => !$get('province_id'))
-                                            ->searchable()
-                                            ->afterStateUpdated(function (callable $set) {
-                                                $set('barangay_id', null);
-                                            })
-                                            ->live()
-                                            ->optionsLimit(75)
-                                            ->required(),
-
-                                        Select::make('barangay_id')
-                                            ->label('Barangay')
-                                            ->options( fn (callable $get): array => getBarangayCustom($get('city_id')) )
-                                            ->disabled(fn (callable $get) => !$get('city_id'))
-                                            ->searchable()
-                                            ->live()
-                                            ->optionsLimit(75)
-                                            ->required(),
-
-                                        TextInput::make('house_address')
-                                            ->columnSpanFull()
-                                            ->helperText('House no., Street, Subdivision, Village')
-                                            ->label('House Address')
-                                            ->required(),
-                                    ]),
+                                    ->schema($patientAddressField),
                     ]),
                     Grid::make(1)
                         ->columnSpan(1)
                         ->schema([
                             Fieldset::make('Book schedule')
                                 ->statePath('book')
-                                ->schema([
-                                    DatePicker::make('appointment_date')
-                                        ->required()
-                                        ->native(false)
-                                        ->prefixIcon('heroicon-o-calendar-days')
-                                        ->prefixIconColor('primary')
-                                        ->closeOnDateSelection()
-                                        ->label('Date'),
-
-                                    Select::make('appointment_time')
-                                        ->label('Time')
-                                        ->placeholder('Select Time')
-                                        ->prefixIcon('heroicon-o-clock')
-                                        ->prefixIconColor('primary')
-                                        ->required()
-                                        ->disableOptionWhen(fn (string $value): bool => ($value) === '08:30')
-                                        ->options(fn () => get_appointment_timeslots())
-                                        ->searchable(),
-
-
-                                    Textarea::make('message')
-                                        ->placeholder('I want to book an appointment')
-                                        ->rows(3)
-                                        ->columnSpan(2)
-                                        ->autosize(),
-                                ]),
+                                ->schema($appointmentField),
                             Fieldset::make('Account Information')
                                 ->columnSpan(1)
                                 ->statePath('account')

@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PatientInformation extends Model
 {
+    use SoftDeletes;
 
     use HasFactory;
 
@@ -30,8 +32,6 @@ class PatientInformation extends Model
     protected static function booted()
     {
         static::creating(function (PatientInformation $model) {
-            // Your logic to be executed before a new model is created
-            // For example, setting a default value or performing validation
             $model->pat_id = generatePatID();
         });
     }
@@ -47,14 +47,19 @@ class PatientInformation extends Model
         return $this->belongsTo(Address::class,'address_id');
     }
 
-    public function civilStatus(): HasMany
+    public function civilStatus(): BelongsTo
     {
-        return $this->hasMany(CivilStatus::class,'civil_status');
+        return $this->belongsTo(CivilStatus::class,'civil_status');
     }
 
-    public function Gender(): HasMany
+    public function patient_gender(): BelongsTo
     {
-        return $this->hasMany(Gender::class,'gender');
+        return $this->belongsTo(Gender::class,'gender');
+    }
+
+    public function getFullname()
+    {
+        return "{$this->first_name} {$this->middle_name} {$this->last_name}";
     }
 
 }
