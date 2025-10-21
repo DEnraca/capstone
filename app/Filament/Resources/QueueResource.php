@@ -25,6 +25,8 @@ class QueueResource extends Resource
     protected static ?string $model = Queue::class;
 
     protected static ?string $navigationIcon = 'fas-person-walking';
+    protected static ?string $navigationGroup = 'Admission';
+
 
     public static function form(Form $form): Form
     {
