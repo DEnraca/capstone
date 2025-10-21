@@ -1,9 +1,10 @@
 <template>
     <div class="grid grid-cols-4 gap-1">
         <div
+            id="now-serving-cards"
             v-for="(queue, index) in queues"
             :key="index"
-            class="min-h-full text-black odd:bg-primary-400 even:bg-primary-500 rounded-lg grid grid-rows-[auto_1fr] mb-1"
+            class="min-h-full text-black rounded-lg grid grid-rows-[auto_1fr] mb-1"
         >
             <!-- Header -->
             <div class="text-center text-2xl font-extrabold py-1">
@@ -98,4 +99,15 @@
             this.stopPolling()
         },
     }
-  </script>
+</script>
+<style>
+
+    #now-serving-cards:nth-child(odd) {
+    background-color: #ea8809; /* example for blue-400 */
+    }
+
+    #now-serving-cards:nth-child(even) {
+    background-color: #fef3c7; /* example for blue-500 */
+    }
+
+</style>
