@@ -28,9 +28,13 @@ class QueueResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('queue_type_id')
+        return $form->schema(static::getQueueFormSchema())->columns(1);
+    }
+
+    public static function getQueueFormSchema(): array
+    {
+        return [
+            Forms\Components\Select::make('queue_type_id')
                     ->columnSpanFull()
                     ->live()
                     ->relationship('queueType', 'name'),
@@ -83,7 +87,7 @@ class QueueResource extends Resource
                     ->searchable(['first_name' , 'last_name', 'emp_id'])
                     ->preload()
                     ->hiddenOn('create'),
-            ])->columns(1);
+                ];
     }
 
     public static function table(Table $table): Table

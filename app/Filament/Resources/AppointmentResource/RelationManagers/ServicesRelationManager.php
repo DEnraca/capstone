@@ -15,6 +15,7 @@ use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Mockery\Matcher\Not;
 
@@ -42,6 +43,12 @@ class ServicesRelationManager extends RelationManager
                     ])
                     ->required(),
             ]);
+    }
+
+
+    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
+    {
+        return auth()->user()->can('view_appointment');
     }
 
     public function isReadOnly(): bool
