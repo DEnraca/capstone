@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Filament\Resources\TransactionResource;
 use App\Models\PatientInformation;
 use App\Models\QueueCall;
 use App\Models\QueueChecklist;
@@ -27,7 +28,6 @@ class QueueAction extends Widget
     public $callAnother;
     public $is_completed;
 
-
     public function mount() : void
     {
         $this->is_completed = false;
@@ -46,7 +46,6 @@ class QueueAction extends Widget
 
     public function complete(){
 
-
         if($this->is_completed){
             $to_complete = clone $this->current;
             $this->setStatus(4);
@@ -64,6 +63,11 @@ class QueueAction extends Widget
             //process patient verification
             $this->patientverification();
         }
+
+        if($this->station == 8 && $this->column == 'step_name' && $this->condition == 'transaction'){
+            return redirect(TransactionResource::getUrl('create', ['checklist_details' => $this->current]));
+        }
+
 
     }
 
