@@ -237,6 +237,43 @@ if (! function_exists('generateQueueNumber')) {
             return $queueNo;
         });
     }
+
+
+
+    if (! function_exists('generateTransCode')) {
+        function generateTransCode()
+        {
+            $year = Carbon::now()->format('Y');
+
+            // Get the latest emp_id for the current year
+            $latest = DB::table('transactions')
+                ->where('code', 'like', "$year%")
+                ->orderByDesc('code')
+                ->first();
+
+            if (!$latest) {
+                return sprintf("%s-%04d-%02d", $year, 0, 0);
+            }
+
+            // Parse the latest emp_id
+            [$latestYear, $latestBackup, $latestCounter] = explode('-', $latest->code);
+
+            $backup = (int) $latestBackup;
+            $counter = (int) $latestCounter;
+
+            // Increment counter, and overflow to backup if needed
+            if ($counter < 99) {
+                $counter++;
+            } else {
+                $counter = 0;
+                $backup++;
+            }
+
+            return sprintf("%s-%04d-%02d", $year, $backup, $counter);
+        }
+    }
+
+
 }
 
 

@@ -36,13 +36,17 @@ class AppointmentResource extends Resource
     public static function form(Form $form): Form
     {
 
+        return $form->schema(static::getAppointmentFormSchema())->columns(1);
+    }
+
+    public static function getAppointmentFormSchema(): array
+    {
         $patientInfoField = PersonalInfo::run();
         $patientAddressField = Address::run();
         $appointmentField = DateTimeMessage::run();
 
-        return $form
-            ->schema([
-                Section::make('Appointment Details')
+        return [
+            Section::make('Appointment Details')
                     ->description(function (Appointment $record) {
                         if($record->services()->count() == 0 || $record->services()->where('status',2)->count() <= 0){
                             // $badge = $record->status_name;
@@ -77,9 +81,7 @@ class AppointmentResource extends Resource
                             ->columnSpan(1),
                     ])->columns(3),
 
-
-
-            ])->columns(1);
+        ];
     }
 
     public static function table(Table $table): Table
@@ -177,8 +179,7 @@ class AppointmentResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\ServicesRelationManager::class,
-            //
+             RelationManagers\ServicesRelationManager::class,
         ];
     }
 

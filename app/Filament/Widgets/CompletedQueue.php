@@ -23,6 +23,7 @@ class CompletedQueue extends BaseWidget
 
     public function table(Table $table): Table
     {
+
         return $table
             ->paginated(false)
             ->query(
@@ -31,7 +32,6 @@ class CompletedQueue extends BaseWidget
                     ->applySorting()
                     ->today()
                     ->where('latest_status', $this->status)
-                    ->current()
             // ...
             )
             ->columns([
