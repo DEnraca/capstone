@@ -34,7 +34,7 @@ class AppointmentReminder extends Mailable
 
     public function build()
     {
-        return $this->subject('Daily Report')
+        return $this->subject('Appointment Reminder')
             ->view('emails.appointment_reminder', $this->data);
     }
 }
