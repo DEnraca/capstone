@@ -7,6 +7,8 @@ use App\Actions\Form\PatientInformation\Address;
 use App\Actions\Form\PatientInformation\PersonalInfo;
 use App\Filament\Resources\TransactionResource\Pages;
 use App\Filament\Resources\TransactionResource\RelationManagers;
+use App\Models\Employee;
+use App\Models\PatientInformation;
 use App\Models\Service;
 use App\Models\Transaction;
 use Filament\Forms;
@@ -96,9 +98,8 @@ class TransactionResource extends Resource
                             ))->columns(3)->columnSpan(2)]),
 
                         Tabs\Tab::make('Billing Information')
-                            ->schema([
-                                // ...
-                            ]),
+                        ->disabled()
+                        ->schema([Group::make()->relationship('billing')->disabled()->schema(InvoiceResource::getInvoiceFormSchema())]),
                     ])
             ]);
     }
@@ -107,26 +108,40 @@ class TransactionResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('queue_id')
+                Tables\Columns\TextColumn::make('code')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('patient_id')
-                    ->numeric()
+                    ->label('Name')
+                    ->formatStateUsing(function ($state){
+                        if(!$state){
+                            return 'N/A';
+                        }
+                        return PatientInformation::find($state)->getFullname();
+                    })
+                    ->searchable(['first_name', 'last_name', 'pat_id'])
                     ->sortable(),
+
                 Tables\Columns\TextColumn::make('created_by')
-                    ->numeric()
+                    ->formatStateUsing(function ($state){
+                        if(!$state){
+                            return 'N/A';
+                        }
+                        return Employee::find($state)?->getFullname() ?? 'N/A';
+                    })
+                    ->searchable(['first_name', 'last_name', 'emp_id'])
                     ->sortable(),
-                Tables\Columns\TextColumn::make('billing_id')
-                    ->numeric()
+
+
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
                     ->sortable(),
+
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()

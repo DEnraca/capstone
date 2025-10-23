@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ShowQueues;
 use App\Livewire\CreateApointment;
 use Illuminate\Support\Facades\Route;
@@ -35,7 +36,11 @@ Route::get('/search-results', function () {
     return view('search');
 });
 
+
 Route::get('/queues', Queues::class);
+Route::get('/pdf/invoice/{id}', [PDFController::class,'invoice'])->name('pdf.invoice');
+Route::get('/pdf/sample', [PDFController::class,'sample'])->name('pdf.sample');
+
 
 
 

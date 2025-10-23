@@ -274,6 +274,40 @@ if (! function_exists('generateQueueNumber')) {
     }
 
 
+    if (! function_exists('generateInvoiceCode')) {
+        function generateInvoiceCode()
+        {
+            $year = Carbon::now()->format('Y');
+
+            // Get the latest emp_id for the current year
+            $latest = DB::table('invoices')
+                ->where('invoice_number', 'like', "$year%")
+                ->orderByDesc('invoice_number')
+                ->first();
+
+            if (!$latest) {
+                return sprintf("%s-%04d-%02d", $year, 0, 0);
+            }
+
+            // Parse the latest emp_id
+            [$latestYear, $latestBackup, $latestCounter] = explode('-', $latest->invoice_number);
+
+            $backup = (int) $latestBackup;
+            $counter = (int) $latestCounter;
+
+            // Increment counter, and overflow to backup if needed
+            if ($counter < 99) {
+                $counter++;
+            } else {
+                $counter = 0;
+                $backup++;
+            }
+
+            return sprintf("%s-%04d-%02d", $year, $backup, $counter);
+        }
+    }
+
+
 }
 
 

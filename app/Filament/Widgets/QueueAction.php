@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Filament\Resources\InvoiceResource;
 use App\Filament\Resources\TransactionResource;
 use App\Models\PatientInformation;
 use App\Models\QueueCall;
@@ -33,6 +34,17 @@ class QueueAction extends Widget
         $this->is_completed = false;
         $this->refresh();
     }
+
+    public static function canView(): bool
+    {
+        // Hide only when on the dashboard
+        if (request()->routeIs('filament.admin.pages.dashboard')) {
+            return false;
+        }
+
+        return true;
+    }
+    
 
     public function setActive($id)
     {
@@ -66,6 +78,10 @@ class QueueAction extends Widget
 
         if($this->station == 8 && $this->column == 'step_name' && $this->condition == 'transaction'){
             return redirect(TransactionResource::getUrl('create', ['checklist_details' => $this->current]));
+        }
+
+        if($this->station == 10 && $this->column == 'step_name' && $this->condition == 'billing'){
+            return redirect(InvoiceResource::getUrl('create', ['checklist_details' => $this->current]));
         }
 
 
