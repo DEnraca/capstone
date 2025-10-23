@@ -50,4 +50,14 @@ class CompletedQueue extends BaseWidget
     }
 
 
+    public static function canView(): bool
+    {
+        // Hide only when on the dashboard
+        if (request()->routeIs('filament.admin.pages.dashboard')) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

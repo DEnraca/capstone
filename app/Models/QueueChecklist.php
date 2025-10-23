@@ -31,37 +31,41 @@ class QueueChecklist extends Model
 
     public function queue(): BelongsTo
     {
-        return $this->belongsTo(Queue::class,'queue_id');
+        return $this->belongsTo(Queue::class, 'queue_id');
     }
 
     public function status(): BelongsTo
     {
-        return $this->belongsTo(QueueStatus::class,'latest_status');
+        return $this->belongsTo(QueueStatus::class, 'latest_status');
     }
 
     public function station(): BelongsTo
     {
-        return $this->belongsTo(Station::class,'station_id');
+        return $this->belongsTo(Station::class, 'station_id');
     }
 
     public function service(): BelongsTo
     {
-        return $this->belongsTo(Service::class,'service_id');
+        return $this->belongsTo(Service::class, 'service_id');
     }
 
     public function updatedBy(): BelongsTo
     {
-        return $this->belongsTo(Employee::class,'updated_by');
+        return $this->belongsTo(Employee::class, 'updated_by');
     }
 
     public function scopeCurrent($query)
     {
-        return $query->where('is_current',true);
+        return $query->where('is_current', true);
     }
 
     public function scopePending($query)
     {
         return $query->where('latest_status', 1);
+    }
+    public function scopeCompletedToday($query)
+    {
+        return $query->today()->where('latest_status', 4);
     }
 
     public function scopeProcessing($query)
@@ -69,12 +73,17 @@ class QueueChecklist extends Model
         return $query->where('latest_status', 2);
     }
 
-    public function scopeToday($query){
+    public function scopeCompleted($query)
+    {
+        return $query->where('latest_status', 4);
+    }
+
+    public function scopeToday($query)
+    {
         return $query->whereHas('queue', function ($q) {
             $q->whereDate('queues.created_at', Carbon::today());
         });
     }
-
 
 
     public function scopeApplySorting($query)
@@ -91,5 +100,4 @@ class QueueChecklist extends Model
             ->orderBy('queues.created_at', 'asc')
             ->select('queue_checklists.*'); // prevent column conflicts
     }
-
 }

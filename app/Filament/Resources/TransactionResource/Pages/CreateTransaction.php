@@ -51,7 +51,6 @@ class CreateTransaction extends CreateRecord
                     ];
                 })->toArray();
             }
-            // dd($filled);
             $this->form->model(Transaction::make());
 
             $this->form->fill($filled);
@@ -96,7 +95,7 @@ class CreateTransaction extends CreateRecord
         $action = new QueueAction();
         $action->getTimestamp($this->checklist_details->id, 4); // completed timestamp
 
-        
+
         redirect()->route('filament.admin.resources.transactions.index');
     }
 

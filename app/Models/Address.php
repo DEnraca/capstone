@@ -17,4 +17,6 @@ class Address extends Model
         'barangay_id',
         'house_address',
     ];
+
+
 }
