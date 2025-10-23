@@ -19,6 +19,7 @@ class ServiceResource extends Resource
     protected static ?string $model = Service::class;
 
     protected static ?string $navigationIcon = 'fas-notes-medical';
+    protected static ?string $navigationGroup = 'Maintenance';
 
     public static function form(Form $form): Form
     {

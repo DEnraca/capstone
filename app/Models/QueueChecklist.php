@@ -86,7 +86,6 @@ class QueueChecklist extends Model
     }
 
 
-
     public function scopeApplySorting($query)
     {
         return $query

@@ -32,6 +32,7 @@ class AppointmentResource extends Resource
     protected static ?string $model = Appointment::class;
 
     protected static ?string $navigationIcon = 'fas-calendar-days';
+    protected static ?string $navigationGroup = 'Admission';
 
     public static function form(Form $form): Form
     {
