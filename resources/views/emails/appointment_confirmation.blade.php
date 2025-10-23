@@ -146,45 +146,6 @@
                             </tr>
                         </tbody>
                     </table>
-                    <table class="row row-2" align="center" width="100%" border="0" cellpadding="0"
-                        cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <table class="row-content stack" align="center" border="0" cellpadding="0"
-                                        cellspacing="0" role="presentation"
-                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-radius: 0; color: #000000; width: 600px; margin: 0 auto;"
-                                        width="600">
-                                        <tbody>
-                                            <tr>
-                                                <td class="column column-1" width="100%"
-                                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top;">
-                                                    <table class="button_block block-1" width="100%" border="0"
-                                                        cellpadding="10" cellspacing="0" role="presentation"
-                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                                                        <tr>
-                                                            <td class="pad">
-                                                                <div class="alignment" align="left"><!--[if mso]>
-<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"   style="height:38px;width:183px;v-text-anchor:middle;" arcsize="11%" fillcolor="#ffdca1">
-<v:stroke dashstyle="Solid" weight="0px" color="#ffdca1"/>
-<w:anchorlock/>
-<v:textbox inset="0px,0px,0px,0px">
-<center dir="false" style="color:#d08500;font-family:sans-serif;font-size:14px">
-<![endif]--><span class="button" style="background-color: #ffdca1; mso-shading: transparent; border-bottom: 0px solid transparent; border-left: 0px solid transparent; border-radius: 4px; border-right: 0px solid transparent; border-top: 0px solid transparent; color: #d08500; display: inline-block; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 400; mso-border-alt: none; padding-bottom: 5px; padding-top: 5px; padding-left: 20px; padding-right: 20px; text-align: center; width: auto; word-break: keep-all; letter-spacing: normal;"><span
-                                                                            style="word-break: break-word; line-height: 28px;">Appointment
-                                                                            Confirmation</span></span><!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
                     <table class="row row-3" align="center" width="100%" border="0" cellpadding="0"
                         cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                         <tbody>
@@ -681,17 +642,20 @@
                                                         style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                                                         <tr>
                                                             <td class="pad">
-                                                                <div class="alignment" align="left"><!--[if mso]>
-<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"   style="height:38px;width:198px;v-text-anchor:middle;" arcsize="11%" fillcolor="#329a98">
-<v:stroke dashstyle="Solid" weight="0px" color="#329a98"/>
-<w:anchorlock/>
-<v:textbox inset="0px,0px,0px,0px">
-<center dir="false" style="color:#ffffff;font-family:sans-serif;font-size:14px">
-<![endif]--><span class="button" style="background-color: #329a98; mso-shading: transparent; border-bottom: 0px solid transparent; border-left: 0px solid transparent; border-radius: 4px; border-right: 0px solid transparent; border-top: 0px solid transparent; color: #ffffff; display: inline-block; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 400; mso-border-alt: none; padding-bottom: 5px; padding-top: 5px; padding-left: 20px; padding-right: 20px; text-align: center; width: auto; word-break: keep-all; letter-spacing: normal;"><span
-                                                                            style="word-break: break-word; line-height: 28px;">View
-                                                                            Appointment
-                                                                            Details</span></span><!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
-                                                                </div>
+                                                                <a href="{{route('filament.admin.pages.dashboard')}}">
+                                                                    <div class="alignment" align="left"><!--[if mso]>
+                                                                        <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"   style="height:38px;width:198px;v-text-anchor:middle;" arcsize="11%" fillcolor="#329a98">
+                                                                        <v:stroke dashstyle="Solid" weight="0px" color="#329a98"/>
+                                                                        <w:anchorlock/>
+                                                                        <v:textbox inset="0px,0px,0px,0px">
+                                                                        <center dir="false" style="color:#ffffff;font-family:sans-serif;font-size:14px">
+                                                                        <![endif]--><span class="button" style="background-color: #329a98; mso-shading: transparent; border-bottom: 0px solid transparent; border-left: 0px solid transparent; border-radius: 4px; border-right: 0px solid transparent; border-top: 0px solid transparent; color: #ffffff; display: inline-block; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 400; mso-border-alt: none; padding-bottom: 5px; padding-top: 5px; padding-left: 20px; padding-right: 20px; text-align: center; width: auto; word-break: keep-all; letter-spacing: normal;"><span
+                                                                                                                                                    style="word-break: break-word; line-height: 28px;">View
+                                                                                                                                                    Appointment
+                                                                                                                                                    Details</span></span><!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
+                                                                                                                                        </div>
+
+                                                                </a>
                                                             </td>
                                                         </tr>
                                                     </table>

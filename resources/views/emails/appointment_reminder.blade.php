@@ -497,25 +497,25 @@
                                             <tr>
                                                 <td class="column column-1" width="100%"
                                                     style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top;">
-                                                    <table class="button_block block-1" width="100%" border="0"
-                                                        cellpadding="10" cellspacing="0" role="presentation"
-                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                                                        <tr>
-                                                            <td class="pad">
-                                                                <div class="alignment" align="left"><!--[if mso]>
-<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"   style="height:32px;width:164px;v-text-anchor:middle;" arcsize="13%" fillcolor="#329a98">
-<v:stroke dashstyle="Solid" weight="0px" color="#329a98"/>
-<w:anchorlock/>
-<v:textbox inset="0px,0px,0px,0px">
-<center dir="false" style="color:#ffffff;font-family:sans-serif;font-size:11px">
-<![endif]--><span class="button" style="background-color: #329a98; mso-shading: transparent; border-bottom: 0px solid transparent; border-left: 0px solid transparent; border-radius: 4px; border-right: 0px solid transparent; border-top: 0px solid transparent; color: #ffffff; display: inline-block; font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 400; mso-border-alt: none; padding-bottom: 5px; padding-top: 5px; padding-left: 20px; padding-right: 20px; text-align: center; width: auto; word-break: keep-all; letter-spacing: normal;"><span
-                                                                            style="word-break: break-word; line-height: 22px;">View
-                                                                            Appointment
-                                                                            Details</span></span><!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
+                                                    <a href="{{route('filament.admin.pages.dashboard')}}">
+                                                        <table class="button_block block-1" width="100%" border="0"
+                                                            cellpadding="10" cellspacing="0" role="presentation"
+                                                            style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                            <tr>
+                                                                <td class="pad">
+                                                                    <div class="alignment" align="center"><!--[if mso]>
+    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"   style="height:32px;width:164px;v-text-anchor:middle;" arcsize="13%" fillcolor="#329a98">
+    <v:stroke dashstyle="Solid" weight="0px" color="#329a98"/>
+    <w:anchorlock/>
+    <v:textbox inset="0px,0px,0px,0px">
+    <center dir="false" style="color:#ffffff;font-family:sans-serif;font-size:11px">
+    <![endif]--><span class="button" style="background-color: #329a98; mso-shading: transparent; border-bottom: 0px solid transparent; border-left: 0px solid transparent; border-radius: 4px; border-right: 0px solid transparent; border-top: 0px solid transparent; color: #ffffff; display: inline-block; font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 400; mso-border-alt: none; padding-bottom: 5px; padding-top: 5px; padding-left: 20px; padding-right: 20px; text-align: center; width: auto; word-break: keep-all; letter-spacing: normal;"><span
+                                                                                style="word-break: break-word; line-height: 22px;">View Appointment</span></span><!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         </tbody>

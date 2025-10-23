@@ -147,7 +147,7 @@ class AppointmentResource extends Resource
                     ->hidden(fn($record) => ($record->status == 1) ? false : true)
                     ->requiresConfirmation()
                     ->action(function (Appointment $record) {
-                        Mail::to('example@example.com')->send(new AppointmentConfirmation($record->id));
+                        Mail::to($record->patient->user->email)->queue(new AppointmentConfirmation($record->id));
                         if ($record->services()->count() == 0 || $record->services()->where('status', 2)->count() < 1) {
                             Notification::make()
                                 ->title('Error')

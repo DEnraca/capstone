@@ -3,11 +3,13 @@
 namespace App\Filament\Resources\AppointmentResource\Pages;
 
 use App\Filament\Resources\AppointmentResource;
+use App\Mail\AppointmentConfirmation;
 use App\Models\Appointment;
 use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Mail;
 
 class EditAppointment extends EditRecord
 {
@@ -21,6 +23,7 @@ class EditAppointment extends EditRecord
                 ->hidden(fn ($record) => ($record->status == 1) ? false : true)
                 ->requiresConfirmation()
                 ->action(function (Appointment $record) {
+                    Mail::to($record->patient->user->email)->queue(new AppointmentConfirmation($record->id));
                     if($record->services()->count() == 0 || $record->services()->where('status',2)->count() < 1) {
                         Notification::make()
                             ->title('Error')

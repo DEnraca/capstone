@@ -5,10 +5,11 @@ namespace App\Mail;
 use App\Models\Appointment;
 use App\Models\PatientInformation;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class AppointmentReminder extends Mailable
+class AppointmentReminder extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -17,9 +18,6 @@ class AppointmentReminder extends Mailable
     public function __construct($appointment_Id) //1
     {
         $app = Appointment::find($appointment_Id); //
-        // name
-        // appointment date 
-        // appointment time
 
         $data = [];
         $data = [
