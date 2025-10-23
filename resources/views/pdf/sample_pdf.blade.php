@@ -100,7 +100,7 @@
             <div class="content" style="text-align: justify;">
                 <div class="row ">
                     <div style="padding-top:20px;" class="no_margin">
-                        <wdiv class="col-xs-8">
+                        <div class="col-xs-8">
 
                         </div>
                         <div class="col-xs-4">

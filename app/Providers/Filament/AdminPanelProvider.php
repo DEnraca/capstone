@@ -5,7 +5,12 @@ namespace App\Providers\Filament;
 use App\Filament\Pages\Auth\EmailVerification;
 use App\Filament\Pages\Auth\Login;
 use App\Filament\Pages\Auth\RequestPasswordReset;
+use App\Filament\Widgets\PatientCategoryPieChart;
 use App\Filament\Widgets\PatientOverview;
+use App\Filament\Widgets\PatientOverviewLineChart;
+use App\Filament\Widgets\ServiceAvailBarChart;
+use App\Filament\Widgets\StationPercentage;
+use App\Filament\Widgets\Welcome;
 use App\Livewire\MyProfileExtended;
 use App\Settings\GeneralSettings;
 use Filament\Http\Middleware\Authenticate;
@@ -56,13 +61,19 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-            ->widgets([
-            ])
+            // ->widgets([
+            //     Welcome::class,
+            //     PatientOverview::class,
+            //     PatientCategoryPieChart::class,
+            //     PatientOverviewLineChart::class,
+            //     ServiceAvailBarChart::class,
+            //     StationPercentage::class,
+            // ])
             ->navigationItems([
-                NavigationItem::make('Queue Board')
-                    ->url('/admin/queue-board', shouldOpenInNewTab: true) // Link to external URL
-                    ->sort(3)
-                    ->icon('fas-person-walking-arrow-right'),
+                // NavigationItem::make('Queue Board')
+                //     ->url('/admin/queue-board', shouldOpenInNewTab: true) // Link to external URL
+                //     ->sort(3)
+                //     ->icon('fas-person-walking-arrow-right'),
             ])
             ->middleware([
                 EncryptCookies::class,

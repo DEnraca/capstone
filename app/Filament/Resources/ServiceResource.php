@@ -46,7 +46,6 @@ class ServiceResource extends Resource
                 ),
                 Forms\Components\TextInput::make('price')
                     ->required()
-                    ->numeric()
                     ->minValue(1)
                     ->placeholder(0)
                     ->prefix('₱'),

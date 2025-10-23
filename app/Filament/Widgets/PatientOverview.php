@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Transaction;
 use Filament\Support\Enums\IconPosition;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -26,7 +27,7 @@ class PatientOverview extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('', '37')
+            Stat::make('', '12')
                 ->color('success')
                 ->description("Today's Patient")
                 ->icon('heroicon-s-user-group'),

@@ -69,6 +69,11 @@ class QueueChecklist extends Model
         return $query->where('latest_status', 2);
     }
 
+    public function scopeCompleted($query)
+    {
+        return $query->where('latest_status', 4);
+    }
+
     public function scopeToday($query){
         return $query->whereHas('queue', function ($q) {
             $q->whereDate('queues.created_at', Carbon::today());

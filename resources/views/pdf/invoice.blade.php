@@ -1,140 +1,170 @@
-<x-layouts.custom>
-    <div>
-        <div class="flex flex-col items-center justify-center min-h-screen">
-            <header class="my-6 flex items-center justify-center">
-                <img src="logo.png" alt="Logo" width="90" height="90" class="mb-12" />
-                <div class="flex flex-col items-center">
-                    <h1 class="text-2xl font-bold">ABR DIAGNOSTICS CENTER</h1>
-                    <div class="text-center text-sm font-semibold leading-tight">
-                        <p class="uppercase">tavera st. pakil, laguna</p>
-                        <p>tel. Nos.: 049-557-2679 / 0935-575-1649</p>
-                        <p>Email: abrclinic2010@gmail.com</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{config('app.name')}}</title>
+    <link rel="stylesheet" href="{{base_path('public/css/bootstrap_trimmed.min.css')}}" />
+    <style type="text/css">
+        *{
+            color: #000 !important;
+        }
+        html {
+            height:100%;
+        }
+        body {
+            font-family: 'DejaVu Sans', sans-serif;
+            margin-left: 0.3in;
+            margin-right: 0.3in;
+        }
+        h1 {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .vcenter {
+            display: inline-block;
+            vertical-align: middle;
+            float: none;
+        }
+        .row {
+            margin-bottom: 5px;
+        }
+        .page {
+            page-break-after:always;
+        }
+        .overlay{
+            position: relative;
+        }
+        .test{
+            position: absolute;
+            bottom: 1px; /* slight padding from bottom of image */
+            left: 0;
+            width: 100%;
+            text-align: center;
+        }
+        .test p {
+            line-height: 0.5;
+        }
+        .display{
+            border-bottom: 1px solid black;
+            text-align:center;
+        }
+        .no_margin{
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            padding: 0 !important;
+        }
+       .title{
+            font-size: 1.8rem;
+            font-weight: 800;
+       }
+        .display-text{
+            height: 10px;
+        }
+
+        #print-date {
+            position: fixed;
+            bottom: 10px; /* adjust spacing from bottom */
+            text-align: left;
+            font-size: 12px;
+            width: 100%;
+            color: #555;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="page">
+            <div class="row">
+                <div class="overlay">
+                    <img src="{{base_path('public/images/logo.png')}}" width="100%" height="auto" style="display: block;"/>
+                    <div class="test">
+                        <p style="text-transform:uppercase">Tel Nos.: 049-557-2679/09350575-1649</p>
+                        <p style="margin:0px;padding:0px">Email:abrclinic2010@gmail.com</p>
                     </div>
                 </div>
-            </header>
-            <main class="w-1/2 space-y-6">
-                <section class="flex justify-between">
-                    <div>
-                        <h1 class="text-3xl font-bold">INVOICE</h1>
-                        <h3 class="text-lg font-semibold">#INV-2025-01</h3>
-                        <h3 class="text-green-400 text-lg font-semibold">PAID</h3>
+            </div>
+            <div class="content" style="text-align: justify;">
+                <div class="row" style="padding-top: 25px">
+                    <div class="col-xs-7">
+                        <p style="font-weight: 700; font-size:4.5rem"> INVOICE</p>
+                        <p style="font-weight: 400; font-size:2rem"> #{{$invoice_number}}</p>
+                        @if ($is_paid)
+                            <p style="font-weight: 400; font-size:1.8rem; color: yellowgreen !important;">Paid</p>
+                        @endif
                     </div>
-                    <div class="text-end font-mono">
-                        <p>Date issued:</p>
-                        <p>01 july 2025</p>
-                        <p>issued to:</p>
-                        <p>2025-0000-00</p>
-                        <p>Christian Francisco</p>
-                        <p>7-2 J Capalad St, Balangkas Valenzuela city</p>
+                    <div class="col-xs-5 text-right">
+                        <div class="col-xs-12">
+                            <p class="title">Date Issued:</p>
+                            <p>{{\Carbon\Carbon::parse($date_issued)->format('d M, Y')}} </p>
+                        </div>
+                        <div class="col-xs-12">
+                            <p class="title">Issued to:</p>
+                            <p>{{$patient_number}}</p>
+                            <p>{{$patient_name}}</p>
+                            <p>{{$address}}</p>
+                        </div>
                     </div>
-                </section>
-                <table class="min-w-full border border-gray-300">
-                    <thead class="bg-amber-400">
-                        <tr>
-                            <th class="border border-gray-300 px-4 py-3 text-right text-sm font-semibold text-gray-700">
-                                No.
-                            </th>
-                            <th class="border border-gray-300 px-4 py-3 text-right text-sm font-semibold text-gray-700">
-                                Description
-                            </th>
-                            <th class="border border-gray-300 px-4 py-3 text-right text-sm font-semibold text-gray-700">
-                                QTY
-                            </th>
-                            <th class="border border-gray-300 px-4 py-3 text-right text-sm font-semibold text-gray-700">
-                                Price
-                            </th>
-                            <th class="border border-gray-300 px-4 py-3 text-right text-sm font-semibold text-gray-700">
-                                Subtotal
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="hover:bg-gray-50">
-                            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600 text-end">
-                                1
-                            </td>
-                            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600 text-end">
-                                Hinged wardrope
-                            </td>
-                            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600 text-end">
-                                1
-                            </td>
-                            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600 text-end">
-                                ₱1200
-                            </td>
-                            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600 text-end">
-                                ₱1200
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-50">
-                            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600 text-end">
-                                1
-                            </td>
-                            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600 text-end">
-                                Hinged wardrope
-                            </td>
-                            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600 text-end">
-                                1
-                            </td>
-                            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600 text-end">
-                                ₱1200
-                            </td>
-                            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600 text-end">
-                                ₱1200
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-50">
-                            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600 text-end">
-                                1
-                            </td>
-                            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600 text-end">
-                                Hinged wardrope
-                            </td>
-                            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600 text-end">
-                                1
-                            </td>
-                            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600 text-end">
-                                ₱1200
-                            </td>
-                            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600 text-end">
-                                ₱1200
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-50">
-                            <td class="border border-gray-300 px-4 py-2 h-32 text-sm text-gray-600 text-end"></td>
-                            <td class="border border-gray-300 px-4 py-2 h-32 text-sm text-gray-600 text-end"></td>
-                            <td class="border border-gray-300 px-4 py-2 h-32 text-sm text-gray-600 text-end"></td>
-                            <td class="border border-gray-300 px-4 py-2 h-32 text-sm text-gray-600 text-end"></td>
-                            <td class="border border-gray-300 px-4 py-2 h-32 text-sm text-gray-600 text-end"></td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-6 text-sm 0 text-end" colspan="5">
-                                <div class="flex justify-end gap-12 items-center text-gray-500">
-                                    <div class="space-y-2">
-                                        <p>Subtotal:</p>
-                                        <p>Disc@PWD:</p>
-                                        <p class="font-semibold">GRAND TOTAL:</p>
-                                    </div>
-                                    <div class="space-y-2 font-bold text-base">
-                                        <p>₱2900</p>
-                                        <p>₱500</p>
-                                        <p>₱2400</p>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </main>
-            <footer class="mt-12 mb-20 w-1/2 space-y-6 text-slate-500">
-                <hr class="w-1/3 border-1 border-slate-400" />
-                <div class="">
-                    <h4>RECEIVED BY:</h4>
-                    <h4>Name: Jane Doe</h4>
-                    <h4>Employee Number: 2025-0032-00</h4>
                 </div>
-                <h4>Print Date: October 14, 2025 4:30 PM</h4>
-            </footer>
+                <div class="row" style="padding-top: 20px">
+                    <div style="padding-top:20px;" class="col-xs-12">
+                        <table style="width: 100%; border-collapse: collapse;" border="1">
+                            <thead style="background-color: #f29a11; text-transform::uppercase;">
+                                <tr>
+                                    <th style="width: 10%; text-align: center; padding: 10px;">No</th>
+                                    <th style="width: 50%; text-align: center; padding: 10px;">Service</th>
+                                    <th style="width: 10%; text-align: center; padding: 10px;">Qty</th>
+                                    <th style="width: 15%; text-align: center; padding: 10px;">Price</th>
+                                    <th style="width: 15%; text-align: center; padding: 10px;">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($services as $key => $service)
+                                    <tr>
+                                        <td style="padding: 8px;">{{$key + 1}}</td>
+                                        <td style="padding: 8px;">{{$service->service->station->name}} - {{$service->service->name}}</td>
+                                        <td style="padding: 8px;" class="text-right">1</td>
+                                        <td style="padding: 8px;" class="text-right">₱ {{number_format($service->service->price)}}</td>
+                                        <td style="padding: 8px;" class="text-right">₱ {{number_format($service->service->price)}}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <div class="text-right" style="text-transform: uppercase; border:1px solid rgb(173, 167, 167); padding:8px">
+                            <p><span style="margin-right: 10px">Subtotal</span>₱ {{number_format($sub_total)}}</p>
+                            @if ($discount)
+                                <p><span style="margin-right: 10px">Disc@ {{$discount}}</span>₱ {{number_format($discount_val,2)}}</p>
+
+                            @endif
+                            <p style="font-weight:bold"><span style="margin-right: 10px">Grand total</span>₱ {{number_format($grand_total,2)}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-top: 30px">
+                    <div style="padding-top:30px;" class="col-xs-12">
+                        <div class="col-xs-5">
+                            <div style="border-bottom: 1px solid"></div>
+                            <p>Received By:</p>
+                            <p>Name: <span style="font-weight: 800">{{$emp}}</span></p>
+                            <p>Employee No.: <span style="font-weight: 800">{{$emp_id}}</span></p>
+                        </div>
+                        <div class="col-xs-7">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
-</x-layouts.custom>
+</body>
+<footer id="print-date">
+    <div>
+        <p>Print Date: {{\Carbon\Carbon::now()->format('M d, Y g:i:s A')}} Dennis Enraca</p>
+    </div>
+</footer>
+</html>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invoice;
 use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
 use PDF;
@@ -9,18 +10,38 @@ use PDF;
 class PDFController extends Controller
 {
 
-    public function invoice(){
+    public function invoice($id){
+        $invoice = Invoice::find($id);
+        if ($invoice) {
+            $patient = $invoice->patient();
+            $add = $patient->address;
+            $address =  getAddressDetails($add->region_id, $add->province_id, $add->city_id, $add->barangay_id);
+            $data = [
+                'invoice_number' => $invoice->invoice_number,
+                'patient_number' => $patient->pat_id,
+                'patient_name' => $patient->getFullname(),
+                'is_paid' => $invoice->is_paid,
+                'date_issued' => $invoice->created_at,
+                'sub_total' =>number_format($invoice->total_amount,2),
+                'discount_val' =>number_format($invoice->total_discount,2),
+                'grand_total' =>number_format($invoice->grand_total,2),
+                'discount' => $invoice->discount?->name ?? null,
+                'date_issued' => $invoice->created_at,
+                'emp' => $invoice->createdBy?->getFullname() ?? null,
+                'emp_id' => $invoice->createdBy?->emp_id ?? null,
+                'services' => $invoice->transaction->tests,
+                'address' => "{$add->house_address} {$address['barangay']} {$address['city']} {$address['province']} {$address['region']} "
+            ];
+            // dd($data);
 
-        if (true) {
+            $filename = $patient->getFullname().' Invoice.pdf';
 
-            $filename = 'Invoice.pdf';
-
-            return PDF::loadView('pdf.invoice')
+            return PDF::loadView('pdf.invoice', $data)
                 ->setOption('encoding', 'UTF-8')
                 ->setOptions(['margin-left' => 5, 'margin-top' => 5, 'margin-right' => 10, 'margin-bottom' => 5])
                 ->setOption('enable-local-file-access', true)
                 ->setOption('images', true)
-                ->stream($filename);
+                ->download($filename);
         }
         else
         {
@@ -30,7 +51,7 @@ class PDFController extends Controller
                 ->danger()
                 ->send();
 
-            return redirect()->route('filament.resources.equipment-monitorings.index');
+            return redirect()->route('filament.resources.transactions.index');
         }
     }
 
