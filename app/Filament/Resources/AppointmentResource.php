@@ -7,6 +7,7 @@ use App\Actions\Form\PatientInformation\Address;
 use App\Actions\Form\PatientInformation\PersonalInfo;
 use App\Filament\Resources\AppointmentResource\Pages;
 use App\Filament\Resources\AppointmentResource\RelationManagers;
+use App\Mail\AppointmentConfirmation;
 use App\Models\Appointment;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
@@ -25,6 +26,7 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
 
 class AppointmentResource extends Resource
@@ -48,39 +50,39 @@ class AppointmentResource extends Resource
 
         return [
             Section::make('Appointment Details')
-                    ->description(function (Appointment $record) {
-                        if($record->services()->count() == 0 || $record->services()->where('status',2)->count() <= 0){
-                            // $badge = $record->status_name;
+                ->description(function (Appointment $record) {
+                    if ($record->services()->count() == 0 || $record->services()->where('status', 2)->count() <= 0) {
+                        // $badge = $record->status_name;
 
-                            return new HtmlString('
+                        return new HtmlString('
                                     <div class="flex justify-between">
                                         <span class="text-red-500">You must approve at least 1 booked services before appointment confirmation</span>
                                     </div>
                                 ');
-                        }
-                        return null;
-                    })
-                    ->schema([
-                        Fieldset::make('Patient Information')
-                            ->relationship('patient')
-                            ->disabled()
-                            ->schema(array_merge(
-                                $patientInfoField,
-                                [
-                                    Fieldset::make('Address')
-                                        ->relationship('address')
-                                        ->schema($patientAddressField)
-                                        ->columnSpanFull()
-                                        ->columns(2),
-                                ]
-                            ))->columns(3)->columnSpan(2),
+                    }
+                    return null;
+                })
+                ->schema([
+                    Fieldset::make('Patient Information')
+                        ->relationship('patient')
+                        ->disabled()
+                        ->schema(array_merge(
+                            $patientInfoField,
+                            [
+                                Fieldset::make('Address')
+                                    ->relationship('address')
+                                    ->schema($patientAddressField)
+                                    ->columnSpanFull()
+                                    ->columns(2),
+                            ]
+                        ))->columns(3)->columnSpan(2),
 
-                        Fieldset::make('Appointment Date')
-                            ->schema($appointmentField)
-                            ->columns(1)
-                            ->disabled(fn (Appointment $record) => ($record->status == 1) ? false : true)
-                            ->columnSpan(1),
-                    ])->columns(3),
+                    Fieldset::make('Appointment Date')
+                        ->schema($appointmentField)
+                        ->columns(1)
+                        ->disabled(fn(Appointment $record) => ($record->status == 1) ? false : true)
+                        ->columnSpan(1),
+                ])->columns(3),
 
         ];
     }
@@ -88,23 +90,23 @@ class AppointmentResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->defaultSort('created_at','desc')
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('patient')
                     ->label('Full Name')
-                    ->formatStateUsing(fn ($state) => $state->first_name . ' ' .$state->last_name )
+                    ->formatStateUsing(fn($state) => $state->first_name . ' ' . $state->last_name)
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('appointment_date')
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('appointment_time')
-                    ->formatStateUsing(fn ($state) => date('h:i A', strtotime($state))),
+                    ->formatStateUsing(fn($state) => date('h:i A', strtotime($state))),
                 Tables\Columns\TextColumn::make('status')
                     ->numeric()
                     ->searchable()
-                    ->formatStateUsing(fn ($state) => getAppointmentStatus($state))
-                    ->color(fn (int $state): string => match ($state) {
+                    ->formatStateUsing(fn($state) => getAppointmentStatus($state))
+                    ->color(fn(int $state): string => match ($state) {
                         1 => 'warning',
                         2 => 'success',
                         3 => 'danger',
@@ -118,8 +120,8 @@ class AppointmentResource extends Resource
 
                 Tables\Columns\TextColumn::make('confirmedBy.employee')
                     ->label('Confirmed By')
-                    ->formatStateUsing(function ($state){
-                        if($state){
+                    ->formatStateUsing(function ($state) {
+                        if ($state) {
                             $user = $state->employee;
                             return ($user) ? $user->first_name . ' ' . $user->last_name : null;
                         }
@@ -142,10 +144,11 @@ class AppointmentResource extends Resource
             ->actions([
                 Action::make('approve')
                     ->label('Confirm Appointment')
-                    ->hidden(fn ($record) => ($record->status == 1) ? false : true)
+                    ->hidden(fn($record) => ($record->status == 1) ? false : true)
                     ->requiresConfirmation()
                     ->action(function (Appointment $record) {
-                        if($record->services()->count() == 0 || $record->services()->where('status',2)->count() < 1) {
+                        Mail::to($record->patient->user->email)->queue(new AppointmentConfirmation($record->id));
+                        if ($record->services()->count() == 0 || $record->services()->where('status', 2)->count() < 1) {
                             Notification::make()
                                 ->title('Error')
                                 ->body('No services selected/approved for this appointment.')
@@ -180,7 +183,7 @@ class AppointmentResource extends Resource
     public static function getRelations(): array
     {
         return [
-             RelationManagers\ServicesRelationManager::class,
+            RelationManagers\ServicesRelationManager::class,
         ];
     }
 
