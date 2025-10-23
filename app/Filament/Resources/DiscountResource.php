@@ -19,6 +19,8 @@ class DiscountResource extends Resource
 
     protected static ?string $navigationIcon = 'fas-percent';
 
+    protected static ?string $navigationGroup = 'Maintenance';
+
     public static function form(Form $form): Form
     {
         return $form

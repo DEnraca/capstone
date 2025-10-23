@@ -31,6 +31,9 @@ class EmployeeResource extends Resource
 
     protected static ?string $navigationIcon = 'fas-user-doctor';
 
+    protected static ?string $navigationGroup = 'Maintenance';
+
+
     public static function form(Form $form): Form
     {
         return $form

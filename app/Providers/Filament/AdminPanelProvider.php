@@ -33,6 +33,8 @@ use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
+
+    
     public function panel(Panel $panel): Panel
     {
         return $panel
@@ -75,6 +77,7 @@ class AdminPanelProvider extends PanelProvider
                 //     ->sort(3)
                 //     ->icon('fas-person-walking-arrow-right'),
             ])
+
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
