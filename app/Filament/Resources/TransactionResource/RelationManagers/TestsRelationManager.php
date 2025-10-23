@@ -60,7 +60,9 @@ class TestsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('service.station.name')->searchable()->label('Station'),
                 Tables\Columns\TextColumn::make('service.name')->searchable()->label('Name'),
                 Tables\Columns\TextColumn::make('service.description')->searchable()->limit(50),
+                Tables\Columns\TextColumn::make('service.price')->prefix('₱')->formatStateUsing(fn ($state) => number_format($state,2))->sortable(),
                 Tables\Columns\TextColumn::make('status.name')->searchable()->badge(),
+
             ])
             ->filters([
                 //

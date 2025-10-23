@@ -25,6 +25,14 @@ class Transaction extends Model
 
     protected $table = 'transactions';
 
+
+    public function payments()
+    {
+        return $this->belongsToMany('invoices_has_payment_method')
+            ->withPivot('status', 'approved_by');
+    }
+
+
     public function queue(): BelongsTo
     {
         return $this->belongsTo(Queue::class,'queue_id');
@@ -36,15 +44,17 @@ class Transaction extends Model
         return $this->belongsTo(PatientInformation::class,'patient_id');
     }
 
+    public function billing(): BelongsTo
+    {
+        return $this->belongsTo(Invoice::class,'billing_id');
+    }
 
     public function tests(): HasMany
     {
         return $this->hasMany(PatientTest::class,'transaction_id');
     }
 
-
-
-     public function createdBy(): BelongsTo
+    public function createdBy(): BelongsTo
     {
         return $this->belongsTo(Employee::class,'created_by');
     }
