@@ -7,6 +7,7 @@ export default {
         './resources/views/filament/**/*.blade.php',
         './resources/views/livewire/*.blade.php',
         './resources/views/public/*.blade.php',
+        './resources/js/components/*.vue',
         './vendor/filament/**/*.blade.php',
     ],
 }

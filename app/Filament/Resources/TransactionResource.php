@@ -98,8 +98,9 @@ class TransactionResource extends Resource
                             ))->columns(3)->columnSpan(2)]),
 
                         Tabs\Tab::make('Billing Information')
-                        ->disabled()
-                        ->schema([Group::make()->relationship('billing')->disabled()->schema(InvoiceResource::getInvoiceFormSchema())]),
+                            ->hiddenOn('create')
+                            ->disabled()
+                            ->schema([Group::make()->relationship('billing')->disabled()->schema(InvoiceResource::getInvoiceFormSchema())]),
                     ])
             ]);
     }

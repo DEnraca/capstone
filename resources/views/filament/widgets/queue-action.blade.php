@@ -92,7 +92,7 @@
         <x-slot name="heading">Verify patient to complete</x-slot>
         @if(!$patient)
             <div>
-                {{-- <p class="text-primary-500">You need to add patient information before completing this queue.  <a href="{{route('filament.admin.resources.patient-informations.create')}}" target="_blank" style="color:blue; !important">[Click here to add it.]</a> </p> --}}
+                <p class="text-primary-500">You need to add patient information before completing this queue.  <a href="{{route('filament.admin.resources.patient-informations.create')}}" target="_blank" style="color:blue; !important">[Click here to add it.]</a> </p>
             </div>
 
         @else
