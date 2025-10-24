@@ -16,7 +16,7 @@ class CreateQueue extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        if($data['appointment_id']){
+        if(isset($data['appointment_id']) && $data['appointment_id']){
             $appointment = Appointment::find($data['appointment_id']);
             if($appointment){
                 $data['patient_id']  = $appointment->patient_id ?? null;

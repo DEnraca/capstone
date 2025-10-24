@@ -103,10 +103,12 @@ class ShowQueues extends Controller
                 ->get();
             $queues = [];
             foreach($stations as $station){
-                $checklists = QueueChecklist::where('station_id', $station->station->id)
+                // $checklists = QueueChecklist::where('station_id',  1)
+                $checklists = QueueChecklist::where('station_id',  $station->station_id)
                     ->applySorting()
                     ->today()
                     ->current();
+                    // dd($checklists->get());
                 $now_serving = (clone $checklists)->processing()->first();
                 if(!$now_serving){
                     $now_serving = [];

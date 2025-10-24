@@ -15,6 +15,8 @@
                 <h2 class="text-lg sm:text-xl font-bold tracking-tight">
                     Welcome,
                     {{$user->name}}
+
+                    <span class="inline-flex items-center rounded-md bg-gray-400/10 px-2 py-1 text-xs font-medium text-gray-400 inset-ring inset-ring-gray-400/20">{{ucwords(str_replace('_', ' ', $user->roles->pluck('name')->join(', '))) }}</span>
                 </h2>
             </div>
         </div>

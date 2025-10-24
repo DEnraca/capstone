@@ -1,17 +1,17 @@
 <template>
     <div class="grid grid-cols-4 gap-1">
         <div
-            id="now-serving-cards"
             v-for="(queue, index) in queues"
             :key="index"
-            class="min-h-full text-black rounded-lg grid grid-rows-[auto_1fr] mb-1"
+            class="min-h-full text-black odd:bg-primary-400 even:bg-primary-500 rounded-lg grid grid-rows-[auto_1fr] mb-1"
         >
             <!-- Header -->
             <div class="text-center text-2xl font-extrabold py-1">
                 <p>
                     {{ queue.station }}
                 </p>
-                <p v-if="queue.now_serving.length > 0" class="text-red-500 text-xl">
+
+                <p v-if="queue.now_serving" class="text-red-500 text-xl">
                     {{ queue.now_serving?.number }} - {{ queue.now_serving?.name }}
                 </p>
             </div>
@@ -31,7 +31,7 @@
                         :key="nextIndex"
                         class="rounded text-center text-md font-black"
                         >
-                            {{ next.number }}
+                            {{ next.number }} ({{ next.name }})
                         </div>
                     </div>
                 </div>
