@@ -1,28 +1,27 @@
 <x-layouts.app>
-    <section class="min-h-screen max-h-screen grid grid-rows-[auto_1fr_auto] gap-0 bg-primary-100">
-        <div class="bg-transparent grid grid-cols-[1fr_20%] gap-1 place-items-center place-content-between text-white">
-            <div class="w-auto h-24">
-                <img src="{{ $logo ?? asset('images/logo.png') }}" alt="Logo" class="w-full h-full object-contain">
-            </div>
-            <div class="text-right text-black">
-                <p class="font-extrabold" id="clock" style="font-size: 2rem"></p>
-                <p class="font-bold" id="date" style="font-size: 1rem"></p>
+    <section class="grid grid-cols-5 grid-rows-[auto_1fr_auto_auto_auto] bg-amber-100 h-screen text-center p-2">
+        <div class="col-span-5 bg-amber-100 flex items-center justify-between px-6 py-2 h-[80px]">
+            <img src="{{ $logo ?? asset('images/logo.png') }}" alt="Logo" class="w-[600px] h-auto object-contain">
+            <div>
+                <p class="text-4xl font-bold" id="clock"></p>
+                <p class="text-sx" id="date"></p>
             </div>
         </div>
-        <div class="grid grid-cols-[1fr_20%] gap-1">
-            <div id="videoContainer" class="bg-gray rounded-md flex items-center justify-center overflow-hidden relative " style="background-color:green;">
-                <video id="video1" class="absolute  w-full h-full rounded-t-md p-0 m-0 object-cover" src="{{asset('images/frontend_asset/abr_vid.mp4')}}" autoplay muted loop playsinline></video>
-            </div>
-            <div class="flex items-center justify-center bg-transparent rounded-md">
-                @include('public.hmos_board')
+        <div class="col-span-4 row-span-3 row-start-2 relative rounded-2xl overflow-hidden">
+            <video id="video1" class="w-full h-full object-cover"
+                src="{{ asset('images/frontend_asset/abr_vid.mp4') }}" autoplay muted loop playsinline></video>
+
+            <div class="absolute bottom-0 left-0 bg-amber-100 w-64 h-16 rounded-tr-xl rounded-t-l-2xl">
+                <p class="p-5 text-2xl font-bold text-slate-600">Now Serving</p>
             </div>
         </div>
 
-        <div id="app2" class="min-h-full p-1" >
-            <div class="text-center py-1 bg-gray-200 rounded-lg">
-                <p class="font-black text-black text-xl">Now Serving</p>
-            </div>
-            <div class="overflow-y-auto p-1 bg-gray-200 rounded-lg m-1">
+        <div class="row-span-3 col-start-5 row-start-2 grid place-items-center">
+            @include('public.hmos_board')
+        </div>
+
+        <div id="app2"class="col-span-5 row-start-5 mt-5 flex justify-start gap-2 overflow-y-auto ">
+            <div class="p-1 rounded-lg m-1">
                 <now-serving></now-serving>
             </div>
             <queue-call></queue-call>
@@ -42,7 +41,11 @@
             const formattedHours = String(hours).padStart(2, "0");
             const timeString = `${formattedHours}:${minutes}:${seconds} ${meridiem}`;
             // Format Date (12 August 2025)
-            const options = { day: "numeric", month: "long", year: "numeric" };
+            const options = {
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            };
             const dateString = now.toLocaleDateString("us-EN", options);
             // Update DOM
             document.getElementById("clock").textContent = timeString;
@@ -64,6 +67,7 @@
                 videos.forEach((video, index) => {
                     video.style.display = index === 0 ? 'block' : 'none';
                 });
+
                 function playNextVideo() {
                     videos[currentVideo].style.display = 'none';
                     videos[currentVideo].pause();
@@ -81,9 +85,6 @@
                 videos[0].play();
             })
         );
-
-
     </script>
 
 </x-layouts.app>
-
