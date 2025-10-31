@@ -102,25 +102,25 @@
                     class="fixed top-0 w-full flex items-center justify-between px-6 py-2 text-white z-50 bg-white/10 backdrop-blur-md border-b border-white/20">
                     <!-- Logo -->
                     <div class="flex items-center">
-                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8 sm:h-12 w-auto" />
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8 w-auto" />
 
                     </div>
 
                     <!-- Desktop Menu -->
-                    <nav class="hidden md:flex space-x-8 text-sm flex items-center">
+                    <nav class="hidden md:flex space-x-4 text-xs flex items-center">
                         <a href="#hero" class="hover:text-amber-400 transition">Home</a>
                         <a href="#about-us" class="hover:text-amber-400 transition">About Us</a>
                         <a href="#patient-care" class="hover:text-amber-400 transition">Patient Care</a>
                     </nav>
 
                     <!-- Desktop Buttons -->
-                    <div class="hidden md:flex space-x-2">
+                    <div class="hidden md:flex space-x-0.5">
                         <a href="{{ route('livewire-appointment') }}" target="_blank"
-                            class="text-sm text-amber-400 border border-slate-300 py-1 px-4 rounded hover:bg-amber-400 hover:text-white transition">
+                            class="text-xs text-amber-400 border border-slate-300 py-1 px-2 rounded hover:bg-amber-400 hover:text-white transition">
                             Create an appointment
                         </a>
                         <a href="{{ route('filament.admin.auth.login') }}"
-                            class="text-sm bg-amber-400 px-4 py-1 rounded text-white hover:bg-amber-500 transition">
+                            class="text-xs bg-amber-400 px-2 py-1 rounded text-white hover:bg-amber-500 transition">
                             Log in
                         </a>
                     </div>
@@ -143,16 +143,20 @@
 
                 <!-- Mobile Menu -->
                 <nav id="mobile-menu"
-                    class="fixed text-primary-300 top-[62px] left-0 w-full bg-white/30 backdrop-blur-xl border-b border-white/20 text-white hidden flex-col px-6 py-8 z-40 md:hidden shadow-lg space-y-4 text-center text-sm uppercase">
+                    class="fixed text-primary-300 top-[58px] left-0 w-full bg-white/30 backdrop-blur-xl border-b
+                             border-white/20  hidden flex-col px-6 py-8 z-40 md:hidden shadow-lg space-y-4 
+                             text-center text-sm uppercase">
                     <a href="#hero"
-                        class="block py-2 font-medium tracking-wide hover:text-amber-300 transition">Home</a>
+                        class="block py-2 font-bold tracking-wide hover:text-amber-300 transition text-black">Home</a>
                     <a href="#about-us"
-                        class="block py-2 font-medium tracking-wide hover:text-amber-300 transition">About Us</a>
+                        class="block py-2 font-bold tracking-wide hover:text-amber-300 transition text-black">About
+                        Us</a>
                     <a href="#patient-care"
-                        class="block py-2 font-medium tracking-wide hover:text-amber-300 transition">Patient Care</a>
+                        class="block py-2 font-bold tracking-wide hover:text-amber-300 transition text-black">Patient
+                        Care</a>
                     <div class="flex flex-col pt-4 border-t border-white/20 space-y-2">
                         <a href="{{ route('livewire-appointment') }}" target="_blank"
-                            class="w-full bg-amber-600 py-2.5 rounded-lg text-white font-semibold shadow-md">
+                            class="w-full bg-amber-600 py-2.5 rounded-lg text-white font-semibold shadow-md ">
                             Create Appointment
                         </a>
                         <a href="{{ route('filament.admin.auth.login') }}"
@@ -521,42 +525,42 @@
             // carousel image array from card content
             const slides = [{
                     src: "{{ asset('images/frontend_asset/cardiac.jpg') }}",
-                    title: "Modern Laboratory",
+                    title: "CARDIAC",
                     description: "Refers to anything related to the heart. A cardiac laboratory usually performs tests and procedures to evaluate heart function, such as ECG, stress tests, and cardiac imaging.",
                 },
                 {
                     src: "{{ asset('images/frontend_asset/ultrasound.jpg') }}",
-                    title: "Expert Medical Team",
+                    title: "ULTRA-SOUND",
                     description: "Also known as sonography, it is an imaging method that uses high-frequency sound waves to create images of the inside of the body. It’s commonly used in pregnancy, but also for organs like the liver, kidneys, and heart.",
                 },
                 {
                     src: "{{ asset('images/frontend_asset/xray.jpg') }}",
-                    title: "Patient Care First",
+                    title: "X-RAY",
                     description: "A quick, painless imaging technique that uses radiation to view inside the body mainly bones and chest. It helps detect fractures, infections, and abnormalities like pneumonia.",
                 },
                 {
                     src: "{{ asset('images/frontend_asset/laboratory.jpg') }}",
-                    title: "Patient Care First",
+                    title: "LABORATORY",
                     description: "A medical laboratory is a facility where tests are carried out on clinical specimens (like blood, urine, or tissue) to gather information about a patient's health for diagnosis, treatment, and prevention of diseases.",
                 },
                 {
                     src: "{{ asset('images/frontend_asset/cardiac.jpg') }}",
-                    title: "Modern Laboratory",
+                    title: "CARDIAC",
                     description: "Refers to anything related to the heart. A cardiac laboratory usually performs tests and procedures to evaluate heart function, such as ECG, stress tests, and cardiac imaging.",
                 },
                 {
                     src: "{{ asset('images/frontend_asset/ultrasound.jpg') }}",
-                    title: "Expert Medical Team",
+                    title: "ULTRA-SOUND",
                     description: "Also known as sonography, it is an imaging method that uses high-frequency sound waves to create images of the inside of the body. It’s commonly used in pregnancy, but also for organs like the liver, kidneys, and heart.",
                 },
                 {
                     src: "{{ asset('images/frontend_asset/xray.jpg') }}",
-                    title: "Patient Care First",
+                    title: "X-RAY",
                     description: "A quick, painless imaging technique that uses radiation to view inside the body mainly bones and chest. It helps detect fractures, infections, and abnormalities like pneumonia.",
                 },
                 {
                     src: "{{ asset('images/frontend_asset/laboratory.jpg') }}",
-                    title: "Patient Care First",
+                    title: "LABORATORY",
                     description: "A medical laboratory is a facility where tests are carried out on clinical specimens (like blood, urine, or tissue) to gather information about a patient's health for diagnosis, treatment, and prevention of diseases.",
                 },
             ];
@@ -603,15 +607,15 @@
 							${
 								slide.title && slide.description
 									? `
-                                                                                                                                                                                                                                                                                                							<div class="p-1 sm:p-2">
-                                                                                                                                                                                                                                                                                                								<h4 class="text-amber-400 text-[10px] sm:text-sm uppercase font-semibold">
-                                                                                                                                                                                                                                                                                                									${slide.title}
-                                                                                                                                                                                                                                                                                                								</h4>
-                                                                                                                                                                                                                                                                                                								<hr class="my-1 sm:my-2"/>
-                                                                                                                                                                                                                                                                                                								<p class="text-[9px] sm:text-xs text-justify">
-                                                                                                                                                                                                                                                                                                									${slide.description}
-                                                                                                                                                                                                                                                                                                								</p>
-                                                                                                                                                                                                                                                                                                							</div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                							<div class="p-1 sm:p-2">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                								<h4 class="text-amber-400 text-[10px] sm:text-base uppercase font-semibold">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                									${slide.title}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                								</h4>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                								<hr class="my-1 sm:my-2"/>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                								<p class="text-[9px] sm:text-sm text-justify">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                									${slide.description}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                								</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                							</div>`
 									: ""
 							}
 						</div>
@@ -624,12 +628,12 @@
                     header.classList.add("bg-white", "text-black", "shadow-md");
                     header.classList.remove("bg-white/10", "text-white");
                     h3.style.textShadow = "none";
-                    mobileMenu.style.color = "black";
+                    // mobileMenu.style.color = "white";
                 } else {
                     header.classList.remove("bg-white", "text-black", "shadow-md");
                     header.classList.add("bg-white/10", "text-white");
                     h3.style.textShadow = "2px 2px 4px rgba(0,0,0,0.8)";
-                    mobileMenu.style.color = "white";
+                    // mobileMenu.style.color = "black";
                 }
             });
 
