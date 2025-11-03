@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Discount;
 use App\Models\Invoice;
+use App\Models\InvoiceHasPayment;
+use App\Models\PaymentMethod;
+use App\Models\Report;
+use Carbon\Carbon;
 use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
 use PDF;
@@ -56,54 +61,103 @@ class PDFController extends Controller
     }
 
 
-    public function sample(){
+    public function generateReport($id){
+        $report = Report::find($id);
 
-        if (true) {
+        $from = Carbon::parse($report->from)->startOfDay();
+        $to = Carbon::parse($report->to)->endOfDay();
 
-            $data = [
-                'department' => 'Test Equipment',
-                'date' => now()->format('F d, Y'),
-                'pms_no' => 'PM-2025-0001',
-                'eq_name' => 'Ultrasound Machine',
-                'manufacturer' => 'ABR Medtech Co.',
-                'model' => 'X21233',
-                'serial_no' => 'SN-1234122',
-
-                'pm_freq' => '2025-02-21112',
-                'procedures' => [],
-                'lastpm_perform' =>  now()->format('F d, Y'),
-
-                'parts' => [],
-                'missingAndReplace' => [],
-
-                'technician' => 'Jane Doe',
-                'client' => 'Jane Doe',
-                'super_visor' => 'Jane Doe',
-                'gsd' => 'Jane Doe',
-
-                'created_at' => now()->format('F d, Y'),
-            ]; //sample data
-
-            $filename = 'Invoice.pdf';
-
-            return PDF::loadView('pdf.sample_pdf',$data) //path of the blade file
-                ->setOption('encoding', 'UTF-8')
-                ->setOptions(['margin-left' => 5, 'margin-top' => 5, 'margin-right' => 10, 'margin-bottom' => 5]) // page margin setup
-                ->setOption('enable-local-file-access', true)
-                ->setOption('images', true) // adding of rendering as image
-                ->stream($filename); // for pdf streaming
-                // ->download($filename); //for pdf downloading
+        if($report){
+            if($report->report_kind_id == 3){
+                $invoices = Invoice::whereBetween('created_at',[$from, $to])->get();
+                $this->invoicesReport($invoices);
+                //invoices
+            }
         }
         else
         {
             Notification::make()
-                ->title('Invoice Generation Failed')
+                ->title('Report Generation Failed')
                 ->body('File not found')
                 ->danger()
                 ->send();
 
-            return redirect()->route('filament.resources.equipment-monitorings.index');
+            return redirect()->route('filament.resources.reports.index');
         }
     }
+
+    public function invoicesReport($record){
+        $data = [];
+        $invoices = [];
+        $health_card = PaymentMethod::where('is_health_card', 1)->get()->pluck('id');
+        foreach($record as $invoice){
+            $invoices[] = [
+                'invoice_number' => $invoice->invoice_number,
+                'transaction_id' => $invoice->transaction->code,
+                'name' => $invoice->transaction?->patient->getFullname() ?? null,
+                'amount_paid' => number_format($invoice->amount_paid,2),
+                'grand_total' => number_format($invoice->grand_total,2),
+                'discounts' => number_format($invoice?->total_discount,2),
+
+                'health_card' => number_format($invoice?->payments->whereIn('payment_method_id', $health_card)->sum('amount_paid'),2),
+                'cash' => number_format($invoice?->payments->where('payment_method_id', 1)->sum('amount_paid'),2),
+                'other' => number_format($invoice?->payments->where('payment_method_id', '!=', 1)->whereNotIn('payment_method_id', $health_card)->sum('amount_paid'),2),
+
+                'is_paid' => $invoice->is_paid,
+                'created_by' => $invoice->createdBy?->getFullname() ?? null,
+                'date_time' => $invoice->created_at->format('F d Y H:i A'),
+            ];
+        }
+
+
+        $invoices = collect($invoices);
+
+        $payment_methods = PaymentMethod::orderBy('id','asc')->get();
+        $method = [];
+        foreach($payment_methods as $paymed){
+            $totals = InvoiceHasPayment::where('payment_method_id', $paymed->id)->whereIn('invoice_id',$record->pluck('id'));
+            $method[] = [
+                'name' => $paymed->name,
+                'total' => number_format($totals->sum('amount_paid'),2),
+                'count' => $totals->count(),
+            ];
+        }
+
+
+        $discount_record = Discount::orderBy('id','asc')->get();
+        $discount = [];
+        foreach($discount_record as $disc){
+            $hehe = $record->where('discount_id',$disc->id);
+            $discount[] = [
+                'name' => $disc->name,
+                'total' => number_format($hehe->sum('total_discount'),2),
+                'count' => $hehe->count(),
+            ];
+        }
+
+        $total = [
+            'discount' => $invoices->sum('discounts'),
+            'amount_paid' => $invoices->sum('amount_paid'),
+            'grand_total' => $invoices->sum('grand_total'),
+            'cash' => $invoices->sum('cash'),
+            'health_card' => $invoices->sum('health_card'),
+        ];
+
+        $data = [
+            'count' => $invoices->count($invoices),
+            'invoices' => $invoices,
+            'total' => $total,
+            'payment_methods' => collect($method),
+            'discount' => $discount,
+        ];
+
+        return collect($data);
+
+    }
+
+
+
+
+
     //
 }
