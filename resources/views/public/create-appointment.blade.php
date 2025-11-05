@@ -1,5 +1,4 @@
 <x-layouts.custom>
-
     <div class="w-full flex justify-between items-center py-3 px-6">
         <a href="{{ route('home') }}">
             <img src="{{ $logo ?? asset('images/logo.png') }}" alt="Logo" class=" w-[360px] object-contain">

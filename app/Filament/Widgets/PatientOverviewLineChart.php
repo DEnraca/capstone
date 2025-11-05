@@ -2,6 +2,8 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Transaction;
+use Flowframe\Trend\Trend;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class PatientOverviewLineChart extends ApexChartWidget
@@ -32,6 +34,13 @@ class PatientOverviewLineChart extends ApexChartWidget
      */
     protected function getOptions(): array
     {
+        $trend = Trend::model(Transaction::class)
+            ->between(
+                start: now()->startOfYear(),
+                end: now(),
+            )
+            ->perMonth()
+            ->count();
         return [
             'chart' => [
                 'type' => 'line',
@@ -40,11 +49,13 @@ class PatientOverviewLineChart extends ApexChartWidget
             'series' => [
                 [
                     'name' => 'Patient Count',
-                    'data' => [2, 4, 6, 10, 14, 7, 2, 9, 10, 15, 13, 18],
+                    'data' => $trend->pluck('aggregate')->toArray(),
                 ],
             ],
             'xaxis' => [
-                'categories' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                'categories' => $trend->pluck('date')
+                    ->map(fn($date) => \Carbon\Carbon::parse($date)->format('M'))
+                    ->toArray(),
                 'labels' => [
                     'style' => [
                         'fontFamily' => 'inherit',

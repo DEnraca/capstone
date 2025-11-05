@@ -10,7 +10,7 @@
                             class="text-primary-500 font-black">{{ count($this->selectedService) }}</span></h4>
                 </div>
                 <div>
-                    <li class="pb-3 sm:pb-4 overflow-auto h-[30rem] bg-gray-100">
+                    <li class="pb-3 sm:pb-4 px-2 overflow-auto h-[30rem] bg-slate-100">
                         @if (!empty($this->selectedService))
                             @foreach ($this->selectedService as $service)
                                 @php
