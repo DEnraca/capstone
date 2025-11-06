@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EmployementType extends Model
 {
+
+    use SoftDeletes;
 
     use HasFactory;
 
@@ -21,7 +24,6 @@ class EmployementType extends Model
 
     public function employees(): HasMany
     {
-        return $this->hasMany(Employee::class,'employment_type');
+        return $this->hasMany(Employee::class, 'employment_type');
     }
-
 }

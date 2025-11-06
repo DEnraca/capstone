@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use App\Models\Blog\Category as BlogPostCategory;
 use App\Models\Blog\Post as BlogPost;
+use App\Models\Department;
 use App\Policies\ActivityPolicy;
 use App\Policies\Blog\CategoryPolicy as BlogPostCategoryPolicy;
 use App\Policies\Blog\PostPolicy as BlogPostPolicy;
