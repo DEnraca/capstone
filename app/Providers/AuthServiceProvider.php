@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use App\Models\Blog\Category as BlogPostCategory;
 use App\Models\Blog\Post as BlogPost;
+use App\Models\Department;
 use App\Policies\ActivityPolicy;
 use App\Policies\Blog\CategoryPolicy as BlogPostCategoryPolicy;
 use App\Policies\Blog\PostPolicy as BlogPostPolicy;
@@ -27,6 +28,7 @@ class AuthServiceProvider extends ServiceProvider
         BlogPost::class => BlogPostPolicy::class,
         Exception::class => ExceptionPolicy::class,
         'Spatie\Permission\Models\Role' => 'App\Policies\RolePolicy',
+        Department::class => \App\Policies\DepartmentPolicy::class,
     ];
 
     /**
