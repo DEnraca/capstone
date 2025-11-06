@@ -13,7 +13,6 @@ class Employee extends Model
     use HasFactory;
 
     protected $table = 'employees';
-
     protected $fillable = [
         'emp_id',
         'last_name',
@@ -44,7 +43,7 @@ class Employee extends Model
 
     public function employmentType(): BelongsTo
     {
-        return $this->belongsTo(EmployementType::class,'employment_type');
+        return $this->belongsTo(EmployementType::class, 'employment_type');
     }
 
     public function position(): BelongsTo
