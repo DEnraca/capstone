@@ -29,7 +29,8 @@ class ServicesTable extends BaseWidget
 {
     public $selectedService;
 
-    public function mount(): void{
+    public function mount(): void
+    {
         $this->selectedService = session('selected_service', []);
     }
 
@@ -52,15 +53,16 @@ class ServicesTable extends BaseWidget
                     ->label('Department')
                     ->relationship('department', 'name'),
             ], layout: FiltersLayout::Modal)
-            ->actions( [
+            ->actions([
                 Action::make('add')
                     ->label('Add to book')
                     ->button()
                     ->color('success')
+                    ->size('xs')
                     ->visible(function (Service $record) {
-                        return (in_array( $record->id,$this->selectedService ?? [])) ? false : true;
+                        return (in_array($record->id, $this->selectedService ?? [])) ? false : true;
                     })
-                    ->action(function (Service $record){
+                    ->action(function (Service $record) {
                         $this->add_item($record->id);
                     }),
 
@@ -70,16 +72,16 @@ class ServicesTable extends BaseWidget
                     ->button()
                     ->modalWidth('lg')
                     ->visible(function (Service $record) {
-                        return (in_array( $record->id,$this->selectedService ?? [])) ? false : true;
+                        return (in_array($record->id, $this->selectedService ?? [])) ? false : true;
                     })
-                    ->action( function (Service $record) {
+                    ->action(function (Service $record) {
                         $this->add_item($record->id);
                     })
-                    ->modalContent(fn (Service $record): View => view(
+                    ->modalContent(fn(Service $record): View => view(
                         'filament.pages.actions.custom-service-table',
                         ['record' => $record],
                     ))
-                    ->modalHeading( fn (Service $record) => 'Service: '.ucfirst($record->name))
+                    ->modalHeading(fn(Service $record) => 'Service: ' . ucfirst($record->name))
                     ->modalCancelActionLabel('Cancel')
                     ->modalFooterActionsAlignment(Alignment::End)
                     ->modalSubmitActionLabel('Add to book'),
@@ -88,21 +90,22 @@ class ServicesTable extends BaseWidget
 
             ])
             ->columns([
-                TextColumn::make('name')->searchable(),
-                TextColumn::make('code')->searchable(),
-                TextColumn::make('station.name')->searchable(),
-                TextColumn::make('department.name')->searchable(),
+                TextColumn::make('name')->searchable()->size('xs'),
+                TextColumn::make('code')->searchable()->size('xs'),
+                TextColumn::make('station.name')->searchable()->size('xs'),
+                TextColumn::make('department.name')->searchable()->size('xs'),
                 TextColumn::make('description')
-                    ->searchable()
+                    ->searchable()->size('xs')
                     ->limit(50),
-                TextColumn::make('price')->money('php')->sortable(),
+                TextColumn::make('price')->money('php')->sortable()->size('xs'),
                 // Stack::make([
 
                 // ])->extraAttributes([ 'class' => 'flex flex-col h-full',])
             ]);
     }
 
-    public function handleRefreshServiceTable(){
+    public function handleRefreshServiceTable()
+    {
         $this->selectedService = session('selected_service');
     }
 
@@ -111,7 +114,8 @@ class ServicesTable extends BaseWidget
         return '';
     }
 
-    public function add_item($id){
+    public function add_item($id)
+    {
         $this->selectedService = $this->selectedService ?? [];
         array_push($this->selectedService, $id);
         session(['selected_service' => $this->selectedService]);
@@ -119,7 +123,4 @@ class ServicesTable extends BaseWidget
 
         return;
     }
-
-
 }
-
