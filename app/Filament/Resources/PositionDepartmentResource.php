@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DepartmentResource\Pages;
-use App\Filament\Resources\DepartmentResource\RelationManagers;
-use App\Models\Department;
+use App\Filament\Resources\PositionDepartmentResource\Pages;
+use App\Filament\Resources\PositionDepartmentResource\RelationManagers;
+use App\Models\Position;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,11 +13,11 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class DepartmentResource extends Resource
+class PositionDepartmentResource extends Resource
 {
-    protected static ?string $model = Department::class;
+    protected static ?string $model = Position::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    protected static ?string $navigationIcon = 'fas-user-tie';
 
     protected static ?string $navigationGroup = 'Maintenance';
 
@@ -26,9 +26,9 @@ class DepartmentResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->label('Department Name')
+                    ->label('Position Department')
                     ->required()
-                    ->maxLength(50),
+                    ->maxLength(50)
             ]);
     }
 
@@ -37,9 +37,9 @@ class DepartmentResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Department Name')
+                    ->label('Position Department Name')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
             ])
             ->filters([
                 //
@@ -58,7 +58,7 @@ class DepartmentResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageDepartments::route('/'),
+            'index' => Pages\ManagePositionDepartments::route('/'),
         ];
     }
 }

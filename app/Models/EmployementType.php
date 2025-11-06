@@ -21,7 +21,6 @@ class EmployementType extends Model
 
     public function employees(): HasMany
     {
-        return $this->hasMany(Employee::class,'employment_type');
+        return $this->hasMany(Employee::class, 'employment_type');
     }
-
 }

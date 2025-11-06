@@ -28,7 +28,6 @@ class AuthServiceProvider extends ServiceProvider
         BlogPost::class => BlogPostPolicy::class,
         Exception::class => ExceptionPolicy::class,
         'Spatie\Permission\Models\Role' => 'App\Policies\RolePolicy',
-        Department::class => \App\Policies\DepartmentPolicy::class,
     ];
 
     /**
