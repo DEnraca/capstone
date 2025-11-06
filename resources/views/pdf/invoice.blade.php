@@ -62,30 +62,12 @@
             height: 10px;
         }
 
-        #print-date {
-            position: fixed;
-            bottom: 10px; /* adjust spacing from bottom */
-            text-align: left;
-            font-size: 12px;
-            width: 100%;
-            color: #555;
-        }
-
     </style>
 </head>
 
 <body>
     <div class="container-fluid">
         <div class="page">
-            <div class="row">
-                <div class="overlay">
-                    <img src="{{base_path('public/images/logo.png')}}" width="100%" height="auto" style="display: block;"/>
-                    <div class="test">
-                        <p style="text-transform:uppercase">Tel Nos.: 049-557-2679/09350575-1649</p>
-                        <p style="margin:0px;padding:0px">Email:abrclinic2010@gmail.com</p>
-                    </div>
-                </div>
-            </div>
             <div class="content" style="text-align: justify;">
                 <div class="row" style="padding-top: 25px">
                     <div class="col-xs-7">
@@ -162,9 +144,5 @@
         </div>
     </div>
 </body>
-<footer id="print-date">
-    <div>
-        <p>Print Date: {{\Carbon\Carbon::now()->format('M d, Y g:i:s A')}} Dennis Enraca</p>
-    </div>
-</footer>
+
 </html>

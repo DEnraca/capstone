@@ -26,7 +26,7 @@ class PatientInformationResource extends Resource
 
     protected static ?string $navigationIcon = 'fas-person-dots-from-line';
     protected static ?string $navigationGroup = 'Admission';
-    
+
     public static function form(Form $form): Form
     {
         $patientInfoField = PersonalInfo::run();
@@ -168,7 +168,7 @@ class PatientInformationResource extends Resource
             'index' => Pages\ListPatientInformation::route('/'),
             'create' => Pages\CreatePatientInformation::route('/create'),
             'view' => Pages\ViewPatientInformation::route('/{record}'),
-            'edit' => Pages\EditPatientInformation::route('/{record}/edit'),
+            'edit' => Pages\EditPatientInformation::route('/{record}/edit')
         ];
     }
 

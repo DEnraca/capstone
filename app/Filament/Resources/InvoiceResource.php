@@ -8,6 +8,7 @@ use App\Models\Discount;
 use App\Models\Employee;
 use App\Models\Invoice;
 use App\Models\PatientInformation;
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
@@ -34,7 +35,7 @@ class InvoiceResource extends Resource
     protected static ?string $navigationIcon = 'fas-receipt';
     protected static ?string $navigationGroup = 'Cashier';
 
-
+    public $change = 0;
     public static function form(Form $form): Form
     {
         return $form->schema(static::getInvoiceFormSchema())->columns(1);
@@ -68,10 +69,13 @@ class InvoiceResource extends Resource
             $variation = 0;
         }
 
+        $set('change', $variation);
+
+
+
         $set('amount_paid', number_format($total_amount,2));
         $set('total_discount', number_format($total_discount,2));
         $set('amount_paid', number_format($amount_paid,2));
-        $set('change', number_format($variation,2));
         $set('grand_total', number_format($grand_total,2));
     }
 
@@ -156,22 +160,24 @@ class InvoiceResource extends Resource
                 Forms\Components\TextInput::make('amount_paid')
                     ->readOnly()
                     ->required()
-                    ->gte('grand_total')
-                    // ->numeric()
-                    // ->money_format('PHP', 2)
+                    ->rules([
+                        fn (Get $get): Closure => function (string $attribute, $value, Closure $fail) use ($get) {
+                            if ($value !== $get('grand_total')) {
+                                $fail('The :attribute is need to be exact to grand total. '. $get('grand_total'));
+                            }
+                        },
+                    ])
+                    ->hint(function (Get $get) {
+                        return 'Change: ' . number_format(($get('change') ?? 0), 2);
+                    })
+
+                    ->hintColor('success')
                     ->prefix('₱'),
 
-                Forms\Components\TextInput::make('change')
-                    ->readOnly()
-                    ->required()
-                    ->default(0)
-                    ->prefix('₱')
-                    ->numeric(),
 
                 Forms\Components\TextInput::make('grand_total')
                     ->readOnly()
                     ->required()
-                    ->columnSpanFull()
                     ->prefix('₱')
                     ->numeric(),
 
@@ -179,6 +185,7 @@ class InvoiceResource extends Resource
         ];
 
     }
+
 
     public static function table(Table $table): Table
     {

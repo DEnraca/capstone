@@ -22,7 +22,6 @@ class Invoice extends Model
         'is_paid',
         'amount_paid',
         'grand_total',
-        'change'
     ];
 
     public function payments()
