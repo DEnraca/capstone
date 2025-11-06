@@ -2,18 +2,19 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PositionDepartmentResource\Pages;
-use App\Filament\Resources\PositionDepartmentResource\RelationManagers;
+use App\Filament\Resources\PositionResource\Pages;
+use App\Filament\Resources\PositionResource\RelationManagers;
 use App\Models\Position;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class PositionDepartmentResource extends Resource
+class PositionResource extends Resource
 {
     protected static ?string $model = Position::class;
 
@@ -42,7 +43,7 @@ class PositionDepartmentResource extends Resource
                     ->sortable()
             ])
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -55,10 +56,18 @@ class PositionDepartmentResource extends Resource
             ]);
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManagePositionDepartments::route('/'),
+            'index' => Pages\ManagePosition::route('/'),
         ];
     }
 }
