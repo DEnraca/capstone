@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ReportResource\Pages;
 use App\Filament\Resources\ReportResource\RelationManagers;
+use App\Models\Employee;
 use App\Models\Report;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
@@ -83,11 +84,12 @@ class ReportResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
                     ->badge()
+                    ->formatStateUsing(fn ($state) => ($state == 2)? 'PDF' : 'Excel')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('reportKind.name')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('generated_by')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('generatedBy.id')
+                    ->formatStateUsing(fn ($state) => Employee::find($state)?->getFullname() ?? null )
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -105,6 +107,7 @@ class ReportResource extends Resource
 
                 Action::make('download')
                     ->requiresConfirmation()
+                    ->icon('heroicon-o-arrow-down-tray')
                     ->url(fn (Report $record): string => route('generate.report', ['id' => $record->id])),
 
                 Tables\Actions\DeleteAction::make(),

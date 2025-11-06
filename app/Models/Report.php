@@ -24,4 +24,11 @@ class Report extends Model
     }
 
 
+    public function generatedBy()
+    {
+        return $this->belongsTo(Employee::class, 'generated_by');
+    }
+
+
+
 }

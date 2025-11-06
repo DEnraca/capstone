@@ -2,15 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\InvoiceExport;
+use App\Exports\PatientInformationExport;
+use App\Exports\TransactionSummaryExport;
+use App\Models\Appointment;
 use App\Models\Discount;
 use App\Models\Invoice;
 use App\Models\InvoiceHasPayment;
+use App\Models\PatientInformation;
 use App\Models\PaymentMethod;
+use App\Models\Queue;
 use App\Models\Report;
+use App\Models\Transaction;
 use Carbon\Carbon;
 use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
-use PDF;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use Illuminate\Support\Str;
 
 class PDFController extends Controller
 {
@@ -40,13 +49,14 @@ class PDFController extends Controller
             // dd($data);
 
             $filename = $patient->getFullname().' Invoice.pdf';
-
             return PDF::loadView('pdf.invoice', $data)
                 ->setOption('encoding', 'UTF-8')
-                ->setOptions(['margin-left' => 5, 'margin-top' => 5, 'margin-right' => 10, 'margin-bottom' => 5])
+                ->setOption('header-html', view('pdf.header')->render())
+                ->setOption('footer-html', view('pdf.footer')->render())
+                ->setOptions(['margin-left' => 5, 'margin-top' => 25, 'margin-right' => 10, 'margin-bottom' => 10])
                 ->setOption('enable-local-file-access', true)
                 ->setOption('images', true)
-                ->download($filename);
+                ->stream($filename);
         }
         else
         {
@@ -66,12 +76,69 @@ class PDFController extends Controller
 
         $from = Carbon::parse($report->from)->startOfDay();
         $to = Carbon::parse($report->to)->endOfDay();
+        $range_name = "{$from->format('F-d-Y')}-{$to->format('F-d-Y')}";
+
+        $test = collect([
+            'range' => "{$from->format('F d, Y')} to {$to->format('F d, Y')}",
+            'created_by' => $report->generatedBy?->getFullname() ?? 'N/A',
+            'created_at' => $report->created_at->format('F d, Y'),
+        ]);
 
         if($report){
+
+            if($report->report_kind_id == 1){ // patient info
+                $pat_infos = PatientInformation::whereBetween('created_at',[$from, $to])->orderBy('created_at','asc')->get();
+                $filename = "{$range_name} Patient Summary";
+                $data = $this->patientInfomationreport($pat_infos);
+                $data = $data->merge($test);
+
+                if($report->type == 1){ // excel;
+                    return Excel::download(new PatientInformationExport($data), "{$filename}.xlsx");
+                }
+                else{ //pdf
+                    return $this->exportPDF('exports.pdf.patient_summary', $data, $filename);
+                }
+            }
+
+            if($report->report_kind_id == 2){ // Transaction
+                $transactions = Transaction::whereBetween('created_at',[$from, $to])->orderBy('created_at','asc')->get();
+                $filename = "{$range_name} Transaction Summary";
+                $data = $this->transactionReport($transactions);
+                $data = $data->merge($test);
+
+                if($report->type == 1){ // excel;
+                    return Excel::download(new TransactionSummaryExport($data), "{$filename}.xlsx");
+                }
+                else{ //pdf
+                    return $this->exportPDF('exports.pdf.transactions', $data, $filename);
+                }
+            }
             if($report->report_kind_id == 3){
                 $invoices = Invoice::whereBetween('created_at',[$from, $to])->get();
-                $this->invoicesReport($invoices);
-                //invoices
+                $filename = "{$range_name} Invoice Summary";
+                $data = $this->invoicesReport($invoices);
+                $data = $data->merge($test);
+
+                if($report->type == 1){ // excel;
+                    return Excel::download(new InvoiceExport($data), "{$filename}.xlsx");
+                }
+                else{ //pdf
+                    return $this->exportPDF('exports.pdf.invoice_summary', $data, $filename);
+                }
+            }
+
+            if($report->report_kind_id == 4){ //appointments
+                $appointments = Appointment::whereBetween('appointment_date',[$from, $to])->get();
+                $filename = "{$range_name} Appointment Summary";
+                $data = $this->appointmentReport($appointments);
+                $data = $data->merge($test);
+
+                if($report->type == 1){ // excel;
+                    return Excel::download(new InvoiceExport($data), "{$filename}.xlsx");
+                }
+                else{ //pdf
+                    return $this->exportPDF('exports.pdf.appointments', $data, $filename);
+                }
             }
         }
         else
@@ -84,6 +151,19 @@ class PDFController extends Controller
 
             return redirect()->route('filament.resources.reports.index');
         }
+    }
+
+    public function exportPDF($path, $data, $filename){
+
+        return PDF::loadView($path, $data)
+                    ->setOption('encoding', 'UTF-8')
+                    ->setOption('header-html', view('pdf.header')->render())
+                    ->setOption('footer-html', view('pdf.footer')->render())
+                    ->setOptions(['margin-left' => 5, 'margin-top' => 25, 'margin-right' => 10, 'margin-bottom' => 10])
+                    ->setOption('enable-local-file-access', true)
+                    ->setOption('images', true)
+                    ->stream($filename.'.pdf');
+
     }
 
     public function invoicesReport($record){
@@ -148,7 +228,7 @@ class PDFController extends Controller
             'invoices' => $invoices,
             'total' => $total,
             'payment_methods' => collect($method),
-            'discount' => $discount,
+            'discounts' => $discount,
         ];
 
         return collect($data);
@@ -156,8 +236,112 @@ class PDFController extends Controller
     }
 
 
+    public function patientInfomationreport($record){
+        $data = [];
+        $patients = [];
+        foreach($record as $patient){
+            $add = $patient->address;
+            $address =  getAddressDetails($add->region_id, $add->province_id, $add->city_id, $add->barangay_id);
+
+            $patients[] = [
+                'pat_id' => $patient->pat_id,
+                'last_name' => $patient->last_name,
+                'first_name' => $patient->first_name,
+                'middle_name' => $patient->middle_name,
+
+                'email' => $patient->user->email,
+                'mobile' => "+63 ".$patient->mobile,
+                'address' => Str::limit( "{$add->house_address} {$address['barangay']} {$address['city']} {$address['province']} {$address['region']} ", 30),
+
+                'gender' => $patient->patient_gender->name,
+                'dob' => Carbon::parse($patient->dob)->format('F d, Y'),
+                'civil_status' => $patient->civilStatus->name,
+
+                'age' => Carbon::parse($patient->dob)->age.' yr/s old.',
+                'date_joined' => $patient->created_at->format('F d, Y'),
+            ];
+        }
+
+        $patients = collect($patients);
+        $data = [
+            'patients' => $patients
+        ];
+
+        return collect($data);
+
+    }
 
 
+    public function transactionReport($record){
+        $data = [];
+        $transactions = [];
+        foreach($record as $transaction){
+            $tests = $transaction->tests->map( function ($q) {
+                return  "{$q->service->code} - {$q->service->name}";
+            });
+            $transactions[] = [
+                'code' => $transaction->code,
+                'queue_number' => $transaction->queue->queue_number,
+                'patient_id' => $transaction->patient->pat_id,
+                'patient_name' => $transaction->patient->getFullname(),
+                'created_at' => Carbon::parse($transaction->dob)->format('F d, Y'),
+                'created_by' =>  $transaction->createdBy->getFullname(),
+                'remarks' => $transaction->remarks,
+                'billing_id' => $transaction?->billing?->invoice_number ?? null,
+                'tests' => $tests,
+            ];
+        }
 
-    //
+        $transactions = collect($transactions);
+        $data = [
+            'transactions' => $transactions
+        ];
+
+        return collect($data);
+
+    }
+
+
+    public function appointmentReport($record){
+        $data = [];
+        $appointments = [];
+        foreach($record as $appointment){
+            // dd($appointment->confirmedBy);
+
+            $tests = $appointment->services->map( function ($q) {
+                return  "{$q->code} - {$q->name}";
+            });
+            $formattedTime = 'N/A';
+            if($appointment->appointment_time){
+                $formattedTime = Carbon::createFromFormat('H:i:s', $appointment->appointment_time)->format('g:i A');
+            }
+
+            $is_queud = 'No';
+
+            if(Queue::where('appointment_id',$appointment->id)->first()){
+                $is_queud = 'Yes';
+            }
+
+            $appointments[] = [
+                'date' => Carbon::parse($appointment->appointment_date)->format('F d, Y'),
+                'time' => $formattedTime,
+                'status' => $appointment->status_name(),
+                'patient_id' => $appointment->patient->pat_id,
+                'patient' => $appointment->patient->getFullname(),
+                'booked_services' => $tests,
+                'approve_by' =>  $appointment->confirmedBy?->employee?->getFullname() ?? null,
+                'is_queued' => $is_queud,
+                'created_at' => Carbon::parse($appointment->created_at)->format('F d, Y')
+            ];
+        }
+
+        $appointments = collect($appointments);
+        $data = [
+            'appointments' => $appointments
+        ];
+
+        return collect($data);
+
+    }
+
 }
