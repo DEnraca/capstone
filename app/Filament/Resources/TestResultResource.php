@@ -34,7 +34,7 @@ class TestResultResource extends Resource
                 Section::make('Result Image Attachments')
                     ->schema([
                         SpatieMediaLibraryFileUpload::make('result_attachments')
-                                ->label('Resullt Image')
+                                ->label('Result Image')
                                 ->acceptedFileTypes(['image/png','image/jpg','image/jpeg'])
                                 ->hint('Accepted file types: png; Max Files: 10')
                                 ->hintColor('primary')

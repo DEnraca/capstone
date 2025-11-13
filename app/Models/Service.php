@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+
 
 class Service extends Model implements HasMedia
 {
@@ -27,6 +29,15 @@ class Service extends Model implements HasMedia
         'description',
         'price',
     ];
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this
+            ->addMediaConversion('service_cover')
+            ->performOnCollections('service_cover')
+            ->sharpen(10)
+            ->nonQueued();
+    }
 
     public function department(): BelongsTo
     {
