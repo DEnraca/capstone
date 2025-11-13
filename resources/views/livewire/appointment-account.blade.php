@@ -48,6 +48,23 @@
         </x-filament::modal>
     </div>
 
+    <div>
+        <x-filament::modal
+            id="terms-and-services-modal"
+            width="xl"
+        >
+            <x-slot name="heading">Terms and Services of ABR Diagnostic Center </x-slot>
+                <div class="space-y-4">
+                    @include('public.terms_and_condition')
+                </div>
+
+                <x-slot name="footer">
+                    <x-filament::button x-on:click="$dispatch('close-modal', { id: 'terms-and-services-modal'})" color="primary">
+                        Back
+                    </x-filament::button>
+                </x-slot>
+        </x-filament::modal>
+    </div>
 
 
 </div>
