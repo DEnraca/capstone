@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Queue extends Model
@@ -61,6 +62,11 @@ class Queue extends Model
     public function checklists(): HasMany
     {
         return $this->hasMany(QueueChecklist::class,'queue_id');
+    }
+
+    public function transaction(): HasOne
+    {
+        return $this->hasOne(Transaction::class,'queue_id');
     }
 
 

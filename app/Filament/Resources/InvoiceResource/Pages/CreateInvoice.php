@@ -14,6 +14,7 @@ class CreateInvoice extends CreateRecord
 {
 
     protected static string $resource = InvoiceResource::class;
+    protected static bool $canCreateAnother = false;
 
     public $checklist_details;
     public $transaction;
@@ -79,7 +80,7 @@ class CreateInvoice extends CreateRecord
         $data['is_paid'] = true;
 
         $data['created_by'] = auth()->user()?->employee?->id ?? null;
-        
+
         return $data;
     }
 

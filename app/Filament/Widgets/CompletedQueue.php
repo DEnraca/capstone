@@ -27,11 +27,7 @@ class CompletedQueue extends BaseWidget
         return $table
             ->paginated(false)
             ->query(
-                QueueChecklist::where('station_id', $this->station)
-                    ->where($this->column,$this->condition)
-                    ->applySorting()
-                    ->today()
-                    ->where('latest_status', $this->status)
+                $this->tableQuery()
             // ...
             )
             ->columns([
@@ -39,6 +35,19 @@ class CompletedQueue extends BaseWidget
             ]);
     }
 
+    public function tableQuery(){
+        $query = QueueChecklist::where('station_id', $this->station)
+            ->where($this->column,$this->condition)
+            ->applySorting()
+            ->today()
+            ->where('latest_status', $this->status);
+
+        if($this->status == 1){
+            $query->current();
+        }
+        return $query;
+
+    }
     protected function getTableHeading(): ?string
     {
         $name = QueueStatus::find($this->status)?->name ?? 'Undefined Status';

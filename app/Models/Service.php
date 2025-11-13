@@ -48,4 +48,10 @@ class Service extends Model implements HasMedia
         return $this->belongsToMany(Employee::class, 'med_tech_has_services', 'service_id', 'med_tech_id');
     }
 
+    public function patientTests()
+    {
+        return $this->hasMany(PatientTest::class, 'service_id');
+    }
+
+
 }

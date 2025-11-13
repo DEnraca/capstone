@@ -5,6 +5,8 @@ namespace App\Providers\Filament;
 use App\Filament\Pages\Auth\EmailVerification;
 use App\Filament\Pages\Auth\Login;
 use App\Filament\Pages\Auth\RequestPasswordReset;
+use App\Filament\Pages\Dashboard;
+use App\Filament\Resources\TestResultResource;
 use App\Filament\Widgets\PatientCategoryPieChart;
 use App\Filament\Widgets\PatientOverview;
 use App\Filament\Widgets\PatientOverviewLineChart;
@@ -12,6 +14,7 @@ use App\Filament\Widgets\ServiceAvailBarChart;
 use App\Filament\Widgets\StationPercentage;
 use App\Filament\Widgets\Welcome;
 use App\Livewire\MyProfileExtended;
+use App\Models\Station;
 use App\Settings\GeneralSettings;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -34,9 +37,25 @@ use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
 class AdminPanelProvider extends PanelProvider
 {
 
-    
     public function panel(Panel $panel): Panel
     {
+        $services_navigation = [];
+        $stations = Station::active()
+            ->withCount([
+                'patientTests as patient_tests_count' => function ($query) {
+                    $query->where('status_id', '!=', 4);
+                },
+            ])
+            ->whereNotIn('id', [8,9,10])->get();
+
+
+
+        foreach ($stations as $station) {
+            $services_navigation[] = NavigationItem::make($station->name)
+                ->group('Services')
+                ->badge(fn() => $station->patient_tests_count ?: null)
+                ->url(fn (): string => TestResultResource::getUrl('index', ['stationID' => $station->id]) ); // Or a custom icon
+        }
         return $panel
             ->default()
             ->id('admin')
@@ -71,12 +90,7 @@ class AdminPanelProvider extends PanelProvider
             //     ServiceAvailBarChart::class,
             //     StationPercentage::class,
             // ])
-            ->navigationItems([
-                // NavigationItem::make('Queue Board')
-                //     ->url('/admin/queue-board', shouldOpenInNewTab: true) // Link to external URL
-                //     ->sort(3)
-                //     ->icon('fas-person-walking-arrow-right'),
-            ])
+            ->navigationItems($services_navigation)
 
             ->middleware([
                 EncryptCookies::class,

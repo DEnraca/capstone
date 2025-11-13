@@ -234,7 +234,17 @@ class EmployeeResource extends Resource
                             ]),
 
 
-                ])
+                        ]),
+                    Section::make('Signature')
+                    ->schema([
+                        SpatieMediaLibraryFileUpload::make('e_signatures')
+                                ->label('E-Signature Image')
+                                ->acceptedFileTypes(['image/png','image/jpg','image/jpeg'])
+                                ->hint('Accepted file types: png;')
+                                ->hintColor('primary')
+                                ->helperText('1600 x 900 resolution or an aspect ration of 16:9 is recommended for better display')
+                                ->collection('e_signatures'),
+                    ]),
 
                 // Forms\Components\Select::make('user_id')
                 //     ->hiddenOn('create')

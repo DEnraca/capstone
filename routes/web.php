@@ -39,6 +39,8 @@ Route::get('/search-results', function () {
 
 Route::get('/queues', Queues::class);
 Route::get('/pdf/invoice/{id}', [PDFController::class,'invoice'])->name('pdf.invoice');
+Route::get('/pdf/test-result/{result}', [PDFController::class,'test_result'])->name('pdf.test-result');
+
 
 Route::get('/reports/{id}', [PDFController::class,'generateReport'])->name('generate.report');
 
