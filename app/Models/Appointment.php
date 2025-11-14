@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Appointment extends Model
 {
@@ -37,10 +38,17 @@ class Appointment extends Model
     }
 
 
-     public function patient(): BelongsTo
+    public function patient(): BelongsTo
     {
         return $this->belongsTo(PatientInformation::class,'patient_id');
     }
+
+
+    public function queue(): HasOne
+    {
+        return $this->hasOne(Queue::class,);
+    }
+
 
 
     public function confirmedBy(): BelongsTo

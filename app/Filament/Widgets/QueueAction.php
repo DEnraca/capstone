@@ -19,6 +19,12 @@ class QueueAction extends Widget
 
     protected int | string | array $columnSpan = 'full';
 
+
+    protected $listeners = [
+        'recall_queue' => 'handleRecallQueue',
+    ];
+
+
     protected static string $view = 'filament.widgets.queue-action';
 
     public $patients = null;
@@ -52,6 +58,16 @@ class QueueAction extends Widget
 
         return true;
     }
+
+    public function handleRecallQueue($id){
+        if($this->current){
+            $this->setStatus(2);
+        }
+        $this->setActive($id);
+        $this->setStatus(1);
+
+    }
+
 
 
     public function setActive($id)
