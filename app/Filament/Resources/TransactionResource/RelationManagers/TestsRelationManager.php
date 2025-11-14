@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\TransactionResource\RelationManagers;
 
+use App\Models\PatientTest;
 use App\Models\Service;
+use App\Models\TestResult;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
@@ -71,8 +73,17 @@ class TestsRelationManager extends RelationManager
                 // Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
-                // Tables\Actions\DeleteAction::make(),
+
+                Tables\Actions\Action::make('generate_result')
+                    ->label('Get PDF Result')
+                    ->icon('fas-file-pdf')
+                    ->color('success')
+                    ->visible(fn ($record) => (TestResult::where('patient_tests_id',$record->id)->first()) ? true : false)
+                    ->url(fn ($record) =>
+                        route('pdf.test-result', ['result' => TestResult::where('patient_tests_id',$record->id)->first()->id])
+                    )
+                    ->requiresConfirmation(),
+
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([
@@ -80,4 +91,6 @@ class TestsRelationManager extends RelationManager
                 // ]),
             ]);
     }
+
+
 }

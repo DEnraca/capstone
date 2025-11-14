@@ -61,11 +61,10 @@ class QueueAction extends Widget
 
     public function handleRecallQueue($id){
         if($this->current){
-            $this->setStatus(2);
+            $this->setStatus(1);
         }
         $this->setActive($id);
         $this->setStatus(1);
-
     }
 
 
@@ -120,7 +119,7 @@ class QueueAction extends Widget
     public function patientverification(){
 
         $this->patient  = $this->current->queue?->patient?->id ?? null;
-        $this->patients = PatientInformation::orderBy('pat_id', 'asc')->get();
+        $this->patients = PatientInformation::orderBy('created_at', 'desc')->get();
         return $this->dispatch('open-modal', id: 'patient-verify-modal');
 
     }

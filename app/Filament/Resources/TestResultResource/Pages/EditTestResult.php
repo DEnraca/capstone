@@ -19,4 +19,10 @@ class EditTestResult extends EditRecord
             Actions\RestoreAction::make(),
         ];
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('sort', ['service_id' => $this->getRecord()->test->service_id]);
+    }
+
 }

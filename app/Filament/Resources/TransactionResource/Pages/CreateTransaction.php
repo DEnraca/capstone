@@ -44,13 +44,16 @@ class CreateTransaction extends CreateRecord
             $filled['patient']['address'] = $checklist_details->queue->patient->address;
 
             if($checklist_details->queue->appointment){
-                $filled['tests'] = $checklist_details->queue->appointment->services->map(function($service){
-                    return [
-                        'service_id' => $service->id,
-                        'status_id' => 1,
-                    ];
+                $filled['tests'] = $checklist_details->queue->appointment->services
+                    ->filter(fn ($service) => $service->pivot->status == 2)
+                    ->map(function($service){
+                        return [
+                            'service_id' => $service->id,
+                            'status_id' => 1,
+                        ];
                 })->toArray();
             }
+            // dd($filled['tests']);
             $this->form->model(Transaction::make());
 
             $this->form->fill($filled);
