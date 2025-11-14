@@ -43,7 +43,7 @@
                             Call Again
                         </x-filament::button>
                     @endif
-                    @if($current?->latest_status == 1)
+                    @if($current?->latest_status == 1 || $current?->latest_status == 2)
                         <x-filament::button class="px-4 py-2" color="danger" :disabled="!$current" wire:click="setStatus(3)">
                             Pause
                         </x-filament::button>
@@ -91,10 +91,11 @@
 
         <x-slot name="heading">Verify patient to complete</x-slot>
         @if(!$patient)
-            <div>
-                <p class="text-primary-500">You need to add patient information before completing this queue.  <a href="{{route('filament.admin.resources.patient-informations.create')}}" target="_blank" style="color:blue; !important">[Click here to add it.]</a> </p>
-            </div>
-
+            @if($current)
+                <div>
+                    <p class="text-primary-500">You need to add patient information before completing this queue.  <a href="{{route('filament.admin.resources.patient-informations.create',['checklistID' => $current->id])}}" target="_blank" style="color:blue; !important">[Click here to add it.]</a> </p>
+                </div>
+            @endif
         @else
             <div class="space-y-4">
                 <label for="patient" class="block text-sm font-medium text-gray-700">Select Patient</label>

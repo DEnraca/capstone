@@ -103,6 +103,10 @@ class CreateTestResult extends CreateRecord
         redirect()->route('filament.admin.resources.invoices.index');
     }
 
+    protected function getRedirectUrl(): string
+    {
+        return $this->previousUrl ?? $this->getResource()::getUrl('sort',['service_id' => $this->checklist_details->service_id]);
+    }
 
 
 
