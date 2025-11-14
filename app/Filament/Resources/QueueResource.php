@@ -57,7 +57,11 @@ class QueueResource extends Resource
                             ->columnSpanFull()
                             ->preload()
                             ->native(false)
-                            ->relationship('appointment', 'id')
+                            ->relationship(
+                                name: 'appointment',
+                                titleAttribute: 'id',
+                                modifyQueryUsing: fn (Builder $query) => $query->whereDate('appointment_date',now())->whereDoesntHave('queue'),
+                            )
                             ->getOptionLabelFromRecordUsing(function ($record) {
                                 if (! $record) return null;
 

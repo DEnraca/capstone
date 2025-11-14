@@ -10,6 +10,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Filament\Tables\Actions\Action;
 
 class CompletedQueue extends BaseWidget
 {
@@ -34,16 +35,42 @@ class CompletedQueue extends BaseWidget
             // ...
             )
             ->columns([
-                TextColumn::make('queue.queue_number')
+                TextColumn::make('queue.queue_number'),
+                TextColumn::make('status.name')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Pending' => 'warning',
+                        'Paused' => 'gray',
+                        'Completed' => 'success',
+                        'Removed' => 'danger',
+                    }),
+            ])
+            ->actions([
+                Action::make('recall')
+                    ->label('Call')
+                    ->color('success')
+                    ->icon('heroicon-o-speaker-wave')
+                    ->visible(fn ($record)=> ($record->latest_status != 4))
+                    ->action(function ($record) {
+                        $this->dispatch('recall_queue', $record->id);
+                        // record
+                        // $this->dispatch('', $record->id);
+                    })
+                    ->requiresConfirmation()
+
             ]);
     }
 
     public function tableQuery(){
+        $status = [$this->status];
+        if($this->status == 3){
+            $status = [3,5];
+        }
         $query = QueueChecklist::where('station_id', $this->station)
             ->where($this->column,$this->condition)
             ->applySorting()
             ->today()
-            ->where('latest_status', $this->status);
+            ->whereIn('latest_status', $status);
 
         if($this->status == 1){
             $query->current();

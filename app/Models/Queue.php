@@ -46,7 +46,7 @@ class Queue extends Model
 
     public function appointment(): BelongsTo
     {
-        return $this->belongsTo(Appointment::class,'appointment_id');
+        return $this->belongsTo(Appointment::class,);
     }
 
     public function status(): BelongsTo
