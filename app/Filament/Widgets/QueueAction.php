@@ -3,15 +3,20 @@
 namespace App\Filament\Widgets;
 
 use App\Filament\Resources\InvoiceResource;
+use App\Filament\Resources\TestResultResource;
 use App\Filament\Resources\TransactionResource;
 use App\Models\PatientInformation;
 use App\Models\QueueCall;
 use App\Models\QueueChecklist;
 use App\Models\QueueTimestamp;
+use App\Models\TestResult;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Widgets\Widget;
 
 class QueueAction extends Widget
 {
+    use HasWidgetShield;
+
     protected int | string | array $columnSpan = 'full';
 
     protected static string $view = 'filament.widgets.queue-action';
@@ -38,13 +43,16 @@ class QueueAction extends Widget
     public static function canView(): bool
     {
         // Hide only when on the dashboard
+        if(!auth()->user()->can(static::getPermissionName())){
+            return false;
+        }
         if (request()->routeIs('filament.admin.pages.dashboard')) {
             return false;
         }
 
         return true;
     }
-    
+
 
     public function setActive($id)
     {
@@ -83,6 +91,12 @@ class QueueAction extends Widget
         if($this->station == 10 && $this->column == 'step_name' && $this->condition == 'billing'){
             return redirect(InvoiceResource::getUrl('create', ['checklist_details' => $this->current]));
         }
+
+
+        if($this->column == 'service_id'){
+            return redirect(TestResultResource::getUrl('create', ['checklist_details' => $this->current]));
+        }
+
 
 
     }
@@ -145,14 +159,12 @@ class QueueAction extends Widget
     }
 
     public function call($checklistID){
-
-        $call_details = QueueCall::find($checklistID);
+        $call_details = QueueCall::where('queue_checklist',$checklistID)->first();
         if($call_details){
             $call_details->is_called = false;
             $call_details->update();
             return;
         }
-
         QueueCall::insert([
             'queue_checklist' => $checklistID,
             'is_called' => false,

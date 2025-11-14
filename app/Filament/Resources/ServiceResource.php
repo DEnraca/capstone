@@ -7,6 +7,8 @@ use App\Filament\Resources\ServiceResource\RelationManagers;
 use App\Models\Service;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -55,6 +57,18 @@ class ServiceResource extends Resource
                     ->maxLength(150)
                     ->rows(5)
                     ->columnSpanFull(),
+
+                Section::make('Service Cover')
+                    ->schema([
+                        SpatieMediaLibraryFileUpload::make('service_cover')
+                                ->label('Service Cover Image')
+                                ->acceptedFileTypes(['image/png','image/jpg','image/jpeg'])
+                                ->hint('Accepted file types: png; ')
+                                ->hintColor('primary')
+                                ->maxFiles(10)
+                                ->helperText('1600 x 900 resolution or an aspect ration of 16:9 is recommended for better display')
+                                ->collection('service_cover'),
+                    ]),
 
             ])->columns(1);
     }

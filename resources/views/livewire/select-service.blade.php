@@ -15,12 +15,13 @@
                             @foreach ($this->selectedService as $service)
                                 @php
                                     $service = (object) $service;
+                                    $image = $service->getMedia('service_cover')?->first()?->getFullUrl() ?? asset('images/logo-light-text.png');
                                 @endphp
                                 <div class="flex items-center space-x-4 py-2 rtl:space-x-reverse cursor-pointer"
                                     wire:click="handleServiceRemove({{ $service->id }})">
                                     <div class="shrink-0 p-1 m-0 flex justify-center">
                                         <img class="w-14 h-12 rounded-lg"
-                                            src="{{ asset('images/frontend_asset/cardiac.jpg') }}" alt="Neil image">
+                                            src="{{ $image}}" alt="Service Cover">
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-xs font-medium text-black truncate">

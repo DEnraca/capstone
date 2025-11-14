@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use App\Models\Queue;
 use App\Models\QueueChecklist;
 use App\Models\QueueStatus;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -12,6 +13,8 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class CompletedQueue extends BaseWidget
 {
+
+    use HasWidgetShield;
 
     public $status;
     public $checklists;
@@ -27,11 +30,7 @@ class CompletedQueue extends BaseWidget
         return $table
             ->paginated(false)
             ->query(
-                QueueChecklist::where('station_id', $this->station)
-                    ->where($this->column,$this->condition)
-                    ->applySorting()
-                    ->today()
-                    ->where('latest_status', $this->status)
+                $this->tableQuery()
             // ...
             )
             ->columns([
@@ -39,6 +38,19 @@ class CompletedQueue extends BaseWidget
             ]);
     }
 
+    public function tableQuery(){
+        $query = QueueChecklist::where('station_id', $this->station)
+            ->where($this->column,$this->condition)
+            ->applySorting()
+            ->today()
+            ->where('latest_status', $this->status);
+
+        if($this->status == 1){
+            $query->current();
+        }
+        return $query;
+
+    }
     protected function getTableHeading(): ?string
     {
         $name = QueueStatus::find($this->status)?->name ?? 'Undefined Status';
@@ -52,6 +64,9 @@ class CompletedQueue extends BaseWidget
 
     public static function canView(): bool
     {
+        if(!auth()->user()->can(static::getPermissionName())){
+            return false;
+        }
         // Hide only when on the dashboard
         if (request()->routeIs('filament.admin.pages.dashboard')) {
             return false;

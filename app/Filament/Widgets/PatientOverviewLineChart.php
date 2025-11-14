@@ -2,13 +2,21 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\PatientInformation;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
+use Carbon\Carbon;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
+use Flowframe\Trend\Trend;
+use Flowframe\Trend\TrendValue;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\View\View;
 
 class PatientOverviewLineChart extends ApexChartWidget
 {
     protected static ?int $sort = 3;
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = 6;
 
+    use HasWidgetShield;
 
     /**
      * Chart Id
@@ -22,8 +30,12 @@ class PatientOverviewLineChart extends ApexChartWidget
      *
      * @var string|null
      */
-    protected static ?string $heading = 'Patient every month for this this year';
+    // protected static ?string $heading = 'Patient every month for this year';
 
+    public function getHeading(): null|string|Htmlable|View
+    {
+        return 'Patient every month for year: ' . now()->format('Y');
+    }
     /**
      * Chart options (series, labels, types, size, animations...)
      * https://apexcharts.com/docs/options
@@ -32,19 +44,40 @@ class PatientOverviewLineChart extends ApexChartWidget
      */
     protected function getOptions(): array
     {
+
+        $data = Trend::model(PatientInformation::class)
+            ->between(
+                start: now()->startOfYear(),
+                end: now()->endOfYear(),
+            )
+            ->perMonth()
+            ->count();
+
         return [
             'chart' => [
                 'type' => 'line',
                 'height' => 300,
+                'toolbar' => [
+                    'show' => true,
+                    'tools' => [
+                        'download' => false,
+                        'selection' => false,
+                        'zoom' => false,
+                        'zoomin' => true,
+                        'zoomout' => true,
+                        'pan' => false,
+                        'reset' => false,
+                    ]
+                ],
             ],
             'series' => [
                 [
                     'name' => 'Patient Count',
-                    'data' => [2, 4, 6, 10, 14, 7, 2, 9, 10, 15, 13, 18],
+                    'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
                 ],
             ],
             'xaxis' => [
-                'categories' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                'categories' => $data->map(fn (TrendValue $value) => Carbon::parse($value->date)->format('M')),
                 'labels' => [
                     'style' => [
                         'fontFamily' => 'inherit',

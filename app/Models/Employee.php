@@ -8,9 +8,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Employee extends Model
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Image\Enums\Fit;
+
+
+class Employee extends Model implements  HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
+
 
     protected $table = 'employees';
     protected $fillable = [
@@ -29,6 +37,18 @@ class Employee extends Model
         'is_active',
         'user_id'
     ];
+
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this
+            ->addMediaConversion('e_signatures')
+            ->performOnCollections('e_signatures')
+            ->sharpen(10)
+            ->nonQueued();
+    }
+
+
 
     public function gender(): BelongsTo
     {

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 class CreatePatientInformation extends CreateRecord
 {
     protected static string $resource = PatientInformationResource::class;
+    protected static bool $canCreateAnother = false;
 
     protected function handleRecordCreation(array $data): Model
     {

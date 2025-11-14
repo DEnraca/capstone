@@ -13,6 +13,7 @@ use App\Models\PatientInformation;
 use App\Models\PaymentMethod;
 use App\Models\Queue;
 use App\Models\Report;
+use App\Models\TestResult;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Filament\Notifications\Notification;
@@ -341,6 +342,66 @@ class PDFController extends Controller
         ];
 
         return collect($data);
+
+    }
+
+    public function test_result(TestResult $result){
+        if(!$result){
+            Notification::make()
+                ->title('Test Result Generation Failed')
+                ->body('No record found')
+                ->danger()
+                ->send();
+            return redirect()->route('filament.admin.pages.dashboard');
+        }
+
+        $service = $result->test->service;
+        $patient = $result->test->transaction->patient;
+        $transaction = $result->test->transaction;
+
+
+        $add = $patient->address;
+        $address =  getAddressDetails($add->region_id, $add->province_id, $add->city_id, $add->barangay_id);
+
+
+
+        $attachments = $result->getMedia('result_attachments')->map(function ($media) {
+            return $media->getFullUrl();
+        })->toArray();
+
+
+        $signatories = $result->signatories->map(function ($signature) {
+            return [
+                'signature' => $signature->getMedia('e_signatures')?->first()?->getFullUrl() ?? null,
+                'name' => $signature->getFullname(),
+                'position' => $signature->position->name ?? null,
+            ];
+        })->toArray();
+        $result = [
+            'address' => Str::limit( "{$add->house_address} {$address['barangay']} {$address['city']} {$address['province']} ", 150),
+            'service_name' => $service->name,
+            'service_code' => $service->code,
+            'date' => Carbon::parse($result->created_at)->format('F d, Y'),
+            'patient_name' => $patient->getFullname(),
+            'code' => $transaction->code,
+            'age' => Carbon::parse($patient->dob)->age,
+            'pat_id' => $patient->pat_id,
+            'gender' => $patient->patient_gender->name,
+            'result' => ucwords($result->result->name),
+            'impressions' => nl2br($result->impressions),
+            'attachments' => $attachments,
+            'signatories' => $signatories,
+        ];
+
+
+        return PDF::loadView('pdf.result', $result)
+            ->setOption('encoding', 'UTF-8')
+            ->setOption('header-html', view('pdf.header')->render())
+            ->setOption('footer-html', view('pdf.footer')->render())
+            ->setOptions(['margin-left' => 5, 'margin-top' => 25, 'margin-right' => 10, 'margin-bottom' => 10])
+            ->setOption('enable-local-file-access', true)
+            ->setOption('images', true)
+            ->stream($patient->getFullname().$service->name.'test-result.pdf');
 
     }
 

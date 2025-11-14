@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Models\Queue;
 use App\Models\QueueChecklist;
 use App\Models\Transaction;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Support\Enums\IconPosition;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -16,6 +17,7 @@ class PatientOverview extends BaseWidget
 
     protected static ?int $sort = 2;
     protected int | string | array $columnSpan = 'full';
+    use HasWidgetShield;
 
 
     protected function getColumns(): int
@@ -31,10 +33,15 @@ class PatientOverview extends BaseWidget
     protected function getStats(): array
     {
         $patient_today = Transaction::whereDate('created_at', now())->count();
-        $on_queue = QueueChecklist::pending()->count();
-        $completed = QueueChecklist::completedToday()->count();
+        $on_queue = Queue::whereHas('checklists', function ($query) {
+            $query->today()->pending()->current();
+        })->count();
+        $completed = Queue::whereHas('checklists', function ($query) {
+            $query->today()->completed()->current();
+        })->count();
+
         $totalAppointments = Appointment::whereDate('appointment_date', now()->format('Y-m-d'))->get();
-        $queued_appointment_today = Queue::whereDate('queue_start', today())
+        $queued_appointment_today = Queue::whereDate('created_at', today())
             ->whereIn('appointment_id', $totalAppointments->pluck('id')->toArray())
             ->count();
 

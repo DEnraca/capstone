@@ -9,6 +9,8 @@ use App\Actions\Form\PatientPersonalInformationFields;
 use App\Models\CivilStatus;
 use App\Models\Gender;
 use App\Models\User;
+use Filament\Actions\Action;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
@@ -43,9 +45,20 @@ class AppointmentAccount extends Component implements HasForms
     {
         $app_form = session('appointment_form', []);
         if(auth()->check()){
-            $this->form->fill($this->automateForm(Auth::user()));
+            if(auth()->user()->hasRole('patient')){
+                $this->form->fill($this->automateForm(Auth::user()));
+            }else{
+
+                Notification::make()
+                    ->title('Unauthorized Appointment Access')
+                    ->body('You are not logged in as a patient. You will be logged out.')
+                    ->danger()
+                    ->send();
+
+                $this->redirect(route('filament.admin.pages.dashboard'));
+            }
         }else{
-            $this->form->fill([]);
+            $this->form->fill($app_form);
         }
 
     }
@@ -85,10 +98,11 @@ class AppointmentAccount extends Component implements HasForms
     public function automateForm($user){
     // dd($user);
         $info = $user->patient;
-        $address = $info->address;
+        $address = $info?->address?->toArray() ?? [];
         $preFilled = [
             'info' => $info->toArray(),
-            'address' => $address->toArray(),
+            'address' => $address,
+            'terms' => true,
             'account' => [
                 'email' => $user->email,
             ]
@@ -175,9 +189,30 @@ class AppointmentAccount extends Component implements HasForms
                                         ->revealable()
                                         ->same('password')
                                         ->required(),
+
+
                                 ]),
+                            Checkbox::make('terms')
+                                ->label(fn () =>new HtmlString('
+                                    I agree to the
+                                    <a
+                                        x-on:click="$dispatch(\'open-modal\', { id: \'terms-and-services-modal\' })"
+                                        class="hover:underline text-primary-500 rounded-lg text-sm py-2  m-0"
+                                    >
+                                    Terms and Services.
+                                    </a>
+                                '))
+                                ->validationMessages([
+                                    'accepted' => 'You must agree to the Terms and Services before proceeding.',
+                                ])
+                                ->accepted(),
+
                             ]),
+
+
+
                         ]),
+
             ]);
 
     }
@@ -192,8 +227,9 @@ class AppointmentAccount extends Component implements HasForms
             $preFilled['book'] = $data['book'];
             $data= $preFilled;
         }
-        Session::put('appointment_form', $data);
+        dd($data);
 
+        Session::put('appointment_form', $data);
         $this->dispatch('changePage','appointment-details');
 
     }

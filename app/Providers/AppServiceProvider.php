@@ -10,6 +10,11 @@ use Filament\Http\Responses\Auth\Contracts\LogoutResponse as LogoutResponseContr
 use App\Http\Responses\LogoutResponse;
 use Filament\Facades\Filament;
 
+use Filament\Navigation\NavigationBuilder;
+use Filament\Navigation\NavigationItem;
+use App\Models\Station;
+
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -32,8 +37,14 @@ class AppServiceProvider extends ServiceProvider
         Filament::registerNavigationGroups([
             'Admission',
             'Cashier',
+            'Services',
+            'Reports',
             'Maintenance',
         ]);
+
+
+
+
 
 
 
