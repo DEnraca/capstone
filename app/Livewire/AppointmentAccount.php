@@ -227,7 +227,6 @@ class AppointmentAccount extends Component implements HasForms
             $preFilled['book'] = $data['book'];
             $data= $preFilled;
         }
-        dd($data);
 
         Session::put('appointment_form', $data);
         $this->dispatch('changePage','appointment-details');

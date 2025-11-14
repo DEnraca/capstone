@@ -24,7 +24,7 @@ class CreateTestResult extends CreateRecord
     public function getTitle(): string | Htmlable
     {
 
-        $service = Service::find($this->service_id);
+        $service = Service::find($this->checklist_details->service_id);
 
         return  $service->code.' - '. $service->name.' Results';
     }
@@ -74,7 +74,8 @@ class CreateTestResult extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['patient_tests_id'] = $this->patient_tests->id;
-        $data['status_id'] = 4;
+
+        // $data['status_id'] = 4; // must be a completed status on tests checklist
 
         return $data;
     }
@@ -82,6 +83,9 @@ class CreateTestResult extends CreateRecord
 
     protected function afterCreate(): void
     {
+        $this->patient_tests->status_id = 4;
+        $this->patient_tests->update();
+
         $to_complete = clone $this->checklist_details;
         $to_complete->is_current = false;
         $to_complete->latest_status = 4;

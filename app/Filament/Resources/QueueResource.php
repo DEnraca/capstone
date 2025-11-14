@@ -108,7 +108,13 @@ class QueueResource extends Resource
                         }
                         return PatientInformation::find($state)->getFullname();
                     })
-                    ->searchable(['first_name', 'last_name', 'pat_id'])
+                    ->searchable(query: function ($query, $search) {
+                        $query->whereHas('patient', function ($q) use ($search) {
+                            $q->where('first_name', 'like', "%{$search}%")
+                              ->orWhere('last_name', 'like', "%{$search}%")
+                              ->orWhere('pat_id', 'like', "%{$search}%");
+                        });
+                    })
                     ->sortable(),
                 Tables\Columns\TextColumn::make('queue_start')
                     ->dateTime('M d Y h:m A')
@@ -123,7 +129,6 @@ class QueueResource extends Resource
                         }
                         return Employee::find($state)?->getFullname() ?? 'N/A';
                     })
-                    ->searchable(['first_name', 'last_name', 'pat_id'])
                     ->sortable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()

@@ -9,6 +9,7 @@ use App\Filament\Resources\AppointmentResource\Pages;
 use App\Filament\Resources\AppointmentResource\RelationManagers;
 use App\Mail\AppointmentConfirmation;
 use App\Models\Appointment;
+use App\Models\PatientInformation;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
@@ -92,10 +93,22 @@ class AppointmentResource extends Resource
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('patient')
+                Tables\Columns\TextColumn::make('patient_id')
                     ->label('Full Name')
-                    ->formatStateUsing(fn($state) => $state->first_name . ' ' . $state->last_name)
-                    ->searchable(),
+                    ->formatStateUsing(function ($state){
+                        if(!$state){
+                            return 'N/A';
+                        }
+                        return PatientInformation::find($state)->getFullname();
+                    })
+                    ->searchable(query: function ($query, $search) {
+                        $query->whereHas('patient', function ($q) use ($search) {
+                            $q->where('first_name', 'like', "%{$search}%")
+                              ->orWhere('last_name', 'like', "%{$search}%")
+                              ->orWhere('pat_id', 'like', "%{$search}%");
+                        });
+                    })
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('appointment_date')
                     ->date()
@@ -104,7 +117,6 @@ class AppointmentResource extends Resource
                     ->formatStateUsing(fn($state) => date('h:i A', strtotime($state))),
                 Tables\Columns\TextColumn::make('status')
                     ->numeric()
-                    ->searchable()
                     ->formatStateUsing(fn($state) => getAppointmentStatus($state))
                     ->color(fn(int $state): string => match ($state) {
                         1 => 'warning',
@@ -115,8 +127,7 @@ class AppointmentResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('patient.mobile')
-                    ->prefix('+63')
-                    ->searchable(),
+                    ->prefix('+63'),
 
                 Tables\Columns\TextColumn::make('confirmedBy.employee')
                     ->label('Confirmed By')
@@ -203,7 +214,7 @@ class AppointmentResource extends Resource
         return $query;
 
     }
-    
+
 
     public static function getPages(): array
     {

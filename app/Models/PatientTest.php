@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -31,5 +32,12 @@ class PatientTest extends Model
     {
         return $this->belongsTo(QueueStatus::class, 'status_id');
     }
+
+
+
+
+
+
+
 
 }
