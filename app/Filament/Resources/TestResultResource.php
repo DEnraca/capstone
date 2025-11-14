@@ -29,10 +29,6 @@ class TestResultResource extends Resource
     {
         return $form
             ->schema([
-
-
-                Forms\Components\Select::make('service_name')->disabled(),
-
                 Section::make('Result Image Attachments')
                     ->schema([
                         SpatieMediaLibraryFileUpload::make('result_attachments')
@@ -75,8 +71,7 @@ class TestResultResource extends Resource
                     ->getStateUsing(fn ($record) =>
                         $record->test?->transaction?->patient?->getFullname() ?? '-'
                     )
-                    ->sortable()
-                    ->searchable(),
+                    ->sortable(),
 
 
                 Tables\Columns\TextColumn::make('test.transaction.code')

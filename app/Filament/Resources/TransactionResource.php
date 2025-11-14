@@ -120,7 +120,13 @@ class TransactionResource extends Resource
                         }
                         return PatientInformation::find($state)->getFullname();
                     })
-                    ->searchable(['first_name', 'last_name', 'pat_id'])
+                    ->searchable(query: function ($query, $search) {
+                        $query->whereHas('patient', function ($q) use ($search) {
+                            $q->where('first_name', 'like', "%{$search}%")
+                              ->orWhere('last_name', 'like', "%{$search}%")
+                              ->orWhere('pat_id', 'like', "%{$search}%");
+                        });
+                    })
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_by')
@@ -130,7 +136,13 @@ class TransactionResource extends Resource
                         }
                         return Employee::find($state)?->getFullname() ?? 'N/A';
                     })
-                    ->searchable(['first_name', 'last_name', 'emp_id'])
+                    ->searchable(query: function ($query, $search) {
+                        $query->whereHas('createdBy', function ($q) use ($search) {
+                            $q->where('first_name', 'like', "%{$search}%")
+                              ->orWhere('last_name', 'like', "%{$search}%")
+                              ->orWhere('emp_id', 'like', "%{$search}%");
+                        });
+                    })
                     ->sortable(),
 
 

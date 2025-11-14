@@ -44,6 +44,7 @@ class ServiceResource extends Resource
                         Forms\Components\TextInput::make('code')
                             ->required()
                             ->columnSpan(2)
+                            ->unique(ignoreRecord: true)
                             ->maxLength(10),
                     ]
                 ),

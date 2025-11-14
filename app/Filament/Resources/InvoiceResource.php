@@ -203,7 +203,13 @@ class InvoiceResource extends Resource
                         }
                         return PatientInformation::find($state)->getFullname();
                     })
-                    ->searchable(['first_name', 'last_name', 'pat_id'])
+                    ->searchable(query: function ($query, $search) {
+                        $query->whereHas('transaction.patient', function ($q) use ($search) {
+                            $q->where('first_name', 'like', "%{$search}%")
+                              ->orWhere('last_name', 'like', "%{$search}%")
+                              ->orWhere('pat_id', 'like', "%{$search}%");
+                        });
+                    })
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('total_amount')->prefix('₱ ')

@@ -44,6 +44,9 @@ class AdminPanelProvider extends PanelProvider
             ->withCount([
                 'patientTests as patient_tests_count' => function ($query) {
                     $query->where('status_id', '!=', 4);
+                    $query->whereHas('transaction', function($q){
+                        $q->where('billing_id','!=', null);
+                    });
                 },
             ])
             ->whereNotIn('id', [8,9,10])->get();

@@ -113,7 +113,6 @@ class PatientInformationResource extends Resource
                         }
                         return PatientInformation::find($state)->getFullname();
                     })
-                    ->searchable(['first_name', 'last_name', 'pat_id'])
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.email')
                     ->label('Email')
@@ -186,6 +185,6 @@ class PatientInformationResource extends Resource
         }
 
         return $query;
-        
+
     }
 }

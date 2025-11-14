@@ -18,9 +18,9 @@ class EditUser extends EditRecord
     {
         return [
             Actions\ActionGroup::make([
-                Actions\CreateAction::make()
-                    ->label('Create')
-                    ->url(fn (): string => static::$resource::getNavigationUrl().'/create'),
+                // Actions\CreateAction::make()
+                //     ->label('Create')
+                //     ->url(fn (): string => static::$resource::getNavigationUrl().'/create'),
                 Actions\EditAction::make()
                     ->label('Change password')
                     ->form([
@@ -45,7 +45,7 @@ class EditUser extends EditRecord
                     ->modalCloseButton(false)
                     ->modalSubmitActionLabel('Submit')
                     ->modalCancelActionLabel('Cancel'),
-                Actions\DeleteAction::make(),
+                // Actions\DeleteAction::make(),
             ])
             ->hiddenLabel()
             ->button()
