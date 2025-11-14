@@ -20,8 +20,6 @@ class ListTestResults extends ListRecords
     public $service_id;
 
 
-    protected static bool $shouldRegisterNavigation = false;
-
 
     public function getTitle(): string | Htmlable
     {

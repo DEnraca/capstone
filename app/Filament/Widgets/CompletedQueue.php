@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use App\Models\Queue;
 use App\Models\QueueChecklist;
 use App\Models\QueueStatus;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -12,6 +13,8 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class CompletedQueue extends BaseWidget
 {
+
+    use HasWidgetShield;
 
     public $status;
     public $checklists;
@@ -61,6 +64,9 @@ class CompletedQueue extends BaseWidget
 
     public static function canView(): bool
     {
+        if(!auth()->user()->can(static::getPermissionName())){
+            return false;
+        }
         // Hide only when on the dashboard
         if (request()->routeIs('filament.admin.pages.dashboard')) {
             return false;

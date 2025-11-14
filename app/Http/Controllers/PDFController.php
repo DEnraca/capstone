@@ -391,7 +391,6 @@ class PDFController extends Controller
             'impressions' => nl2br($result->impressions),
             'attachments' => $attachments,
             'signatories' => $signatories,
-
         ];
 
 

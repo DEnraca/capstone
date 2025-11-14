@@ -10,10 +10,13 @@ use App\Models\QueueCall;
 use App\Models\QueueChecklist;
 use App\Models\QueueTimestamp;
 use App\Models\TestResult;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Widgets\Widget;
 
 class QueueAction extends Widget
 {
+    use HasWidgetShield;
+
     protected int | string | array $columnSpan = 'full';
 
     protected static string $view = 'filament.widgets.queue-action';
@@ -40,6 +43,9 @@ class QueueAction extends Widget
     public static function canView(): bool
     {
         // Hide only when on the dashboard
+        if(!auth()->user()->can(static::getPermissionName())){
+            return false;
+        }
         if (request()->routeIs('filament.admin.pages.dashboard')) {
             return false;
         }

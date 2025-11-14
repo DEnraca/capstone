@@ -183,9 +183,16 @@ class TransactionResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
+
+        $query = parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+
+        // If user is a patient → only show his own records
+        if (auth()->user()->hasRole('patient')) {
+            $query->where('patient_id', auth()->user()->patient->id);
+        }
+        return $query;
     }
 }

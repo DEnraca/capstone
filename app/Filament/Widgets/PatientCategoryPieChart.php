@@ -2,12 +2,17 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\QueueType;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class PatientCategoryPieChart extends ApexChartWidget
 {
+    use HasWidgetShield;
+
     protected static ?int $sort = 6;
-    protected int | string | array $columnSpan = 4;
+
+    protected int | string | array $columnSpan = 6;
 
     /**
      * Chart Id
@@ -31,12 +36,22 @@ class PatientCategoryPieChart extends ApexChartWidget
      */
     protected function getOptions(): array
     {
+        $queue_types = QueueType::all();
+        $data = [];
+        foreach($queue_types as $type){
+            $data[] =[
+                'name' => $type->name,
+                'count' => $type->queues->count()
+            ];
+        }
         return [
             'chart' => [
                 'type' => 'pie',
+                'height' => 250,
+
             ],
-            'series' => [2, 8, 3],
-            'labels' => ['PWD/SC/Pregnant', 'Appointment', 'Walk-in'],
+            'series' => count(collect($data)?->pluck('count'))>0 ? collect($data)?->pluck('count') : 1,
+            'labels' =>  count(collect($data)?->pluck('name'))>0 ? collect($data)?->pluck('name') : 'No Data',
             'legend' => [
                 'labels' => [
                     'fontFamily' => 'inherit',

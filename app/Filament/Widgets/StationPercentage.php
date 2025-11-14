@@ -2,12 +2,16 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Station;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class StationPercentage extends ApexChartWidget
 {
+    use HasWidgetShield;
+
     protected static ?int $sort = 5;
-    protected int | string | array $columnSpan = 4;
+    protected int | string | array $columnSpan = 6;
 
     /**
      * Chart Id
@@ -31,13 +35,20 @@ class StationPercentage extends ApexChartWidget
      */
     protected function getOptions(): array
     {
+        $stations = Station::active()
+                ->withCount([
+                    'patientTests as patient_tests_count'
+                ])
+                ->having('patient_tests_count', '>=', 1)
+                ->get();
+
         return [
             'chart' => [
                 'type' => 'pie',
-                'height' => 300,
+                'height' => 250,
             ],
-            'series' => [3, 14, 6, 5],
-            'labels' => ['Heart', 'Laboratory', 'Radiograph', 'Drug'],
+            'series' => $stations->pluck('patient_tests_count')->toArray(),
+            'labels' => $stations->pluck('name')->toArray(),
             'legend' => [
                 'labels' => [
                     'fontFamily' => 'inherit',

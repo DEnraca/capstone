@@ -48,14 +48,14 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->whereNotIn('id', [8,9,10])->get();
 
-
-
         foreach ($stations as $station) {
             $services_navigation[] = NavigationItem::make($station->name)
+                ->visible(fn () => auth()->user()?->can('view_any_test::result'))
                 ->group('Services')
                 ->badge(fn() => $station->patient_tests_count ?: null)
                 ->url(fn (): string => TestResultResource::getUrl('index', ['stationID' => $station->id]) ); // Or a custom icon
         }
+
         return $panel
             ->default()
             ->id('admin')

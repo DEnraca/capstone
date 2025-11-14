@@ -174,9 +174,18 @@ class PatientInformationResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
+
+        $query = parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+
+        // If user is a patient → only show his own records
+        if (auth()->user()->hasRole('patient')) {
+            $query->where('user_id', auth()->id());
+        }
+
+        return $query;
+        
     }
 }
