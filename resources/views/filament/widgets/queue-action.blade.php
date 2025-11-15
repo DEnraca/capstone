@@ -120,4 +120,55 @@
             </x-filament::button>
         </x-slot>
     </x-filament::modal>
+
+
+    <x-filament::modal
+        id="relase-transaction-modal"
+        width="md"
+    >
+
+        {{-- Heading --}}
+        <x-slot name="heading">
+            <div class="flex items-center gap-2">
+                <x-filament::icon icon="heroicon-o-check-circle" class="w-5 h-5 text-success-600" />
+                <span>Complete Transaction</span>
+            </div>
+        </x-slot>
+
+        {{-- Body --}}
+        <div class="space-y-4 py-2">
+            <div class="rounded-lg bg-danger-50 border border-danger-200 p-4">
+                <p class="text-danger-700 text-sm leading-relaxed">
+                    <strong>Warning:</strong><br>
+                    Completing this transaction will automatically release all queued stations.
+                    This action <span class="font-semibold">cannot be undone</span>.
+                </p>
+            </div>
+
+        </div>
+
+        {{-- Footer --}}
+        <x-slot name="footer">
+            <x-filament::button
+                wire:click="complete_queue"
+                color="success"
+                class="font-semibold"
+                :disabled="!$current"
+            >
+                Release
+            </x-filament::button>
+
+            <x-filament::button
+                x-on:click="$dispatch('close-modal', { id: 'relase-transaction-modal' })"
+                color="gray"
+                class="font-medium"
+            >
+                Cancel
+            </x-filament::button>
+        </x-slot>
+
+    </x-filament::modal>
+
+
+
 </x-filament-widgets::widget>
