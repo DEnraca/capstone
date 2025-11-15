@@ -20,7 +20,7 @@ class DateTimeMessage
                 ->prefixIcon('heroicon-o-calendar-days')
                 ->prefixIconColor('primary')
                 ->closeOnDateSelection()
-                ->minDate(now()->addDays(1)->startOfDay())
+                ->minDate(now()->startOfDay())
                 ->columnSpan(1)
                 ->label('Date'),
 

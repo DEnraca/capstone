@@ -33,6 +33,8 @@ class TransactionResource extends Resource
 
     protected static ?string $navigationIcon = 'fas-file';
     protected static ?string $navigationGroup = 'Admission';
+    protected static ?int $navigationSort = 4;
+
 
     public static function form(Form $form): Form
     {

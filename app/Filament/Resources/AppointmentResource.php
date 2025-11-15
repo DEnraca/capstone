@@ -36,6 +36,7 @@ class AppointmentResource extends Resource
 
     protected static ?string $navigationIcon = 'fas-calendar-days';
     protected static ?string $navigationGroup = 'Admission';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -99,7 +100,7 @@ class AppointmentResource extends Resource
                         if(!$state){
                             return 'N/A';
                         }
-                        return PatientInformation::find($state)->getFullname();
+                        return PatientInformation::find($state)?->getFullname() ?? null;
                     })
                     ->searchable(query: function ($query, $search) {
                         $query->whereHas('patient', function ($q) use ($search) {

@@ -26,6 +26,7 @@ class PatientInformationResource extends Resource
 
     protected static ?string $navigationIcon = 'fas-person-dots-from-line';
     protected static ?string $navigationGroup = 'Admission';
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {
