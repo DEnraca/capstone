@@ -26,6 +26,7 @@ class QueueResource extends Resource
 
     protected static ?string $navigationIcon = 'fas-person-walking';
     protected static ?string $navigationGroup = 'Admission';
+    protected static ?int $navigationSort = 2;
 
 
     public static function form(Form $form): Form

@@ -9,8 +9,11 @@ use App\Models\PatientInformation;
 use App\Models\QueueCall;
 use App\Models\QueueChecklist;
 use App\Models\QueueTimestamp;
+use App\Models\Release;
 use App\Models\TestResult;
+use App\Models\Transaction;
 use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
+use Filament\Notifications\Notification;
 use Filament\Widgets\Widget;
 
 class QueueAction extends Widget
@@ -107,10 +110,18 @@ class QueueAction extends Widget
             return redirect(InvoiceResource::getUrl('create', ['checklist_details' => $this->current]));
         }
 
+        if($this->station == 9 && $this->column == 'step_name' && $this->condition == 'releasing'){
+
+            $this->dispatch('open-modal', id: 'relase-transaction-modal');
+            // return redirect(InvoiceResource::getUrl('create', ['checklist_details' => $this->current]));
+        }
+
 
         if($this->column == 'service_id'){
             return redirect(TestResultResource::getUrl('create', ['checklist_details' => $this->current]));
         }
+
+
 
 
 
@@ -141,6 +152,39 @@ class QueueAction extends Widget
         $this->is_completed = true;
         $this->complete();
         return;
+    }
+
+    public function complete_queue(){
+        $transaction = Transaction::where('queue_id',$this->current->queue_id)->first();
+
+        if(!$transaction){
+            Notification::make()
+                ->title('Error')
+                ->body('No transaction found.')
+                ->danger()
+                ->send();
+            return;
+        }
+
+        $transaction->queue->status_id = 4;
+        $transaction->queue->update();
+        Release::insert([
+            'transaction_id' => $transaction->id,
+            'released_by' => auth()->user()->employee->id,
+            'created_at' => now(),
+
+        ]);
+        $this->is_completed = true;
+        $this->complete();
+        $this->dispatch('close-modal', id: 'relase-transaction-modal');
+
+        Notification::make()
+            ->title('Success')
+            ->body('Transaction Completed.')
+            ->success()
+            ->send();
+
+
     }
 
 
