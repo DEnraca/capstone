@@ -63,15 +63,7 @@ class CreateTransaction extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $to_complete = clone $this->checklist_details;
-        $to_complete->is_current = false;
-        $to_complete->latest_status = 4;
-        $to_complete->update();
-        $nextStation = $to_complete->queue->checklists()->pending()->where('id', '!=', $to_complete->id)->orderBy('id','asc')->first();
-        if($nextStation){
-            $nextStation->is_current = true;
-            $nextStation->update();
-        }
+
         $this->patientTests = $data['tests'] ?? [];
         $data['queue_id'] = $this->checklist_details->queue_id;
         $data['patient_id'] = $this->checklist_details->queue->patient_id;
@@ -83,6 +75,17 @@ class CreateTransaction extends CreateRecord
 
     protected function afterCreate(): void
     {
+        $to_complete = clone $this->checklist_details;
+        $to_complete->is_current = false;
+        $to_complete->latest_status = 4;
+        $to_complete->update();
+        $nextStation = $to_complete->queue->checklists()->pending()->where('id', '!=', $to_complete->id)->orderBy('id','asc')->first();
+        if($nextStation){
+            $nextStation->is_current = true;
+            $nextStation->update();
+        }
+
+        
         $last_sort = $this->checklist_details->queue->checklists()->max('sort_order') ?? 0;
         foreach ($this->patientTests as $test) {
             $test = $this->record->tests()->create($test);
