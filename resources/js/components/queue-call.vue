@@ -4,11 +4,11 @@
 		class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
 		<div
 			class="relative justify-center text-center bg-gray-100 rounded-md p-4 shadow-2xl p-10 max-w-lg w-full mx-4">
-			<audio
+			<!-- <audio
 				ref="modalSound"
 				:src="soundSrc"
 				autoplay
-				loop></audio>
+				loop></audio> -->
 
 			<div class="w-auto h-16 border-b">
 				<img
@@ -58,6 +58,7 @@ export default {
 						}
 						this.queue_details = response.data.data;
 						this.displayModal();
+                        this.speakQueue();
 					}
 				})
 				.catch((error) => {
@@ -67,6 +68,42 @@ export default {
 					);
 				});
 		},
+        speakQueue() {
+            const msg = `Queue number ${this.queue_details.queue_number},  please proceed to ${this.queue_details.transaction}`;
+
+            const utterance = new SpeechSynthesisUtterance(msg);
+
+            // Make it slower (normal = 1)
+            utterance.rate = 1.2;   // 0.5 - 2 (lower = slower)
+            utterance.pitch = 1.2;  // Slightly higher = more feminine
+
+            function setVoice() {
+                const voices = window.speechSynthesis.getVoices();
+
+                // Try to find a female English voice
+                const femaleVoice = voices.find(voice =>
+                    voice.name.toLowerCase().includes('female') ||
+                    voice.name.toLowerCase().includes('woman') ||
+                    voice.name.toLowerCase().includes('zira') ||     // Windows female
+                    voice.name.toLowerCase().includes('samantha') || // Mac female
+                    voice.name.toLowerCase().includes('google us english')
+                );
+
+                if (femaleVoice) {
+                    utterance.voice = femaleVoice;
+                }
+
+                window.speechSynthesis.speak(utterance);
+            }
+
+            // Fix for browsers that load voices asynchronously
+            if (speechSynthesis.getVoices().length === 0) {
+                speechSynthesis.onvoiceschanged = setVoice;
+            } else {
+                setVoice();
+            }
+        },
+
 		startPolling() {
 			this.showModal = false;
 			this.pollInterval = setInterval(this.fetchTransactions, 8000); // every 8 sec
