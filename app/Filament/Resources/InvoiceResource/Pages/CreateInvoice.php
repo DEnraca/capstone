@@ -54,7 +54,7 @@ class CreateInvoice extends CreateRecord
                 'invoice_number' => $code,
                 'transaction_id' => $transactionID->id,
                 'service_availed' => $services,
-                'total_amount' => number_format($total_amount,2),
+                'total_amount' => number_format($total_amount ?? 0,2),
             ];
             $this->form->fill($filled);
         }
@@ -73,14 +73,11 @@ class CreateInvoice extends CreateRecord
             $nextStation->update();
         }
 
-        $data['amount_paid'] = str_replace(',', '', ($data['total_amount'] ?? 0));
-
-        $data['is_paid'] = true;
+        $data['amount_paid'] = string_to_number($data['grand_total']);
         $data['invoice_number'] = $this->code;
         $data['is_paid'] = true;
 
-        $data['created_by'] = auth()->user()?->employee?->id ?? null;
-
+        $data['created_by'] = verify_employee_handler();
         return $data;
     }
 

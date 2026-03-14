@@ -1,6 +1,6 @@
 <x-layouts.app>
     <section
-        class="grid grid-cols-[1fr_1fr_1fr_1fr_250px] grid-rows-[auto_1fr_auto_auto_auto] bg-amber-100 h-screen text-center p-2">
+        class="grid grid-cols-[1fr_1fr_1fr_1fr_250px] grid-rows-[auto_1fr_auto_50px] bg-amber-100 h-screen text-center p-2">
 
         <div class="col-span-5 bg-amber-100 flex items-center justify-between px-6 py-2 h-[80px]">
             <img src="{{ $logo ?? asset('images/logo.png') }}" alt="Logo" class="w-[420px] h-auto object-contain">
@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        <div class="col-span-4 row-span-3 row-start-2 relative rounded-2xl overflow-hidden ">
+        <div class="col-span-5 row-span-3 row-start-2 relative rounded-2xl overflow-hidden ">
             <video id="video1" class="w-full h-full object-cover"
                 src="{{ asset('images/frontend_asset/abr_vid.mp4') }}" autoplay muted loop playsinline></video>
 
@@ -19,15 +19,8 @@
             </div>
         </div>
 
-        <div class="row-span-3 col-start-5 row-start-2 grid place-items-center w-[250px]  p-4 rounded-2xl mx-1">
-            @include('public.hmos_board')
-        </div>
-
-
-        <div id="app2" class="col-span-5 row-start-5 mt-5 flex justify-start gap-2 overflow-y-auto ">
-            <div class="p-1 rounded-lg m-1">
-                <now-serving></now-serving>
-            </div>
+        <div id="app2" class="mt-5 flex justify-start gap-2 overflow-y-auto col-span-5">
+            <now-serving></now-serving>
             <queue-call></queue-call>
         </div>
     </section>

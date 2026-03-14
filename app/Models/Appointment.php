@@ -49,8 +49,6 @@ class Appointment extends Model
         return $this->hasOne(Queue::class,);
     }
 
-
-
     public function confirmedBy(): BelongsTo
     {
         return $this->belongsTo(User::class,'confimed_by');

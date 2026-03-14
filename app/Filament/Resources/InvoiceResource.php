@@ -4,15 +4,20 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\InvoiceResource\Pages;
 use App\Filament\Resources\InvoiceResource\RelationManagers;
+use App\Forms\Components\Text;
+use App\Forms\Components\TextEntry;
 use App\Models\Discount;
 use App\Models\Employee;
 use App\Models\Invoice;
 use App\Models\PatientInformation;
 use Closure;
 use Filament\Forms;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -42,13 +47,13 @@ class InvoiceResource extends Resource
     }
 
     public static function compute_total_amount($set, $get){
-        $total_amount = str_replace(',', '', ($get('total_amount') ?? 0));
-        $total_discount = $get('total_discount') ?? 0;
-        $amount_paid = 0;
-        $variation = $get('change') ?? 0;
-        $grand_total = $get('grand_total') ?? 0;
+        $total_amount = string_to_number($get('total_amount'));
+        $total_discount = string_to_number($get('total_discount') ?? 0);
+        $amount_paid = string_to_number($get('payments')['amount_tendered'] ?? 00);
+        $variation = string_to_number($get('change') ?? 0);
+        $grand_total = string_to_number($get('grand_total') ?? 0);
 
-        $discID = $get('discount_id');
+        $discID = string_to_number($get('discount_id'));
 
         if($discID){
             $discount = Discount::find($discID);
@@ -59,21 +64,13 @@ class InvoiceResource extends Resource
             $grand_total = $total_amount;
         }
         if($get('payments')){
-            foreach($get('payments') as $payment){
-                $amount_paid += $payment['amount_paid'] ?? 0;
-            }
+            $amount_paid = string_to_number($get('payments')['amount_tendered'] ?? 0);
         }
 
         $variation = $amount_paid - $grand_total;
-        if($variation < 0){
-            $variation = 0;
-        }
 
-        $set('change', $variation);
-
-
-
-        $set('amount_paid', number_format($total_amount,2));
+        $set('payments.variation', number_format($variation,2));
+        $set('payments.amount_paid', $grand_total);
         $set('total_discount', number_format($total_discount,2));
         $set('amount_paid', number_format($amount_paid,2));
         $set('grand_total', number_format($grand_total,2));
@@ -82,6 +79,7 @@ class InvoiceResource extends Resource
     public static function getInvoiceFormSchema(): array
     {
         return [
+
             Grid::make(2)->schema([
                 Forms\Components\TextInput::make('invoice_number')
                 ->required()
@@ -112,76 +110,92 @@ class InvoiceResource extends Resource
             //         );
             //     }),
 
-            Forms\Components\Select::make('discount_id')
-                ->preload()
-                ->live() // Set the field to be reactive.
-                ->afterStateUpdated(function (Set $set, Get $get) {
-                    self::compute_total_amount($set, $get);  // correct
-                })
-                ->relationship(
-                    name: 'discount',
-                    modifyQueryUsing: fn (Builder $query) => $query->orderBy('name'),
-                )
 
-                ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->name} {$record->percentage}%"),
-
-
-            Repeater::make('payments')
-                ->label('Payment Methods')
-                ->relationship()
-                ->afterStateUpdated(fn (Set $set, Get $get) => self::compute_total_amount($set, $get))
-                ->live( debounce: 1000)
+            Section::make('Billing Details')
+                ->columns(3)
                 ->schema([
-                    Select::make('payment_method_id')
-                        ->columnSpanFull()
-                        ->relationship('paymentMethod','name')
-                        ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                        ->required(),
-                    TextInput::make('reference_number')->required(),
-                    TextInput::make('amount_paid')
-
-                        ->minValue(0)->numeric()->required(),
-                ])
-                ->columns(2),
-
-            Grid::make(2)->schema([
-                Forms\Components\TextInput::make('total_amount')
-                    ->label('Sub Total')
-                    ->required()
-                    ->readOnly()
-                    ->prefix('₱')
-                    ->numeric(),
-                Forms\Components\TextInput::make('total_discount')
-                    ->readOnly()
-                    ->numeric()
-                    ->prefix('₱')
-                    ->default(0),
-
-                Forms\Components\TextInput::make('amount_paid')
-                    ->readOnly()
-                    ->required()
-                    ->rules([
-                        fn (Get $get): Closure => function (string $attribute, $value, Closure $fail) use ($get) {
-                            if ($value !== $get('grand_total')) {
-                                $fail('The :attribute is need to be exact to grand total. '. $get('grand_total'));
-                            }
-                        },
-                    ])
-                    ->hint(function (Get $get) {
-                        return 'Change: ' . number_format(($get('change') ?? 0), 2);
+                    Forms\Components\Select::make('discount_id')
+                    ->preload()
+                    ->live() // Set the field to be reactive.
+                    ->afterStateUpdated(function (Set $set, Get $get) {
+                        self::compute_total_amount($set, $get);  // correct
                     })
+                    ->relationship(
+                        name: 'discount',
+                        modifyQueryUsing: fn (Builder $query) => $query->orderBy('name'),
+                    )
+                    ->columnSpanFull()
+                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->name} {$record->percentage}%"),
 
-                    ->hintColor('success')
-                    ->prefix('₱'),
+                    Fieldset::make('Payments')
+                        ->schema([
+                            Group::make()
+                                ->afterStateUpdated(fn (Set $set, Get $get) => self::compute_total_amount($set, $get))
+                                ->relationship('payments')
+                                ->columnSpanFull()
+                                ->schema([
+                                    Select::make('payment_method_id')
+                                        ->columnSpanFull()
+                                        ->relationship('paymentMethod','name')
+                                        // ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                                        ->live()
+                                        ->required(),
 
+                                    TextInput::make('reference_number')
+                                        ->required()
+                                        ->live()
+                                        ->visible(fn (Get $get) => $get('payment_method_id') != 1),
 
-                Forms\Components\TextInput::make('grand_total')
-                    ->readOnly()
-                    ->required()
-                    ->prefix('₱')
-                    ->numeric(),
+                                    Grid::make(5)
+                                        ->schema([
+                                            TextInput::make('amount_tendered')
+                                                ->live()
+                                                ->prefix('₱')
+                                                ->label('Cash Tendered')
+                                                ->minValue(0)
+                                                ->columnSpan(4)
+                                                ->numeric()
+                                                ->rules([
+                                                    fn (Get $get): Closure => function (string $attribute, $value, Closure $fail) use ($get) {
+                                                        $grandTotal = string_to_number($get('../grand_total'));
+                                                        if($get('payment_method_id') != 1){
+                                                            if (string_to_number($value) != $grandTotal) {
+                                                                return $fail('For non-cash payments, the amount must exactly match the grand total of ₱' . number_format($grandTotal, 2) . '.');                                                            }
+                                                        }
+                                                        if (string_to_number($value) < $grandTotal) {
+                                                           return $fail('Insufficient Cash Tendered');
+                                                        }
+                                                    },
+                                                ])
+                                                ->required(),
 
-            ]),
+                                            TextEntry::make('variation')
+                                                ->label('Change: ')
+                                                ->default('0.00')
+                                                ->currency('₱')
+                                                ->formatStateUsing(fn ($state) =>number_format($state,2)),
+
+                                            TextEntry::make('amount_paid')
+                                                ->label('Amount Paid: ')
+                                                ->default('0.00')
+                                                ->columnSpanFull()
+                                                ->inlineLabel()
+                                                ->currency('₱')
+                                                ->formatStateUsing(fn ($state) =>number_format($state,2)),
+                                        ])
+
+                                ])
+                        ])
+                        ->columnSpan(2),
+                    Fieldset::make('Billing Statement')
+                        ->columnSpan(1)
+                        ->columns(1)
+                        ->schema([
+                            TextEntry::make('total_amount')->label('Subtotal: ')->columnSpanFull()->default('0.00')->inlineLabel()->currency('₱')->formatStateUsing(fn ($state) =>number_format($state,2)),
+                            TextEntry::make('total_discount')->label('Discount: ')->columnSpanFull()->default('0.00')->inlineLabel()->currency('₱')->formatStateUsing(fn ($state) =>number_format($state,2)),
+                            TextEntry::make('grand_total')->label('Grand Total: ')->columnSpanFull()->default('0.00')->inlineLabel()->currency('₱')->formatStateUsing(fn ($state) =>number_format($state,2)),
+                        ])
+                ]),
         ];
 
     }

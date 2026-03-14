@@ -4,6 +4,7 @@ namespace App\Filament\Resources\TransactionResource\Pages;
 
 use App\Filament\Resources\TransactionResource;
 use App\Filament\Widgets\QueueAction;
+use App\Models\Employee;
 use App\Models\QueueChecklist;
 use App\Models\Transaction;
 use Filament\Actions;
@@ -63,12 +64,11 @@ class CreateTransaction extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-
         $this->patientTests = $data['tests'] ?? [];
         $data['queue_id'] = $this->checklist_details->queue_id;
         $data['patient_id'] = $this->checklist_details->queue->patient_id;
         $data['code'] = $this->code;
-        $data['created_by'] = auth()->user()->employee->id;
+        $data['created_by'] = verify_employee_handler();
         unset($data['tests']); // prevent Filament trying to sync prematurely
         return $data;
     }
@@ -85,7 +85,7 @@ class CreateTransaction extends CreateRecord
             $nextStation->update();
         }
 
-        
+
         $last_sort = $this->checklist_details->queue->checklists()->max('sort_order') ?? 0;
         foreach ($this->patientTests as $test) {
             $test = $this->record->tests()->create($test);

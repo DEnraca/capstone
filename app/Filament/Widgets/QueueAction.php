@@ -168,6 +168,7 @@ class QueueAction extends Widget
 
         $transaction->queue->status_id = 4;
         $transaction->queue->update();
+        
         Release::insert([
             'transaction_id' => $transaction->id,
             'released_by' => auth()->user()->employee->id,
