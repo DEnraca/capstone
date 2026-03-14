@@ -19,6 +19,8 @@ class InvoiceHasPayment extends Model
         'reference_number',
         'amount_paid',
         'invoice_id',
+        'amount_tendered',
+        'variation',
     ];
 
     public function paymentMethod(): BelongsTo

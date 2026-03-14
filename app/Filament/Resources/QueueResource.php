@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\QueueResource\Pages;
 use App\Filament\Resources\QueueResource\RelationManagers;
+use App\Models\Appointment;
 use App\Models\Employee;
 use App\Models\PatientInformation;
 use App\Models\Queue;
@@ -51,7 +52,6 @@ class QueueResource extends Resource
                             ->relationship('priorityType', 'name'),
                     ]),
                 Fieldset::make('Appointment Lane')
-
                     ->visible( fn (Get $get) => $get('queue_type_id') == 1)
                     ->schema([
                         Forms\Components\Select::make('appointment_id')
@@ -63,19 +63,16 @@ class QueueResource extends Resource
                                 titleAttribute: 'id',
                                 modifyQueryUsing: fn (Builder $query) => $query->whereDate('appointment_date',now())->whereDoesntHave('queue'),
                             )
-                            ->getOptionLabelFromRecordUsing(function ($record) {
-                                if (! $record) return null;
+                            ->getOptionLabelFromRecordUsing(fn (Appointment $record) =>
+                                format_appoiment_details_for_queue($record)
+                            )
+                            ->getOptionLabelUsing(function ($value) {
+                                $record = Appointment::with(['patient','services'])->find($value);
 
-                                $patientName = $record->patient ?  $record->patient->first_name. ' '. $record->patient->last_name:  'Unknown';
-                                $date = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $record->appointment_date.' '. $record->appointment_time ?? null)
-                                    ->format('F d Y g:i A');
-
-                                $date = $date ?? 'No Date';
-                                $services = $record->services->pluck('name')->join(', ');
-
-                                // Build a label like: "John Doe - June 24, 2007 (Services: Service 1, Service 2)"
-                                return "{$patientName} - {$date} • Services: {$services}";
-                            }),
+                                return $record
+                                    ? format_appoiment_details_for_queue($record)
+                                    : null;
+                            })
                     ]),
 
                 Forms\Components\TextInput::make('queue_start')

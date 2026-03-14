@@ -74,7 +74,7 @@ export default {
             const utterance = new SpeechSynthesisUtterance(msg);
 
             // Make it slower (normal = 1)
-            utterance.rate = 1.2;   // 0.5 - 2 (lower = slower)
+            utterance.rate = 1.0;   // 0.5 - 2 (lower = slower)
             utterance.pitch = 1.2;  // Slightly higher = more feminine
 
             function setVoice() {
@@ -106,7 +106,7 @@ export default {
 
 		startPolling() {
 			this.showModal = false;
-			this.pollInterval = setInterval(this.fetchTransactions, 8000); // every 8 sec
+			this.pollInterval = setInterval(this.fetchTransactions, 7000); // every 8 sec
 		},
 		stopPolling() {
 			if (this.pollInterval) clearInterval(this.pollInterval);
@@ -117,7 +117,7 @@ export default {
 			setTimeout(() => {
 				this.showModal = false;
 				this.startPolling();
-			}, 5000);
+			}, 4500);
 		},
 	},
 

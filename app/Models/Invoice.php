@@ -26,7 +26,7 @@ class Invoice extends Model
 
     public function payments()
     {
-        return $this->hasMany(InvoiceHasPayment::class, 'invoice_id');
+        return $this->hasOne(InvoiceHasPayment::class, 'invoice_id');
     }
 
     public function transaction()

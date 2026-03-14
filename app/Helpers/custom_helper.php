@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Employee;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -195,49 +196,47 @@ if (! function_exists('generateQueueNumber')) {
     /**
      * Generate a unique queue number with type prefix and sequence per day.
      *
-     * Example output: W-20251004-001
+     * Example output: A-0001
      */
     function generateQueueNumber(int $type = 1): string
     {
         $prefix = match ($type) {
-            2  => 'W',
-            4  => 'P',
-            1  => 'A',
-            default => 'U', // unknown
+            2 => 'W',
+            3 => 'P',
+            1 => 'A',
+            default => 'U',
         };
 
-        $date = Carbon::now()->format('Ymd');
+        return DB::transaction(function () use ($prefix) {
 
-        return DB::transaction(function () use ($prefix, $type, $date) {
-            // Find latest queue number for today & same type
+            $today = Carbon::today();
+
+            // Get latest queue number for today & same type
             $latest = DB::table('queues')
-                ->whereDate('created_at', Carbon::today())
-                ->where('queue_number', 'like', "{$prefix}-{$date}-%")
+                ->whereDate('created_at', $today)
+                ->where('queue_number', 'like', "{$prefix}-%")
                 ->lockForUpdate()
                 ->orderByDesc('queue_number')
                 ->first();
 
-            // Extract the numeric part from the last queue_number (if exists)
             $nextSequence = 1;
-            if ($latest && preg_match('/-(\d{3})$/', $latest->queue_number, $matches)) {
+
+            if ($latest && preg_match('/(\d{4})$/', $latest->queue_number, $matches)) {
                 $nextSequence = (int) $matches[1] + 1;
             }
 
-            // Format next queue number
-            $formattedSeq = str_pad($nextSequence, 3, '0', STR_PAD_LEFT);
-            $queueNo = "{$prefix}-{$date}-{$formattedSeq}";
-
-            // Final check for duplicates
-            while (DB::table('queues')->where('queue_number', $queueNo)->exists()) {
-                $nextSequence++;
-                $formattedSeq = str_pad($nextSequence, 3, '0', STR_PAD_LEFT);
-                $queueNo = "{$prefix}-{$date}-{$formattedSeq}";
+            // Limit to 9999 per day
+            if ($nextSequence > 9999) {
+                throw new Exception("Queue limit reached for today.");
             }
+
+            $formattedSeq = str_pad($nextSequence, 4, '0', STR_PAD_LEFT);
+            $queueNo = "{$prefix}-{$formattedSeq}";
 
             return $queueNo;
         });
-    }
 
+    }
 
 
     if (! function_exists('generateTransCode')) {
@@ -308,12 +307,45 @@ if (! function_exists('generateQueueNumber')) {
     }
 
 
+    if (! function_exists('string_to_number')) {
+        function string_to_number($string)
+        {
+            if ($string === null) {
+                return 0;
+            }
+
+            // Remove everything except digits and decimal point
+            $clean = preg_replace('/[^0-9.]/', '', $string);
+
+            return (float) $clean;
+        }
+    }
+
+
+    if (! function_exists('format_appoiment_details_for_queue')) {
+        function format_appoiment_details_for_queue($record)
+        {
+
+            $patientName = $record->patient ?  $record->patient->first_name. ' '. $record->patient->last_name:  'Unknown';
+            $date = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $record->appointment_date.' '. $record->appointment_time ?? null)
+                ->format('F d Y g:i A');
+
+            $date = $date ?? 'No Date';
+            $services = $record->services->pluck('name')->join(', ');
+
+            // Build a label like: "John Doe - June 24, 2007 (Services: Service 1, Service 2)"
+
+            return "{$patientName} - {$date} • Services: {$services}";
+        }
+    }
+
+
+    if (! function_exists('verify_employee_handler')) {
+        function verify_employee_handler()
+        {
+            return auth()->user()->employee?->id ?? Employee::where('position_id',2)->first()?->id ?? null;
+        }
+    }
+
+
 }
-
-
-
-
-
-
-
-

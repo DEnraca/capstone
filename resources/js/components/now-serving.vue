@@ -1,9 +1,9 @@
 <template>
-	<div class="grid grid-cols-4 gap-1">
+	<div class="grid grid-cols-4 gap-1 p-1 m-1 w-full">
 		<div
 			v-for="(queue, index) in queues"
 			:key="index"
-			class="min-h-full odd:bg-primary-400 even:bg-primary-500 grid grid-rows-[auto_1fr] mb-1">
+			class="min-h-full odd:bg-primary-400 even:bg-primary-500 grid grid-rows-[auto_1fr] mb-1 rounded-lg">
 			<!-- Header -->
 			<div class="text-center text-xl font-bold py-1">
 				<p>

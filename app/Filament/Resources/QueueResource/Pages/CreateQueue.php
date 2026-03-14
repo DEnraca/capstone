@@ -22,9 +22,9 @@ class CreateQueue extends CreateRecord
                 $data['patient_id']  = $appointment->patient_id ?? null;
             }
         }
-        $data['queue_number'] = generateQueueNumber();
+        $data['queue_number'] = generateQueueNumber($data['queue_type_id'] ?? 1);
         $data['queue_start'] = now();
-        $data['created_by'] = auth()->user()->employee ? auth()->user()->employee->id : null;
+        $data['created_by'] =  verify_employee_handler();
         return $data;
     }
 
