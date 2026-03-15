@@ -42,15 +42,19 @@ class AdminPanelProvider extends PanelProvider
         $services_navigation = [];
         $stations = Station::active()
             ->withCount([
-                'patientTests as patient_tests_count' => function ($query) {
-                    $query->where('status_id', '!=', 4);
-                    $query->whereHas('transaction', function($q){
-                        $q->where('billing_id','!=', null);
-                    });
+                'checklist as active_checklist' => function ($query) {
+                    $query->current();
+                    $query->processing();
+                    $query->pending();
+                    // dd();
+                    // $query->where('status_id', '!=', 4);
+                    // $query->whereHas('transaction', function($q){
+                    //     $q->where('billing_id','!=', null);
+                    // });
                 },
             ])
             ->whereNotIn('id', [8,9,10])->get();
-
+        // dd($stations);
         foreach ($stations as $station) {
             $services_navigation[] = NavigationItem::make($station->name)
                 ->visible(fn () => auth()->user()?->can('view_any_test::result'))

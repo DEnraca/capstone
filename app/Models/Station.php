@@ -31,6 +31,9 @@ class Station extends Model
 
     }
 
+    public function checklist(): HasMany {
+        return $this->hasMany(QueueChecklist::class,'station_id');
+    }
     public function patientTests(): HasManyThrough
     {
         return $this->hasManyThrough(
