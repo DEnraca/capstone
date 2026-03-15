@@ -63,7 +63,7 @@ class SendTransactionResultsEmail implements ShouldQueue
             $result = $test->testResult;
             if (!$result) continue;
 
-            $filename = Str::slug($result->test->service->name) . '-result.pdf';
+            $filename = Str::slug($invoice->patient()->last_name.$result->test->service->name) . '-result.pdf';
             $path = storage_path("app/public/results/{$filename}");
             Storage::disk('public')->makeDirectory('results');
 
@@ -73,8 +73,8 @@ class SendTransactionResultsEmail implements ShouldQueue
             $attachments[] = $path;
         }
 
-        // Dispatch email $transaction?->patient->user?->email
-        Mail::to('dennisenraca25@gmail.com')
+        // Dispatch email
+        Mail::to($transaction?->patient->user?->email)
             ->send(new PatientResultsMail($transaction, $attachments));
 
         // Optional: delete temporary PDFs
