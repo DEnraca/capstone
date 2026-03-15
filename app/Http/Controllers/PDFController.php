@@ -29,34 +29,12 @@ class PDFController extends Controller
         $invoice = Invoice::find($id);
         if ($invoice) {
             $patient = $invoice->patient();
-            $add = $patient->address;
-            $address =  getAddressDetails($add->region_id, $add->province_id, $add->city_id, $add->barangay_id);
-            $data = [
-                'invoice_number' => $invoice->invoice_number,
-                'patient_number' => $patient->pat_id,
-                'patient_name' => $patient->getFullname(),
-                'is_paid' => $invoice->is_paid,
-                'date_issued' => $invoice->created_at,
-                'sub_total' => $invoice->total_amount,
-                'discount_val' => $invoice->total_discount,
-                'grand_total' => $invoice->grand_total,
-                'discount' => $invoice->discount?->name ?? null,
-                'date_issued' => $invoice->created_at,
-                'emp' => $invoice->createdBy?->getFullname() ?? null,
-                'emp_id' => $invoice->createdBy?->emp_id ?? null,
-                'services' => $invoice->transaction->tests,
-                'address' => "{$add->house_address} {$address['barangay']} {$address['city']} {$address['province']} {$address['region']} "
-            ];
 
             $filename = $patient->getFullname().' Invoice.pdf';
-            return PDF::loadView('pdf.invoice', $data)
-                ->setOption('encoding', 'UTF-8')
-                ->setOption('header-html', view('pdf.header')->render())
-                ->setOption('footer-html', view('pdf.footer')->render())
-                ->setOptions(['margin-left' => 5, 'margin-top' => 25, 'margin-right' => 10, 'margin-bottom' => 10])
-                ->setOption('enable-local-file-access', true)
-                ->setOption('images', true)
-                ->stream($filename);
+
+            $pdf = $this->buildInvoiceReport($invoice);
+
+            return $pdf->stream($filename);
         }
         else
         {
@@ -359,30 +337,43 @@ class PDFController extends Controller
             return redirect()->route('filament.admin.pages.dashboard');
         }
 
+        $pdf = $this->buildResultPdf($result);
+
+        return $pdf->stream(
+            $result->test->transaction->patient->getFullname().'_test-result.pdf'
+        );
+
+    }
+
+
+    public function buildResultPdf(TestResult $result , $savePath = null)
+    {
         $service = $result->test->service;
         $patient = $result->test->transaction->patient;
         $transaction = $result->test->transaction;
 
-
         $add = $patient->address;
-        $address =  getAddressDetails($add->region_id, $add->province_id, $add->city_id, $add->barangay_id);
-
-
+        $address = getAddressDetails(
+            $add->region_id,
+            $add->province_id,
+            $add->city_id,
+            $add->barangay_id
+        );
 
         $attachments = $result->getMedia('result_attachments')->map(function ($media) {
             return $media->getFullUrl();
         })->toArray();
 
-
         $signatories = $result->signatories->map(function ($signature) {
             return [
-                'signature' => $signature->getMedia('e_signatures')?->first()?->getFullUrl() ?? null,
+                'signature' => $signature->getMedia('e_signatures')?->first()?->getFullUrl(),
                 'name' => $signature->getFullname(),
                 'position' => $signature->position->name ?? null,
             ];
         })->toArray();
-        $result = [
-            'address' => Str::limit( "{$add->house_address} {$address['barangay']} {$address['city']} {$address['province']} ", 150),
+
+        $data = [
+            'address' => Str::limit("{$add->house_address} {$address['barangay']} {$address['city']} {$address['province']}",150),
             'service_name' => $service->name,
             'service_code' => $service->code,
             'date' => Carbon::parse($result->created_at)->format('F d, Y'),
@@ -397,16 +388,67 @@ class PDFController extends Controller
             'signatories' => $signatories,
         ];
 
+        $pdf = PDF::loadView('pdf.result', $data)
+            ->setOption('encoding', 'UTF-8')
+            ->setOption('header-html', view('pdf.header')->render())
+            ->setOption('footer-html', view('pdf.footer')->render())
+            ->setOptions([
+                'margin-left' => 5,
+                'margin-top' => 25,
+                'margin-right' => 10,
+                'margin-bottom' => 10
+            ])
+            ->setOption('enable-local-file-access', true)
+            ->setOption('images', true);
 
-        return PDF::loadView('pdf.result', $result)
+        if ($savePath) {
+            $pdf->save($savePath);
+            return $savePath; // return stored file path
+        }
+
+        return $pdf;
+
+    }
+
+
+    public function buildInvoiceReport($invoice, $savePath = null){
+        $patient = $invoice->patient();
+        $add = $patient->address;
+        $address =  getAddressDetails($add->region_id, $add->province_id, $add->city_id, $add->barangay_id);
+        $data = [
+            'invoice_number' => $invoice->invoice_number,
+            'patient_number' => $patient->pat_id,
+            'patient_name' => $patient->getFullname(),
+            'is_paid' => $invoice->is_paid,
+            'date_issued' => $invoice->created_at,
+            'sub_total' => $invoice->total_amount,
+            'discount_val' => $invoice->total_discount,
+            'grand_total' => $invoice->grand_total,
+            'discount' => $invoice->discount?->name ?? null,
+            'date_issued' => $invoice->created_at,
+            'emp' => $invoice->createdBy?->getFullname() ?? null,
+            'emp_id' => $invoice->createdBy?->emp_id ?? null,
+            'services' => $invoice->transaction->tests,
+            'address' => "{$add->house_address} {$address['barangay']} {$address['city']} {$address['province']} {$address['region']} "
+        ];
+
+        $filename = $patient->getFullname().' Invoice.pdf';
+        $pdf = PDF::loadView('pdf.invoice', $data)
             ->setOption('encoding', 'UTF-8')
             ->setOption('header-html', view('pdf.header')->render())
             ->setOption('footer-html', view('pdf.footer')->render())
             ->setOptions(['margin-left' => 5, 'margin-top' => 25, 'margin-right' => 10, 'margin-bottom' => 10])
             ->setOption('enable-local-file-access', true)
-            ->setOption('images', true)
-            ->stream($patient->getFullname().$service->name.'test-result.pdf');
+            ->setOption('images', true);
 
+
+        if ($savePath) {
+            $pdf->save($savePath);
+            return $savePath; // return stored file path
+        }
+
+
+        return $pdf;
     }
 
 }

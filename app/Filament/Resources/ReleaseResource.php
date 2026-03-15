@@ -4,14 +4,22 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ReleaseResource\Pages;
 use App\Filament\Resources\ReleaseResource\RelationManagers;
+use App\Http\Controllers\PDFController;
+use App\Jobs\SendTransactionResultsEmail;
+use App\Mail\PatientResultsMail;
 use App\Models\Release;
+use App\Models\Transaction;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ReleaseResource extends Resource
 {
@@ -65,6 +73,22 @@ class ReleaseResource extends Resource
             ->filters([
             ])
             ->actions([
+                Tables\Actions\Action::make('send_results')
+                    ->label('Send Results Email')
+                    ->icon('heroicon-o-envelope')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->action(function ($record) {
+
+                        SendTransactionResultsEmail::dispatch($record->transaction->id);
+
+                        Notification::make()
+                            ->title('Email Job Queued')
+                            ->body('The test results will be emailed to the patient shortly.')
+                            ->success()
+                            ->send();
+
+                }),
                 Tables\Actions\Action::make('view_transaction')
                     ->label('View Transaction')
                     ->icon('fas-eye')
