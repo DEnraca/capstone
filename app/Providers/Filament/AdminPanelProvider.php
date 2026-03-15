@@ -44,8 +44,8 @@ class AdminPanelProvider extends PanelProvider
             ->withCount([
                 'checklist as active_checklist' => function ($query) {
                     $query->current();
-                    $query->processing();
-                    $query->pending();
+                    // $query->processing();
+                    // $query->pending();
                     // dd();
                     // $query->where('status_id', '!=', 4);
                     // $query->whereHas('transaction', function($q){
@@ -59,7 +59,7 @@ class AdminPanelProvider extends PanelProvider
             $services_navigation[] = NavigationItem::make($station->name)
                 ->visible(fn () => auth()->user()?->can('view_any_test::result'))
                 ->group('Services')
-                ->badge(fn() => $station->patient_tests_count ?: null)
+                ->badge(fn() => $station->active_checklist ?: null)
                 ->url(fn (): string => TestResultResource::getUrl('index', ['stationID' => $station->id]) ); // Or a custom icon
         }
 
