@@ -73,7 +73,11 @@ class CreateInvoice extends CreateRecord
             $nextStation->update();
         }
 
-        $data['amount_paid'] = string_to_number($data['grand_total']);
+        $data['total_amount'] = string_to_number($data['amount_paid'] ?? 0);
+        $data['grand_total'] = string_to_number($data['grand_total'] ?? 0);
+        $data['total_discount'] = string_to_number($data['total_discount'] ?? 0);
+        $data['amount_paid'] = string_to_number($data['grand_total'] ?? 0);
+
         $data['invoice_number'] = $this->code;
         $data['is_paid'] = true;
 
