@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use App\Filament\Resources\InvoiceResource;
 use App\Filament\Resources\TestResultResource;
 use App\Filament\Resources\TransactionResource;
+use App\Jobs\SendTransactionResultsEmail;
 use App\Models\PatientInformation;
 use App\Models\QueueCall;
 use App\Models\QueueChecklist;
@@ -168,20 +169,21 @@ class QueueAction extends Widget
 
         $transaction->queue->status_id = 4;
         $transaction->queue->update();
-        
+
         Release::insert([
             'transaction_id' => $transaction->id,
-            'released_by' => auth()->user()->employee->id,
+            'released_by' => verify_employee_handler(),
             'created_at' => now(),
-
         ]);
         $this->is_completed = true;
         $this->complete();
         $this->dispatch('close-modal', id: 'relase-transaction-modal');
 
+        SendTransactionResultsEmail::dispatch($transaction->id);
+
         Notification::make()
-            ->title('Success')
-            ->body('Transaction Completed.')
+            ->title('Transaction Completed')
+            ->body('Result will be receive shortly through email! Please wait thank you!.')
             ->success()
             ->send();
 
