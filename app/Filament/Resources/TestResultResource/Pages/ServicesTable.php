@@ -47,11 +47,15 @@ class ServicesTable extends ListRecords
     {
         return Service::query()
             ->withCount([
-                'patientTests as patient_tests_count' => function ($query) {
-                    $query->where('status_id', '!=', 4);
-                    $query->whereHas('transaction', function($q){
-                        $q->where('billing_id','!=', null);
-                    });
+                'checklists as patient_tests_count' => function ($query) {
+                    // $query->applySorting();
+                    $query->current();
+                    $query->pending();
+                    $query->processing();
+                    // $query->where('status_id', '!=', 4);
+                    // $query->whereHas('transaction', function($q){
+                    //     $q->where('billing_id','!=', null);
+                    // });
                 },
             ])
             ->orderByDesc('patient_tests_count')

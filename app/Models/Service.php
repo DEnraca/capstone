@@ -65,4 +65,9 @@ class Service extends Model implements HasMedia
     }
 
 
+    public function checklists(): HasMany
+    {
+        return $this->hasMany(QueueChecklist::class,'service_id');
+    }
+
 }
