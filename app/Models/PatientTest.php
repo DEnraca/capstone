@@ -37,7 +37,7 @@ class PatientTest extends Model
 
     public function testResult(): HasOne
     {
-        return $this->hasOne(TestResult::class, 'result_id');
+        return $this->hasOne(TestResult::class, 'patient_tests_id');
     }
 
 
