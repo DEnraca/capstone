@@ -54,7 +54,7 @@ class CreateInvoice extends CreateRecord
                 'invoice_number' => $code,
                 'transaction_id' => $transactionID->id,
                 'service_availed' => $services,
-                'total_amount' => number_format($total_amount ?? 0,2),
+                'total_amount' => $total_amount ?? 0,
             ];
             $this->form->fill($filled);
         }
