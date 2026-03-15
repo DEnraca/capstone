@@ -179,9 +179,9 @@ class PDFController extends Controller
                 'grand_total' => number_format($invoice->grand_total,2),
                 'discounts' => number_format($invoice?->total_discount,2),
 
-                'health_card' => number_format($invoice?->payments->whereIn('payment_method_id', $health_card)->sum('amount_paid'),2),
-                'cash' => number_format($invoice?->payments->where('payment_method_id', 1)->sum('amount_paid'),2),
-                'other' => number_format($invoice?->payments->where('payment_method_id', '!=', 1)->whereNotIn('payment_method_id', $health_card)->sum('amount_paid'),2),
+                'health_card' => number_format($invoice?->payments?->whereIn('payment_method_id', $health_card)?->sum('amount_paid') ?? 0,2),
+                'cash' => number_format($invoice?->payments?->where('payment_method_id', 1)?->sum('amount_paid') ?? 0,2),
+                'other' => number_format($invoice?->payments?->where('payment_method_id', '!=', 1)?->whereNotIn('payment_method_id', $health_card)?->sum('amount_paid') ?? 0,2),
 
                 'is_paid' => $invoice->is_paid,
                 'created_by' => $invoice->createdBy?->getFullname() ?? null,
@@ -214,13 +214,18 @@ class PDFController extends Controller
                 'count' => $hehe->count(),
             ];
         }
+        $amount_paid = $invoices->pluck('amount_paid')->map(function ($test){ $abc = (string_to_number($test)); return $abc;});
+        $discounts = $invoices->pluck('discounts')->map(function ($test){ $abc = (string_to_number($test)); return $abc;});
+        $grand_total = $invoices->pluck('grand_total')->map(function ($test){ $abc = (string_to_number($test)); return $abc;});
+        $cash = $invoices->pluck('cash')->map(function ($test){ $abc = (string_to_number($test)); return $abc;});
+        $health_card = $invoices->pluck('health_card')->map(function ($test){ $abc = (string_to_number($test)); return $abc;});
 
         $total = [
-            'discount' => $invoices->sum('discounts'),
-            'amount_paid' => $invoices->sum('amount_paid'),
-            'grand_total' => $invoices->sum('grand_total'),
-            'cash' => $invoices->sum('cash'),
-            'health_card' => $invoices->sum('health_card'),
+            'discount' =>  $discounts->sum(),
+            'amount_paid' =>$amount_paid->sum(),
+            'grand_total' => $grand_total->sum(),
+            'cash' => $cash->sum(),
+            'health_card' => $health_card->sum(),
         ];
 
         $data = [
