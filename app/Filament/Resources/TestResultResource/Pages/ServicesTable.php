@@ -51,7 +51,7 @@ class ServicesTable extends ListRecords
                     // $query->applySorting();
                     $query->current();
                     $query->pending();
-                    $query->processing();
+                    // $query->processing();
                     // $query->where('status_id', '!=', 4);
                     // $query->whereHas('transaction', function($q){
                     //     $q->where('billing_id','!=', null);

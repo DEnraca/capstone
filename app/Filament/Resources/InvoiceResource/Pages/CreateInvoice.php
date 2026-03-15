@@ -72,8 +72,7 @@ class CreateInvoice extends CreateRecord
             $nextStation->is_current = true;
             $nextStation->update();
         }
-
-        $data['total_amount'] = string_to_number($data['amount_paid'] ?? 0);
+        $data['total_amount'] = string_to_number($data['total_amount'] ?? 0);
         $data['grand_total'] = string_to_number($data['grand_total'] ?? 0);
         $data['total_discount'] = string_to_number($data['total_discount'] ?? 0);
         $data['amount_paid'] = string_to_number($data['grand_total'] ?? 0);
@@ -82,6 +81,7 @@ class CreateInvoice extends CreateRecord
         $data['is_paid'] = true;
 
         $data['created_by'] = verify_employee_handler();
+        
         return $data;
     }
 

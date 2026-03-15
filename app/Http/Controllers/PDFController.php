@@ -37,9 +37,9 @@ class PDFController extends Controller
                 'patient_name' => $patient->getFullname(),
                 'is_paid' => $invoice->is_paid,
                 'date_issued' => $invoice->created_at,
-                'sub_total' =>number_format($invoice->total_amount,2),
-                'discount_val' =>number_format($invoice->total_discount,2),
-                'grand_total' =>number_format($invoice->grand_total,2),
+                'sub_total' => $invoice->total_amount,
+                'discount_val' => $invoice->total_discount,
+                'grand_total' => $invoice->grand_total,
                 'discount' => $invoice->discount?->name ?? null,
                 'date_issued' => $invoice->created_at,
                 'emp' => $invoice->createdBy?->getFullname() ?? null,
@@ -47,7 +47,6 @@ class PDFController extends Controller
                 'services' => $invoice->transaction->tests,
                 'address' => "{$add->house_address} {$address['barangay']} {$address['city']} {$address['province']} {$address['region']} "
             ];
-            // dd($data);
 
             $filename = $patient->getFullname().' Invoice.pdf';
             return PDF::loadView('pdf.invoice', $data)

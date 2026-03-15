@@ -75,6 +75,16 @@ class QueueResource extends Resource
                             })
                     ]),
 
+                Forms\Components\Select::make('patient_id')
+                    ->relationship('patient', 'id')
+                    ->getOptionLabelFromRecordUsing(fn (Model $record) => $record->getFullname())
+                    ->nullable()
+                    ->placeholder('No Patient Information')
+                    ->native(false)
+                    ->searchable(['first_name' , 'last_name', 'emp_id'])
+                    ->preload()
+                    ->hidden(fn (Get $get) => $get('queue_type_id') == 1 ),
+
                 Forms\Components\TextInput::make('queue_start')
                     ->disabled()
                     ->hiddenOn('create')
