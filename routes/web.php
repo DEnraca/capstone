@@ -41,6 +41,9 @@ Route::get('/queues', Queues::class);
 Route::get('/pdf/invoice/{id}', [PDFController::class,'invoice'])->name('pdf.invoice');
 Route::get('/pdf/test-result/{result}', [PDFController::class,'test_result'])->name('pdf.test-result');
 
+Route::get('/pdf/patient-profile/{result}', [PDFController::class,'patient_profile'])->name('pdf.patient-profile');
+
+
 
 Route::get('/reports/{id}', [PDFController::class,'generateReport'])->name('generate.report');
 

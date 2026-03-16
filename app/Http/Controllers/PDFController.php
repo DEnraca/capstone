@@ -49,6 +49,20 @@ class PDFController extends Controller
     }
 
 
+    public function patient_profile($result){
+
+
+        return PDF::loadView('pdf.patient_profile', [])
+            ->setOption('encoding', 'UTF-8')
+            ->setOption('header-html', view('pdf.header')->render())
+            ->setOption('footer-html', view('pdf.footer')->render())
+            ->setOptions(['margin-left' => 5, 'margin-top' => 25, 'margin-right' => 10, 'margin-bottom' => 10])
+            ->setOption('enable-local-file-access', true)
+            ->setOption('images', true)
+            ->stream('Patient-Profile.pdf');
+
+    }
+
     public function generateReport($id){
         $report = Report::find($id);
 

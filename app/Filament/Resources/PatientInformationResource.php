@@ -13,8 +13,10 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -143,6 +145,25 @@ class PatientInformationResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
+
+                Action::make('pdf_patientInfo')
+                    ->label('Print')
+                    ->requiresConfirmation()
+                    ->openUrlInNewTab()
+                    ->icon('fas-print')
+                    ->url( fn($record) => route('pdf.patient-profile',['result' => $record->id]))
+                    ->action(function (PatientInformation $record) {
+
+
+                        //send email reminder here
+
+                        Notification::make()
+                            ->title('Success')
+                            ->body('Appointment has been approved.')
+                            ->success()
+                            ->send();
+                    })
+                    ->color('success'),
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
