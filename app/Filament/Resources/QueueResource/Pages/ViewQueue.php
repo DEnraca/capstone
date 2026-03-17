@@ -4,6 +4,7 @@ namespace App\Filament\Resources\QueueResource\Pages;
 
 use App\Filament\Resources\QueueResource;
 use App\Filament\Resources\QueueResource\Widgets\QueueOverview;
+use App\Filament\Widgets\QueueTracker;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -16,6 +17,9 @@ class ViewQueue extends ViewRecord
     {
         return [
             QueueOverview::class,
+            QueueTracker::make([
+                'queue' => $this->record
+            ])
         ];
     }
 
