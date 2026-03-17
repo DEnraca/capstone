@@ -95,7 +95,7 @@ class ReleasePolicy
      */
     public function replicate(User $user, Release $release): bool
     {
-        return $user->can('replicate_release');
+        return $user->can('{{ Replicate }}');
     }
 
     /**

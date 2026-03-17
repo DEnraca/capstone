@@ -270,6 +270,7 @@ class InvoiceResource extends Resource
 
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -299,9 +300,19 @@ class InvoiceResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
+
+        $query = parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+
+            if (auth()->user()->hasRole('patient')) {
+                $query->whereHas('transaction', function ($q) {
+                    $q->where('patient_id', auth()->user()->patient->id);
+                });
+            }
+
+        return $query;
+
     }
 }

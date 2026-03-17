@@ -9,6 +9,7 @@ use App\Jobs\SendTransactionResultsEmail;
 use App\Mail\PatientResultsMail;
 use App\Models\Release;
 use App\Models\Transaction;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -21,7 +22,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class ReleaseResource extends Resource
+class ReleaseResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Release::class;
 
@@ -33,6 +34,27 @@ class ReleaseResource extends Resource
     protected static ?string $navigationLabel = 'Releasings';
 
     protected static ?int $navigationSort = 5;
+
+
+    public static function getPermissionPrefixes(): array
+    {
+
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'restore',
+            'delete',
+            'delete_any',
+            'send_email_report',
+            'restore_any',
+            'reorder',
+            'force_delete',
+            'force_delete_any'
+        ];
+    }
+
 
     public static function form(Form $form): Form
     {
@@ -77,6 +99,7 @@ class ReleaseResource extends Resource
                     ->label('Send Results Email')
                     ->icon('heroicon-o-envelope')
                     ->color('success')
+                    ->authorize(auth()->user()->can('send_email_report_release'))
                     ->requiresConfirmation()
                     ->action(function ($record) {
 

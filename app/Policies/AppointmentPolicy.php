@@ -95,7 +95,7 @@ class AppointmentPolicy
      */
     public function replicate(User $user, Appointment $appointment): bool
     {
-        return $user->can('replicate_appointment');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
