@@ -10,6 +10,7 @@ use App\Filament\Resources\AppointmentResource\RelationManagers;
 use App\Mail\AppointmentConfirmation;
 use App\Models\Appointment;
 use App\Models\PatientInformation;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
@@ -30,13 +31,34 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
 
-class AppointmentResource extends Resource
+class AppointmentResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Appointment::class;
 
     protected static ?string $navigationIcon = 'fas-calendar-days';
     protected static ?string $navigationGroup = 'Admission';
     protected static ?int $navigationSort = 1;
+
+
+    public static function getPermissionPrefixes(): array
+    {
+
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'restore',
+            'delete',
+            'delete_any',
+            'approve',
+            'restore_any',
+            'reorder',
+            'force_delete',
+            'force_delete_any'
+        ];
+    }
+
 
     public static function form(Form $form): Form
     {
@@ -156,6 +178,7 @@ class AppointmentResource extends Resource
             ->actions([
                 Action::make('approve')
                     ->label('Confirm Appointment')
+                    ->authorize(auth()->user()->can('approve_appointment'))
                     ->hidden(fn($record) => ($record->status == 1) ? false : true)
                     ->requiresConfirmation()
                     ->action(function (Appointment $record) {
